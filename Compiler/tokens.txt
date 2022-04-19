@@ -1,3 +1,29 @@
-// Operators
-// Data types
-// 
+1) Identifier
+starts with: _, A-Z, a-z
+can include: _, A-Z, a-z, 0-9
+
+Key words:
+2) Mathematical expressions 
++, -, *, /, !, >, <, ==, !=, >=, <=, ||, && // done
+3) Assignment statements 
+=, +=, -=, *=, %=, ++, -- // done
+4) Data types
+int, float, char, string, double, bool, void // done
+5) Conditons and loops
+if, else, for, while, do, switch, case, const, break, continue, exit // done
+6) Block structure
+{, }, (, ), [, ] // done
+functions
+
+
+
+Numbers: 0-9 // done
+Strings: " *anything* "
+Floats: Numbers.Numbers 	//done
+Chars: ' a single character'
+White spaces: //, ,\t  // done
+ 
+
+are we going to implement pointers and arrays?
+what is meant by repeat-until loops?
+how to add the regex of "<="?

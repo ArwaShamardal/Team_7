@@ -5,18 +5,65 @@ and main() ***/
 int count = 0;
 %}
 
-/*** Rule Section has three rules, first rule
+/*** Rule Section has three rules, first rule (regex)
 matches with capital letters, second rule
 matches with any character except newline and
 third rule does not take input after the enter***/
 %%
-if {printf("%s \n", yytext);}
-for {printf("%s \n", yytext);}
-[0-9] {printf(" integer detected\n");}
+int | 
+float |
+char |
+string |
+double |
+bool |
+void |
+if |
+else |
+for |
+while |
+do |
+switch |
+case |
+const |
+break |
+continue |
+true |
+false |
+exit {printf("%s was entered \n", yytext);}
+\+ |
+- |
+\* |
+\/ |
+! |
+> |
+\< |
+== |
+!= |
+>= |
+\<= |
+\|\| |
+&& |
+\{ |
+\} |
+\( |
+\) |
+\/\/ |
+\[ |
+\] |
+\\t |
+\\n |
+[ ] |
+; |
+: |
+, |
+\. {printf("%s was entered \n", yytext);}
+([0-9]*\.[0-9]+)|([0-9]+\.[0-9]+)|([1-9][0-9]*) {printf("%s was entered \n", yytext);}
+
+
 %%
 
 /*** Code Section prints the number of
-capital letter present in the given input***/
+capital letter present in the given input***/  // (C code)
 int yywrap(){}
 int main(){
 
