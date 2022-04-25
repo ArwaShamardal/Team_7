@@ -57,7 +57,10 @@
      BOOLEAN = 273,
      CONSTANT = 274,
      VOID = 275,
-     T_BoolConstant = 276
+     VAL_INTEGER = 276,
+     VAL_FLOAT = 277,
+     VARIABLE = 278,
+     UMINUS = 279
    };
 #endif
 /* Tokens.  */
@@ -79,7 +82,10 @@
 #define BOOLEAN 273
 #define CONSTANT 274
 #define VOID 275
-#define T_BoolConstant 276
+#define VAL_INTEGER 276
+#define VAL_FLOAT 277
+#define VARIABLE 278
+#define UMINUS 279
 
 
 
@@ -89,12 +95,12 @@ typedef union YYSTYPE
 {
 
 /* Line 1676 of yacc.c  */
-#line 9 "parser.y"
-int int_type;
+#line 8 "parser.y"
+int int_type; char variable[32];
 
 
 /* Line 1676 of yacc.c  */
-#line 98 "y.tab.h"
+#line 104 "y.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
