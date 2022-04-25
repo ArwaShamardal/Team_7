@@ -11,10 +11,12 @@ void yyerror(const char *s);
 int count = 0;
 %}
 
-/*** Rule Section has three rules, first rule (regex)
-matches with capital letters, second rule
-matches with any character except newline and
-third rule does not take input after the enter***/
+/* Regular expressions */
+letter [a-zA-Z]
+digit [0-9]
+skip_char  [ \t\r\f\v]+
+identifier (_|{letter})({letter}|{digit}|_){0,31}
+
 %%
 int 		{return INTEGER;}
 float 		{return FLOAT;}
@@ -33,6 +35,7 @@ case 		{return CASE;}
 const 		{return CONSTANT;}
 break 		{return BREAK;}
 continue	{return CONTINUE;}
+return		{return RETURN;}
 .		{yyerror("invalid character");}
 %%
 

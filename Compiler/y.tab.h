@@ -48,15 +48,16 @@
      CASE = 264,
      BREAK = 265,
      CONTINUE = 266,
-     INTEGER = 267,
-     CHARACTER = 268,
-     FLOAT = 269,
-     STRING = 270,
-     DOUBLE = 271,
-     BOOLEAN = 272,
-     CONSTANT = 273,
-     VOID = 274,
-     T_BoolConstant = 275
+     RETURN = 267,
+     INTEGER = 268,
+     CHARACTER = 269,
+     FLOAT = 270,
+     STRING = 271,
+     DOUBLE = 272,
+     BOOLEAN = 273,
+     CONSTANT = 274,
+     VOID = 275,
+     T_BoolConstant = 276
    };
 #endif
 /* Tokens.  */
@@ -69,15 +70,16 @@
 #define CASE 264
 #define BREAK 265
 #define CONTINUE 266
-#define INTEGER 267
-#define CHARACTER 268
-#define FLOAT 269
-#define STRING 270
-#define DOUBLE 271
-#define BOOLEAN 272
-#define CONSTANT 273
-#define VOID 274
-#define T_BoolConstant 275
+#define RETURN 267
+#define INTEGER 268
+#define CHARACTER 269
+#define FLOAT 270
+#define STRING 271
+#define DOUBLE 272
+#define BOOLEAN 273
+#define CONSTANT 274
+#define VOID 275
+#define T_BoolConstant 276
 
 
 
@@ -92,7 +94,7 @@ int int_type;
 
 
 /* Line 1676 of yacc.c  */
-#line 96 "y.tab.h"
+#line 98 "y.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
