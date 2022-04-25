@@ -19,6 +19,7 @@ skip_char 		[ \t\r\f\v]+
 variable 		(_|{letter})({letter}|{digit}|_){0,31}
 integer_val 	[1-9]{digit}*
 float_val		({digit}+[.])?{digit}+
+/*double_val		({digit}+[.])?{digit}+ */
 
 
 /*** Tokens format
@@ -48,8 +49,18 @@ continue		{return CONTINUE;}
 return			{return RETURN;}
 <<EOF>>			{return 0;}
 
-;				{return SEMICOLON;}
-=				{return OP_EQUAL;}
+";"				{ return(';'); }
+","				{ return(','); }
+"("				{ return('('); }
+")"				{ return(')'); }
+":"				{ return(':'); }
+
+"="				{return('=');}
+"+"				{return('+');}
+"-"				{return('-');}
+"*"				{return('*');}
+"/"				{return('/');}
+"%"				{return('%');}
 
 {skip_char}			;
 

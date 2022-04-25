@@ -60,8 +60,8 @@
      VOID = 276,
      VAL_INTEGER = 277,
      VAL_FLOAT = 278,
-     VARIABLE = 279,
-     OP_EQUAL = 280,
+     VAL_DOUBLE = 279,
+     VARIABLE = 280,
      UMINUS = 281
    };
 #endif
@@ -87,8 +87,8 @@
 #define VOID 276
 #define VAL_INTEGER 277
 #define VAL_FLOAT 278
-#define VARIABLE 279
-#define OP_EQUAL 280
+#define VAL_DOUBLE 279
+#define VARIABLE 280
 #define UMINUS 281
 
 
