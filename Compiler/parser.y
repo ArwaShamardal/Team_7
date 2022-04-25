@@ -6,9 +6,15 @@
 %}
 
 
-%union { int int_type; }
+%union {int int_type;}
 
-%token INTEGER
+/* Keywords tokens*/
+%token IF ELSE FOR WHILE DO SWITCH CASE BREAK CONTINUE 
+
+/* Data types tokens*/
+%token INTEGER CHARACTER FLOAT STRING DOUBLE BOOLEAN CONSTANT VOID
+
+%token T_BoolConstant
 
 %%
 builder: INTEGER;

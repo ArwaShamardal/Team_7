@@ -39,11 +39,45 @@
    /* Put the tokens into the symbol table, so that GDB and other debuggers
       know about them.  */
    enum yytokentype {
-     INTEGER = 258
+     IF = 258,
+     ELSE = 259,
+     FOR = 260,
+     WHILE = 261,
+     DO = 262,
+     SWITCH = 263,
+     CASE = 264,
+     BREAK = 265,
+     CONTINUE = 266,
+     INTEGER = 267,
+     CHARACTER = 268,
+     FLOAT = 269,
+     STRING = 270,
+     DOUBLE = 271,
+     BOOLEAN = 272,
+     CONSTANT = 273,
+     VOID = 274,
+     T_BoolConstant = 275
    };
 #endif
 /* Tokens.  */
-#define INTEGER 258
+#define IF 258
+#define ELSE 259
+#define FOR 260
+#define WHILE 261
+#define DO 262
+#define SWITCH 263
+#define CASE 264
+#define BREAK 265
+#define CONTINUE 266
+#define INTEGER 267
+#define CHARACTER 268
+#define FLOAT 269
+#define STRING 270
+#define DOUBLE 271
+#define BOOLEAN 272
+#define CONSTANT 273
+#define VOID 274
+#define T_BoolConstant 275
 
 
 
@@ -54,11 +88,11 @@ typedef union YYSTYPE
 
 /* Line 1676 of yacc.c  */
 #line 9 "parser.y"
- int int_type; 
+int int_type;
 
 
 /* Line 1676 of yacc.c  */
-#line 62 "y.tab.h"
+#line 96 "y.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */

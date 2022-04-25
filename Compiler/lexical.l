@@ -16,56 +16,24 @@ matches with capital letters, second rule
 matches with any character except newline and
 third rule does not take input after the enter***/
 %%
-int {return INTEGER;}
-float |
-char |
-string |
-double |
-bool |
-void |
-if |
-else |
-for |
-while |
-do |
-switch |
-case |
-const |
-break |
-continue |
-true |
-false |
-exit {printf("%s was entered \n", yytext);}
-\+ |
-- |
-\* |
-\/ |
-! |
-> |
-\< |
-== |
-!= |
->= |
-\<= |
-\|\| |
-&& |
-\{ |
-\} |
-\( |
-\) |
-\/\/ |
-\[ |
-\] |
-\\t |
-\\n |
-[ ] |
-; |
-: |
-, |
-\. {printf("%s was entered \n", yytext);}
-([0-9]*\.[0-9]+)|([0-9]+\.[0-9]+)|([1-9][0-9]*) {printf("%s was entered \n", yytext);}
-
-
+int 		{return INTEGER;}
+float 		{return FLOAT;}
+char		{return CHARACTER;}
+string 		{return STRING;}
+double 		{return DOUBLE;}
+bool 		{return BOOLEAN;}
+void 		{return VOID;}
+if 			{return IF;}
+else 		{return ELSE;}
+for 		{return FOR;}
+while 		{return WHILE;}
+do 			{return DO;}
+switch 		{return SWITCH;}
+case 		{return CASE;}
+const 		{return CONSTANT;}
+break 		{return BREAK;}
+continue	{return CONTINUE;}
+.		{yyerror("invalid character");}
 %%
 
 /*** Code Section prints the number of
