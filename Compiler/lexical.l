@@ -2,6 +2,12 @@
 which can be accessed inside yylex()
 and main() ***/
 %{
+#include <stdlib.h>
+#include <stdio.h>
+#include <limits.h>
+#include "y.tab.h"
+int yylex();
+void yyerror(const char *s);
 int count = 0;
 %}
 
@@ -10,7 +16,7 @@ matches with capital letters, second rule
 matches with any character except newline and
 third rule does not take input after the enter***/
 %%
-int | 
+int {return INTEGER;}
 float |
 char |
 string |
