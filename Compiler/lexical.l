@@ -6,7 +6,6 @@ and main() ***/
 #include <stdio.h>
 #include <limits.h>
 #include "y.tab.h"
-int yylex();
 void yyerror(const char *s);
 int count = 0;
 %}
@@ -47,12 +46,16 @@ const 			{return CONSTANT;}
 break 			{return BREAK;}
 continue		{return CONTINUE;}
 return			{return RETURN;}
+<<EOF>>			{return 0;}
+
+;				{return SEMICOLON;}
+=				{return OP_EQUAL;}
 
 {skip_char}			;
 
 {variable}		{return VARIABLE;}
 
-{integer_val}	{printf("%d lexical", atoi(yytext)); return VAL_INTEGER;}
+{integer_val}	{return VAL_INTEGER;}
 {float_val}		{return VAL_FLOAT;}
 
 .				{yyerror("invalid character");}

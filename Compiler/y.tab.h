@@ -49,18 +49,20 @@
      BREAK = 265,
      CONTINUE = 266,
      RETURN = 267,
-     INTEGER = 268,
-     CHARACTER = 269,
-     FLOAT = 270,
-     STRING = 271,
-     DOUBLE = 272,
-     BOOLEAN = 273,
-     CONSTANT = 274,
-     VOID = 275,
-     VAL_INTEGER = 276,
-     VAL_FLOAT = 277,
-     VARIABLE = 278,
-     UMINUS = 279
+     SEMICOLON = 268,
+     INTEGER = 269,
+     CHARACTER = 270,
+     FLOAT = 271,
+     STRING = 272,
+     DOUBLE = 273,
+     BOOLEAN = 274,
+     CONSTANT = 275,
+     VOID = 276,
+     VAL_INTEGER = 277,
+     VAL_FLOAT = 278,
+     VARIABLE = 279,
+     OP_EQUAL = 280,
+     UMINUS = 281
    };
 #endif
 /* Tokens.  */
@@ -74,18 +76,20 @@
 #define BREAK 265
 #define CONTINUE 266
 #define RETURN 267
-#define INTEGER 268
-#define CHARACTER 269
-#define FLOAT 270
-#define STRING 271
-#define DOUBLE 272
-#define BOOLEAN 273
-#define CONSTANT 274
-#define VOID 275
-#define VAL_INTEGER 276
-#define VAL_FLOAT 277
-#define VARIABLE 278
-#define UMINUS 279
+#define SEMICOLON 268
+#define INTEGER 269
+#define CHARACTER 270
+#define FLOAT 271
+#define STRING 272
+#define DOUBLE 273
+#define BOOLEAN 274
+#define CONSTANT 275
+#define VOID 276
+#define VAL_INTEGER 277
+#define VAL_FLOAT 278
+#define VARIABLE 279
+#define OP_EQUAL 280
+#define UMINUS 281
 
 
 
@@ -96,11 +100,11 @@ typedef union YYSTYPE
 
 /* Line 1676 of yacc.c  */
 #line 8 "parser.y"
-int int_type; char variable[32];
+int int_type; char var[32];
 
 
 /* Line 1676 of yacc.c  */
-#line 104 "y.tab.h"
+#line 108 "y.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
