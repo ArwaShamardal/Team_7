@@ -43,7 +43,7 @@ program 			: Starter program
     				| Starter
 					;
 
-Starter 			: {printInFile("empty file\n");} | Assign |DataType |Logic
+Starter 			: {printInFile("empty file\n");} | Assign |DataType |Logic|Function
 					;
 
 Assign  			: IDETIFIER '=' Expression ';' {printInFile("Assigned succefully\n");}
@@ -81,7 +81,14 @@ AssignLogic			: AssignLogic OP_EQUALITY AssignLogic
 					| ValueTypeAll
 					| IDETIFIER
 					| '(' Expression ')'
-					; 
+					;
+
+Function			: DataType IDETIFIER '(' Arguments ')' '{' '}' {printInFile("Function constructed successfully\n");}
+					;
+
+Arguments			: DataTypeNoVoid IDETIFIER ',' 
+					| DataTypeNoVoid IDETIFIER
+					;
 
 ValueTypeNumber		: VAL_INTEGER 
 					| VAL_FLOAT
@@ -94,6 +101,13 @@ ValueTypeLetter		: VAL_BOOLEAN
 
 ValueTypeAll		: ValueTypeNumber
 					| ValueTypeLetter
+					;
+
+DataTypeNoVoid		: INTEGER
+					| FLOAT
+					| CHARACTER
+					| STRING
+					| BOOLEAN
 					;
 
 DataType			: INTEGER
@@ -113,6 +127,9 @@ DataType			: INTEGER
 
 void yyerror (char const *s) {
 	fprintf (stderr, "%s\n", s);
+	char errorString[256];
+	strcpy(errorString,s);
+	printInFile(errorString);
 }
 
 void printInFile(char message[maxLinesToParse]){
@@ -132,7 +149,8 @@ int main(void) {
 	}
 	else
 	{
-		fprintf(f1,"I can not parse");
+		for(int i=0; i<lineCount ; i++)
+			fprintf(f1,outputMessages[i]);
 		printf("\nParsing failed\n");
 		return 0;
 	}
