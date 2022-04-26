@@ -15,8 +15,8 @@
 %token INTEGER CHARACTER FLOAT STRING DOUBLE BOOLEAN CONSTANT VOID
 
 /* Variables/Values*/
-%token VAL_INTEGER VAL_FLOAT VAL_DOUBLE
-%token <var> VARIABLE;
+%token VAL_INTEGER VAL_FLOAT VAL_DOUBLE VAL_STRING VAL_CHAR VAL_BOOLEAN
+%token <var> IDETIFIER;
 
 %right '='
 %left '+' '-'
@@ -24,12 +24,21 @@
 %left UMINUS
 
 
+/*Grammars are written in UpperCamelCase*/
 
 %%
-Starter 			: {printf("empty file");} | Assign
+Starter 			: {printf("empty file");} | Assign |DataType
 					;
 
-Assign  			: VARIABLE '=' Expression ';' {printf("Assigned succefully");}
+Assign  			: IDETIFIER '=' Expression ';' {printf("Assigned succefully");}
+					;
+
+DataType			: INTEGER
+					| FLOAT
+					| CHARACTER
+					| STRING
+					| BOOLEAN
+					| VOID
 					;
 
 Expression			: Expression '+' Term
@@ -44,13 +53,22 @@ Term 				: Term '*' Factor
 					;
 					
 Factor				: '(' Expression ')'
-					| Number
-					| VARIABLE
+					| ValueTypeNumber
+					| IDETIFIER
 					;
 
-Number				: VAL_INTEGER 
+ValueTypeNumber		: VAL_INTEGER 
 					| VAL_FLOAT
 					;
+
+/*ValueTypeLetter		: VAL_BOOLEAN
+					| VAL_CHAR
+					| VAL_STRING
+					;
+
+ValueTypeAll		: ValueTypeNumber
+					| ValueTypeLetter
+					;*/			
 %%
 
 /* {printf(" %d parser",VAL_INTEGER);}

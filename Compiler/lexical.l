@@ -16,9 +16,14 @@ int count = 0;
 letter			[a-zA-Z]
 digit			[0-9]
 skip_char 		[ \t\r\f\v]+
-variable 		(_|{letter})({letter}|{digit}|_){0,31}
+variable 		(_|{letter})({letter}|{digit}|_)*
+/*{0,31}*/
+
 integer_val 	[1-9]{digit}*
 float_val		({digit}+[.])?{digit}+
+string_val		\"[^("|\')]*\"$
+char_val		\'.\'
+bool_val		"true"|"false"|"1"|"0"
 /*double_val		({digit}+[.])?{digit}+ */
 
 
@@ -49,12 +54,17 @@ continue		{return CONTINUE;}
 return			{return RETURN;}
 <<EOF>>			{return 0;}
 
+
+
 ";"				{ return(';'); }
 ","				{ return(','); }
 "("				{ return('('); }
 ")"				{ return(')'); }
+"{"				{ return('{'); }
+"}"				{ return('}'); }
 ":"				{ return(':'); }
 
+"=="			{return('=');}
 "="				{return('=');}
 "+"				{return('+');}
 "-"				{return('-');}
@@ -62,12 +72,18 @@ return			{return RETURN;}
 "/"				{return('/');}
 "%"				{return('%');}
 
-{skip_char}			;
 
-{variable}		{return VARIABLE;}
 
+
+{bool_val}      {return VAL_BOOLEAN;}
+{variable}		{return IDETIFIER;}
 {integer_val}	{return VAL_INTEGER;}
 {float_val}		{return VAL_FLOAT;}
+{string_val}	{return VAL_STRING;}
+{char_val}		{return VAL_CHAR;}
+
+
+{skip_char}		;
 
 .				{yyerror("invalid character");}
 %%

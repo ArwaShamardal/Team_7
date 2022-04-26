@@ -61,8 +61,11 @@
      VAL_INTEGER = 277,
      VAL_FLOAT = 278,
      VAL_DOUBLE = 279,
-     VARIABLE = 280,
-     UMINUS = 281
+     VAL_STRING = 280,
+     VAL_CHAR = 281,
+     VAL_BOOLEAN = 282,
+     IDETIFIER = 283,
+     UMINUS = 284
    };
 #endif
 /* Tokens.  */
@@ -88,8 +91,11 @@
 #define VAL_INTEGER 277
 #define VAL_FLOAT 278
 #define VAL_DOUBLE 279
-#define VARIABLE 280
-#define UMINUS 281
+#define VAL_STRING 280
+#define VAL_CHAR 281
+#define VAL_BOOLEAN 282
+#define IDETIFIER 283
+#define UMINUS 284
 
 
 
@@ -104,7 +110,7 @@ int int_type; char var[32];
 
 
 /* Line 1676 of yacc.c  */
-#line 108 "y.tab.h"
+#line 114 "y.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
