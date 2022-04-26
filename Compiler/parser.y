@@ -3,6 +3,8 @@
 	void yyerror(const char *s);
 	#include <stdlib.h>
 	#include <stdio.h>
+	FILE * yyin;
+    FILE * f1;
 %}
 
 %union {int int_type; char var[32];}
@@ -108,11 +110,31 @@ void yyerror (char const *s) {
 	fprintf (stderr, "%s\n", s);
 }
 
-int main (void)
+
+int main(void) {
+    yyin = fopen("test.txt", "r");
+	f1=fopen("output.txt","w");
+   if(!yyparse())
+	{
+		printf("\nParsing complete\n");
+		fprintf(f1,"hello there");
+	}
+	else
+	{
+		fprintf(f1,"I can not parse");
+		printf("\nParsing failed\n");
+		return 0;
+	}
+	fclose(yyin);
+	fclose(f1);
+    return 0;
+}
+
+/*int main (void)
 {
 	int a=1;
 	while(1){
 		yyparse ();
 	}
   	return 0;
-}
+}*/

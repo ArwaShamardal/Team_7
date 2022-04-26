@@ -74,10 +74,12 @@
 	void yyerror(const char *s);
 	#include <stdlib.h>
 	#include <stdio.h>
+	FILE * yyin;
+    FILE * f1;
 
 
 /* Line 189 of yacc.c  */
-#line 81 "y.tab.c"
+#line 83 "y.tab.c"
 
 /* Enabling traces.  */
 #ifndef YYDEBUG
@@ -190,12 +192,12 @@ typedef union YYSTYPE
 {
 
 /* Line 214 of yacc.c  */
-#line 8 "parser.y"
+#line 10 "parser.y"
 int int_type; char var[32];
 
 
 /* Line 214 of yacc.c  */
-#line 199 "y.tab.c"
+#line 201 "y.tab.c"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
@@ -207,7 +209,7 @@ int int_type; char var[32];
 
 
 /* Line 264 of yacc.c  */
-#line 211 "y.tab.c"
+#line 213 "y.tab.c"
 
 #ifdef short
 # undef short
@@ -507,11 +509,11 @@ static const yytype_int8 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    35,    35,    36,    39,    39,    39,    39,    42,    45,
-      46,    47,    50,    51,    52,    53,    56,    57,    58,    63,
-      66,    67,    68,    69,    70,    71,    72,    73,    74,    75,
-      76,    79,    80,    83,    84,    85,    88,    89,    92,    93,
-      94,    95,    96,    97
+       0,    37,    37,    38,    41,    41,    41,    41,    44,    47,
+      48,    49,    52,    53,    54,    55,    58,    59,    60,    65,
+      68,    69,    70,    71,    72,    73,    74,    75,    76,    77,
+      78,    81,    82,    85,    86,    87,    90,    91,    94,    95,
+      96,    97,    98,    99
 };
 #endif
 
@@ -1462,28 +1464,28 @@ yyreduce:
         case 4:
 
 /* Line 1455 of yacc.c  */
-#line 39 "parser.y"
+#line 41 "parser.y"
     {printf("empty file");}
     break;
 
   case 8:
 
 /* Line 1455 of yacc.c  */
-#line 42 "parser.y"
+#line 44 "parser.y"
     {printf("Assigned succefully");}
     break;
 
   case 19:
 
 /* Line 1455 of yacc.c  */
-#line 63 "parser.y"
+#line 65 "parser.y"
     {printf("Logic operators detected");}
     break;
 
 
 
 /* Line 1455 of yacc.c  */
-#line 1487 "y.tab.c"
+#line 1489 "y.tab.c"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);
@@ -1695,7 +1697,7 @@ yyreturn:
 
 
 /* Line 1675 of yacc.c  */
-#line 100 "parser.y"
+#line 102 "parser.y"
 
 
 /* {printf(" %d parser",VAL_INTEGER);}
@@ -1707,11 +1709,31 @@ void yyerror (char const *s) {
 	fprintf (stderr, "%s\n", s);
 }
 
-int main (void)
+
+int main(void) {
+    yyin = fopen("test.txt", "r");
+	f1=fopen("output.txt","w");
+   if(!yyparse())
+	{
+		printf("\nParsing complete\n");
+		fprintf(f1,"hello there");
+	}
+	else
+	{
+		fprintf(f1,"I can not parse");
+		printf("\nParsing failed\n");
+		return 0;
+	}
+	fclose(yyin);
+	fclose(f1);
+    return 0;
+}
+
+/*int main (void)
 {
 	int a=1;
 	while(1){
 		yyparse ();
 	}
   	return 0;
-}
+}*/
