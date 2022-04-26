@@ -65,7 +65,17 @@
      VAL_CHAR = 281,
      VAL_BOOLEAN = 282,
      IDETIFIER = 283,
-     UMINUS = 284
+     OP_INCREMENT = 284,
+     OP_DECREMENT = 285,
+     OP_GREATER_THAN = 286,
+     OP_LESS_THAN = 287,
+     OP_GREATER_OR_EQUAL = 288,
+     OP_LESS_OR_EQUAL = 289,
+     OP_INEQUALITY = 290,
+     OP_EQUALITY = 291,
+     OP_LOGICAL_OR = 292,
+     OP_LOGICAL_AND = 293,
+     UMINUS = 294
    };
 #endif
 /* Tokens.  */
@@ -95,7 +105,17 @@
 #define VAL_CHAR 281
 #define VAL_BOOLEAN 282
 #define IDETIFIER 283
-#define UMINUS 284
+#define OP_INCREMENT 284
+#define OP_DECREMENT 285
+#define OP_GREATER_THAN 286
+#define OP_LESS_THAN 287
+#define OP_GREATER_OR_EQUAL 288
+#define OP_LESS_OR_EQUAL 289
+#define OP_INEQUALITY 290
+#define OP_EQUALITY 291
+#define OP_LOGICAL_OR 292
+#define OP_LOGICAL_AND 293
+#define UMINUS 294
 
 
 
@@ -110,7 +130,7 @@ int int_type; char var[32];
 
 
 /* Line 1676 of yacc.c  */
-#line 114 "y.tab.h"
+#line 134 "y.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */

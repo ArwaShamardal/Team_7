@@ -64,7 +64,17 @@ return			{return RETURN;}
 "}"				{ return('}'); }
 ":"				{ return(':'); }
 
-"=="			{return('=');}
+"++"			{ return OP_INCREMENT; }
+"--"			{ return OP_DECREMENT; }
+"<="			{ return OP_LESS_OR_EQUAL; }
+">="			{ return OP_GREATER_OR_EQUAL; }
+"<"				{ return OP_LESS_THAN; }
+">"				{ return OP_GREATER_THAN; }
+"=="			{ return OP_EQUALITY; }
+"!="			{ return OP_INEQUALITY; }
+"&&"			{ return OP_LOGICAL_AND; }
+"||"			{ return OP_LOGICAL_OR; }
+
 "="				{return('=');}
 "+"				{return('+');}
 "-"				{return('-');}
