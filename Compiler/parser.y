@@ -3,8 +3,13 @@
 	void yyerror(const char *s);
 	#include <stdlib.h>
 	#include <stdio.h>
+	#include <string.h>
+	#define maxLinesToParse 256
 	FILE * yyin;
     FILE * f1;
+	int lineCount=0;
+	char outputMessages [maxLinesToParse][maxLinesToParse];
+	void printInFile(char message[maxLinesToParse]);
 %}
 
 %union {int int_type; char var[32];}
@@ -38,10 +43,10 @@ program 			: Starter program
     				| Starter
 					;
 
-Starter 			: {printf("empty file");} | Assign |DataType |Logic
+Starter 			: {printInFile("empty file\n");} | Assign |DataType |Logic
 					;
 
-Assign  			: IDETIFIER '=' Expression ';' {printf("Assigned succefully");}
+Assign  			: IDETIFIER '=' Expression ';' {printInFile("Assigned succefully\n");}
 					;
 
 Expression			: Expression '+' Term
@@ -62,7 +67,7 @@ Factor				: '(' Expression ')'
 
 
 
-Logic				: AssignLogic {printf("Logic operators detected");}
+Logic				: AssignLogic {printInFile("Logic operators detected\n");}
 					;
 
 AssignLogic			: AssignLogic OP_EQUALITY AssignLogic
@@ -110,6 +115,11 @@ void yyerror (char const *s) {
 	fprintf (stderr, "%s\n", s);
 }
 
+void printInFile(char message[maxLinesToParse]){
+	strcpy(outputMessages[lineCount],message);
+	lineCount++;
+}
+
 
 int main(void) {
     yyin = fopen("test.txt", "r");
@@ -117,7 +127,8 @@ int main(void) {
    if(!yyparse())
 	{
 		printf("\nParsing complete\n");
-		fprintf(f1,"hello there");
+		for(int i=0; i<lineCount ; i++)
+			fprintf(f1,outputMessages[i]);
 	}
 	else
 	{
