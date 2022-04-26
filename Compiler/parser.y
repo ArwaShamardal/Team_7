@@ -58,29 +58,36 @@ Factor				: '(' Expression ')'
 					| IDETIFIER
 					;
 
+
+
+Logic				: AssignLogic {printf("Logic operators detected");}
+					;
+
+AssignLogic			: AssignLogic OP_EQUALITY AssignLogic
+					| AssignLogic OP_INEQUALITY AssignLogic
+					| AssignLogic OP_GREATER_OR_EQUAL AssignLogic
+					| AssignLogic OP_LESS_OR_EQUAL AssignLogic
+					| AssignLogic OP_GREATER_THAN AssignLogic
+					| AssignLogic OP_LESS_THAN AssignLogic
+					| AssignLogic OP_LOGICAL_OR AssignLogic
+					| AssignLogic OP_LOGICAL_AND AssignLogic
+					| ValueTypeAll
+					| IDETIFIER
+					| '(' Expression ')'
+					; 
+
 ValueTypeNumber		: VAL_INTEGER 
 					| VAL_FLOAT
 					;
 
-Logic				: AssignLogic ';' {printf("Logic operators detected");}
-					;
-
-AssignLogic			: AssignLogic OP_EQUALITY AssignLogic  
-					| AssignLogic OP_LOGICAL_OR AssignLogic
-					| AssignLogic OP_LOGICAL_AND AssignLogic
-					| Expression
-					; 
-
-
-
-/*ValueTypeLetter		: VAL_BOOLEAN
+ValueTypeLetter		: VAL_BOOLEAN
 					| VAL_CHAR
 					| VAL_STRING
 					;
 
 ValueTypeAll		: ValueTypeNumber
 					| ValueTypeLetter
-					;*/
+					;
 
 DataType			: INTEGER
 					| FLOAT
