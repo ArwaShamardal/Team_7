@@ -592,7 +592,7 @@ static const char *const yytname[] =
   "OP_GREATER_THAN", "OP_LESS_THAN", "OP_GREATER_OR_EQUAL",
   "OP_LESS_OR_EQUAL", "'+'", "'-'", "'*'", "'/'", "'%'", "OP_LOGICAL_NOT",
   "'('", "')'", "';'", "','", "'{'", "'}'", "':'", "$accept", "program",
-  "Starter", "Statement", "VarDeclarationLine", "VarDeclaration",
+  "Starter", "Statement", "OneLineDeclaration", "VarDeclaration",
   "Expression", "ArithmeticExp", "RelationalExp", "LogicalExp",
   "AssignExp", "Assign", "ArithmeticAssignExp", "ArithmeticAssign",
   "IncrementExp", "DecrementExp", "Increment", "Decrement", "Return",

@@ -92,10 +92,10 @@ return			{return RETURN;}
 
 
 
-{variable}		{return IDETIFIER;}
 {integer_val}	{return VAL_INTEGER;}
 {float_val}		{return VAL_FLOAT;}
 {bool_val}      {return VAL_BOOLEAN;}
+{variable}		{return IDETIFIER;}
 {string_val}	{return VAL_STRING;}
 {char_val}		{return VAL_CHAR;}
 
