@@ -26,7 +26,7 @@
 %token <var> IDETIFIER;
 
 /*Short assignment operators*/
-%token OP_INCREMENT OP_DECREMENT
+%token OP_INCREMENT OP_DECREMENT OP_PLUS_EQUAL OP_MINUS_EQUAL OP_MULTIPLY_EQUAL OP_DIVIDE_EQUAL OP_MODULO_EQUAL OP_LOGICAL_NOT
 
 %right '='
 %left OP_LESS_OR_EQUAL OP_GREATER_OR_EQUAL OP_LESS_THAN OP_GREATER_THAN 
@@ -65,8 +65,10 @@ Statement			: VarDeclaration Statement
 					| DoWhileLoop Statement
 					| ForLoop Statement
 					| SwitchCase Statement
-					| Expression Statement
 					| Assign Statement
+					| Increment Statement
+					| Decrement Statement
+					| ArithmeticAssign Statement
 					|
 					;
 
@@ -75,31 +77,57 @@ VarDeclaration		: DataType IDETIFIER ';' {printInFile("Variable Defined succeful
 					;
 
 
+Expression			: ArithmeticExp
+					| RelationalExp
+					| LogicalExp
+					| '(' Expression ')'
+					| ValueTypeNumber
+					| AssignExp
+					| IncrementExp
+					| DecrementExp
+					| ArithmeticAssignExp
+					| IDETIFIER
+					;
 
-Expression			: Expression '+' Expression
+ArithmeticExp		: Expression '+' Expression
 					| Expression '-' Expression
 					| Expression '*' Expression
 					| Expression '/' Expression
 					| Expression '%' Expression
-					| Expression OP_EQUALITY Expression
+					;
+
+RelationalExp		: Expression OP_EQUALITY Expression
 					| Expression OP_INEQUALITY Expression
 					| Expression OP_GREATER_OR_EQUAL Expression
 					| Expression OP_LESS_OR_EQUAL Expression
 					| Expression OP_GREATER_THAN Expression
 					| Expression OP_LESS_THAN Expression
-					| Expression OP_LOGICAL_OR Expression
+					;	
+
+LogicalExp			: Expression OP_LOGICAL_OR Expression
 					| Expression OP_LOGICAL_AND Expression
-					| '(' Expression ')'
-					| ValueTypeNumber
-					| AssignExp
-					| IDETIFIER
+					| OP_LOGICAL_NOT Expression
 					;
+
+
+
 
 AssignExp			: IDETIFIER '=' Expression
 					;
 
-Assign  			: IDETIFIER '=' Expression ';' {printInFile("Assigned succefully\n");}
+Assign  			: AssignExp ';' {printInFile("Assigned succefully\n");}
 					;
+
+ArithmeticAssignExp : IDETIFIER OP_PLUS_EQUAL Expression
+					| IDETIFIER OP_MINUS_EQUAL Expression
+					| IDETIFIER OP_MULTIPLY_EQUAL Expression
+					| IDETIFIER OP_DIVIDE_EQUAL Expression
+					| IDETIFIER OP_MODULO_EQUAL Expression
+					;
+
+ArithmeticAssign 	: ArithmeticAssignExp ';'
+					;
+
 /* 
 Expression			: Expression '+' Term
 					| Expression '-' Term
@@ -116,14 +144,20 @@ Factor				: '(' Expression ')'
 					| ValueTypeNumber
 					| IDETIFIER
 					; */
-
-Increment			: OP_INCREMENT IDETIFIER {printInFile("Prefix increment detected\n");}
-					| IDETIFIER OP_INCREMENT {printInFile("Postfix increment detected\n");}
+IncrementExp		: OP_INCREMENT IDETIFIER {printInFile("Prefix increment Exp detected\n");}
+					| IDETIFIER OP_INCREMENT {printInFile("Postfix increment Exp detected\n");}
 					;
 
-Decrement			: OP_DECREMENT IDETIFIER {printInFile("Prefix decrement detected\n");}
-					| IDETIFIER OP_DECREMENT {printInFile("Postfix decrement detected\n");}
+DecrementExp		: OP_DECREMENT IDETIFIER {printInFile("Prefix decrement Exp detected\n");}
+					| IDETIFIER OP_DECREMENT {printInFile("Postfix decrement Exp detected\n");}
 					;
+
+Increment			: IncrementExp ';' {printInFile("increment detected\n");}
+					;
+
+Decrement			: DecrementExp ';' {printInFile("decrement detected\n");}
+					;
+
 
 
 /* Logic				: AssignLogic {printInFile("Logic operators detected\n");}
@@ -157,7 +191,7 @@ Condition			: Mif {printInFile("MIf constructed successfully\n");}
 					;
 
 Mif					: IF '(' Expression ')' '{' Statement '}' ELSE Mif
-					| '{' Assign '}'
+					| '{' Statement '}'
 					;
 
 Uif					: IF '(' Expression ')' '{' Statement '}'

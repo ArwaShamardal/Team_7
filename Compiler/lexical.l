@@ -19,7 +19,7 @@ skip_char 		[ \t\r\f\v]+
 variable 		(_|{letter})({letter}|{digit}|_)*
 /*{0,31}*/
 
-integer_val 	[1-9]{digit}*
+integer_val 	([1-9]{digit}*)|0
 float_val		({digit}*[.])?{digit}+
 string_val		\"[^("|\')]*\"$
 char_val		\'([^'\\]|\\.)?\'
@@ -75,6 +75,13 @@ return			{return RETURN;}
 "!="			{ return OP_INEQUALITY; }
 "&&"			{ return OP_LOGICAL_AND; }
 "||"			{ return OP_LOGICAL_OR; }
+"!"             { return OP_LOGICAL_NOT; }
+
+"+="            { return OP_PLUS_EQUAL; }
+"-="            { return OP_MINUS_EQUAL; }
+"*="            { return OP_MULTIPLY_EQUAL; }
+"/="            { return OP_DIVIDE_EQUAL; }
+"%="            { return OP_MODULO_EQUAL; }
 
 "="				{return('=');}
 "+"				{return('+');}
@@ -86,10 +93,10 @@ return			{return RETURN;}
 
 
 
-{bool_val}      {return VAL_BOOLEAN;}
 {variable}		{return IDETIFIER;}
 {integer_val}	{return VAL_INTEGER;}
 {float_val}		{return VAL_FLOAT;}
+{bool_val}      {return VAL_BOOLEAN;}
 {string_val}	{return VAL_STRING;}
 {char_val}		{return VAL_CHAR;}
 

@@ -68,15 +68,21 @@
      IDETIFIER = 284,
      OP_INCREMENT = 285,
      OP_DECREMENT = 286,
-     OP_GREATER_THAN = 287,
-     OP_LESS_THAN = 288,
-     OP_GREATER_OR_EQUAL = 289,
-     OP_LESS_OR_EQUAL = 290,
-     OP_INEQUALITY = 291,
-     OP_EQUALITY = 292,
-     OP_LOGICAL_OR = 293,
-     OP_LOGICAL_AND = 294,
-     UMINUS = 295
+     OP_PLUS_EQUAL = 287,
+     OP_MINUS_EQUAL = 288,
+     OP_MULTIPLY_EQUAL = 289,
+     OP_DIVIDE_EQUAL = 290,
+     OP_MODULO_EQUAL = 291,
+     OP_LOGICAL_NOT = 292,
+     OP_GREATER_THAN = 293,
+     OP_LESS_THAN = 294,
+     OP_GREATER_OR_EQUAL = 295,
+     OP_LESS_OR_EQUAL = 296,
+     OP_INEQUALITY = 297,
+     OP_EQUALITY = 298,
+     OP_LOGICAL_OR = 299,
+     OP_LOGICAL_AND = 300,
+     UMINUS = 301
    };
 #endif
 /* Tokens.  */
@@ -109,15 +115,21 @@
 #define IDETIFIER 284
 #define OP_INCREMENT 285
 #define OP_DECREMENT 286
-#define OP_GREATER_THAN 287
-#define OP_LESS_THAN 288
-#define OP_GREATER_OR_EQUAL 289
-#define OP_LESS_OR_EQUAL 290
-#define OP_INEQUALITY 291
-#define OP_EQUALITY 292
-#define OP_LOGICAL_OR 293
-#define OP_LOGICAL_AND 294
-#define UMINUS 295
+#define OP_PLUS_EQUAL 287
+#define OP_MINUS_EQUAL 288
+#define OP_MULTIPLY_EQUAL 289
+#define OP_DIVIDE_EQUAL 290
+#define OP_MODULO_EQUAL 291
+#define OP_LOGICAL_NOT 292
+#define OP_GREATER_THAN 293
+#define OP_LESS_THAN 294
+#define OP_GREATER_OR_EQUAL 295
+#define OP_LESS_OR_EQUAL 296
+#define OP_INEQUALITY 297
+#define OP_EQUALITY 298
+#define OP_LOGICAL_OR 299
+#define OP_LOGICAL_AND 300
+#define UMINUS 301
 
 
 
@@ -132,7 +144,7 @@ int int_type; char var[32];
 
 
 /* Line 1676 of yacc.c  */
-#line 136 "y.tab.h"
+#line 148 "y.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
