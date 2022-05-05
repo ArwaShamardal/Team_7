@@ -26,14 +26,20 @@
 %token <var> IDETIFIER;
 
 /*Short assignment operators*/
-%token OP_INCREMENT OP_DECREMENT OP_PLUS_EQUAL OP_MINUS_EQUAL OP_MULTIPLY_EQUAL OP_DIVIDE_EQUAL OP_MODULO_EQUAL OP_LOGICAL_NOT
+%token OP_INCREMENT OP_DECREMENT /* Precedence check */
 
+ /* Precedence and associativity */
+%right OP_PLUS_EQUAL OP_MINUS_EQUAL OP_MULTIPLY_EQUAL OP_DIVIDE_EQUAL OP_MODULO_EQUAL	/* += -= *= /= %= */
 %right '='
-%left OP_LESS_OR_EQUAL OP_GREATER_OR_EQUAL OP_LESS_THAN OP_GREATER_THAN 
-%left OP_LOGICAL_AND OP_LOGICAL_OR OP_EQUALITY OP_INEQUALITY
+%left OP_LOGICAL_OR							/* || */
+%left OP_LOGICAL_AND						/* && */
+%left OP_EQUALITY OP_INEQUALITY				/* == != */
+%left OP_LESS_OR_EQUAL OP_GREATER_OR_EQUAL OP_LESS_THAN OP_GREATER_THAN 		/* <= >= < > */
 %left '+' '-'
 %left '*' '/' '%'
-%left UMINUS
+%right OP_LOGICAL_NOT
+ /* %right UMINUS */
+%left '(' ')'	 		
 
 
 /*Grammars are written in UpperCamelCase*/
@@ -44,7 +50,8 @@ program 			: Starter program
 					;
 
 Starter 			: {printInFile("empty file\n");} 
-					| Statement
+					| Statement Starter
+					| Function Starter
 					/* | Assign 
 					| DataType 
 					| Function 
@@ -59,20 +66,21 @@ Starter 			: {printInFile("empty file\n");}
 					| FunctionCall */
 					;
 					
-Statement			: VarDeclaration Statement
-					| Condition Statement
-					| WhileLoop Statement
-					| DoWhileLoop Statement
-					| ForLoop Statement
-					| SwitchCase Statement
-					| Assign Statement
-					| Increment Statement
-					| Decrement Statement
-					| ArithmeticAssign Statement
-					| Return Statement
-					| BREAK ';' Statement
-					| CONTINUE ';' Statement
-					|
+Statement			: VarDeclaration Starter
+					| Assign Starter
+					| FunctionCall Starter
+					| Condition Starter
+					| WhileLoop Starter
+					| DoWhileLoop Starter
+					| ForLoop Starter
+					| SwitchCase Starter
+					| Increment Starter
+					| Decrement Starter
+					| ArithmeticAssign Starter
+					| Return Starter
+					| BREAK ';' Starter
+					| CONTINUE ';' Starter
+					| 
 					;
 
 VarDeclaration		: DataType IDETIFIER ';' {printInFile("Variable Defined succefully\n");}
@@ -82,10 +90,11 @@ VarDeclaration		: DataType IDETIFIER ';' {printInFile("Variable Defined succeful
 
 
 Expression			: ArithmeticExp
+					| FunctionCallExp
 					| RelationalExp
 					| LogicalExp
 					| '(' Expression ')'
-					| ValueTypeNumber
+					| ValueTypeAll
 					| AssignExp
 					| IncrementExp
 					| DecrementExp
@@ -98,6 +107,7 @@ ArithmeticExp		: Expression '+' Expression
 					| Expression '*' Expression
 					| Expression '/' Expression
 					| Expression '%' Expression
+					| '-' Expression
 					;
 
 RelationalExp		: Expression OP_EQUALITY Expression
@@ -240,10 +250,12 @@ Parameters			: DataTypeNoVoid IDETIFIER ',' DataTypeNoVoid IDETIFIER
 
 Arguments			: Expression ',' Arguments
 					| Expression
+					|
 					;
 
 
-FunctionCall		: IDETIFIER '(' Arguments ')' ';' 
+FunctionCallExp		: IDETIFIER '(' Arguments ')'
+FunctionCall		: FunctionCallExp ';'
 
 ValueTypeNumber		: VAL_INTEGER 
 					| VAL_FLOAT

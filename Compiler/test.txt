@@ -1,1 +1,1 @@
-return;
+int s = 'd';

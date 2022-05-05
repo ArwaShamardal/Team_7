@@ -1,6 +1,4 @@
-/*** Definition Section has one variable
-which can be accessed inside yylex()
-and main() ***/
+
 %{
 #include <stdlib.h>
 #include <stdio.h>
@@ -21,10 +19,11 @@ variable 		(_|{letter})({letter}|{digit}|_)*
 
 integer_val 	([1-9]{digit}*)|0
 float_val		({digit}*[.])?{digit}+
-string_val		\"[^("|\')]*\"$
-char_val		\'([^'\\]|\\.)?\'
+string_val		\"[^(")]*\"$
+char_val		\'[^(\')]?\'$
 bool_val		"true"|"false"|"1"|"0"
 /*double_val		({digit}+[.])?{digit}+ */
+comment        	\/\/.*
 
 
 /*** Tokens format
@@ -100,7 +99,7 @@ return			{return RETURN;}
 {string_val}	{return VAL_STRING;}
 {char_val}		{return VAL_CHAR;}
 
-
+{comment}       ;
 {skip_char}		;
 
 .				{yyerror("invalid character");}
