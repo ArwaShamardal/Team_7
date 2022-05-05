@@ -59,50 +59,10 @@
 
 %%
 
-Starter 			: {printInFile("empty file\n");} |Assign |DataType |Logic|Function
+Starter 			: {printInFile("empty file\n");} | Assign
 					;
 
-Assign  			: IDETIFIER '=' Expression ';' {printInFile("Assigned succefully\n");}
-					;
-
-Expression			: Expression '+' Term
-					| Expression '-' Term
-					| Term
-					;
-
-Term 				: Term '*' Factor 
-					| Term '/' Factor
-					| Term '%' Factor
-					| Factor
-					;
-					
-Factor				: '(' Expression ')'
-					| ValueTypeNumber
-					| IDETIFIER
-					;
-
-
-Logic				: AssignLogic {printInFile("Logic operators detected\n");}
-					;
-
-AssignLogic			: AssignLogic OP_EQUALITY AssignLogic
-					| AssignLogic OP_INEQUALITY AssignLogic
-					| AssignLogic OP_GREATER_OR_EQUAL AssignLogic
-					| AssignLogic OP_LESS_OR_EQUAL AssignLogic
-					| AssignLogic OP_GREATER_THAN AssignLogic
-					| AssignLogic OP_LESS_THAN AssignLogic
-					| AssignLogic OP_LOGICAL_OR AssignLogic
-					| AssignLogic OP_LOGICAL_AND AssignLogic
-					| ValueTypeAll
-					| IDETIFIER
-					| '(' Expression ')'
-					;
-
-Function			: DataType IDETIFIER '(' Arguments ')' '{' '}' {printInFile("Function constructed successfully\n");}
-					;
-
-Arguments			: DataTypeNoVoid IDETIFIER ',' 
-					| DataTypeNoVoid IDETIFIER
+Assign  			: IDETIFIER '=' ValueTypeAll ';' {printInFile("Assigned succefully\n");}
 					;
 
 ValueTypeNumber		: VAL_INTEGER 
@@ -116,21 +76,6 @@ ValueTypeLetter		: VAL_BOOLEAN
 
 ValueTypeAll		: ValueTypeNumber
 					| ValueTypeLetter
-					;
-
-DataTypeNoVoid		: INTEGER
-					| FLOAT
-					| CHARACTER
-					| STRING
-					| BOOLEAN
-					;
-
-DataType			: INTEGER
-					| FLOAT
-					| CHARACTER
-					| STRING
-					| BOOLEAN
-					| VOID
 					;
 
 %%

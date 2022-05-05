@@ -1,6 +1,3 @@
-/*** Definition Section has one variable
-which can be accessed inside yylex()
-and main() ***/
 %{
 #include <stdlib.h>
 #include <stdio.h>
@@ -24,10 +21,9 @@ comment        	\/\/.*
 integer_val 	[1-9]{digit}*
 float_val		({digit}*[.])?{digit}+
 string_val		\"[^("|\')]*\"$
-char_val		\'([^'\\]|\\.)\'
+char_val		\'([^'\\]|\\.)?\'
 bool_val		"true"|"false"|"1"|"0"
 /*double_val		({digit}+[.])?{digit}+ */
-
 
 /*** Tokens format
 /***	1- Capitalized letters

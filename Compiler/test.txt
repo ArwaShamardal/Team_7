@@ -1,6 +1,2 @@
-x=5;
-x=5+5+7*9/(9+3);
-int afssf(int a){}
-x==6
-x&&y
-int afssf(){}
+x=6;
+y=8;
