@@ -20,9 +20,9 @@ variable 		(_|{letter})({letter}|{digit}|_)*
 /*{0,31}*/
 
 integer_val 	[1-9]{digit}*
-float_val		({digit}+[.])?{digit}+
+float_val		({digit}*[.])?{digit}+
 string_val		\"[^("|\')]*\"$
-char_val		\'.\'
+char_val		\'([^'\\]|\\.)?\'
 bool_val		"true"|"false"|"1"|"0"
 /*double_val		({digit}+[.])?{digit}+ */
 
@@ -48,6 +48,7 @@ while 			{return WHILE;}
 do 				{return DO;}
 switch 			{return SWITCH;}
 case 			{return CASE;}
+default         {return DEFAULT;}
 const 			{return CONSTANT;}
 break 			{return BREAK;}
 continue		{return CONTINUE;}

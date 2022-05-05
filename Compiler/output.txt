@@ -1,6 +1,3 @@
 Assigned succefully
 Assigned succefully
-Function constructed successfully
-Logic operators detected
-Logic operators detected
-syntax error
+For Loop constructed successfully

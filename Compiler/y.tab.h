@@ -46,36 +46,37 @@
      DO = 262,
      SWITCH = 263,
      CASE = 264,
-     BREAK = 265,
-     CONTINUE = 266,
-     RETURN = 267,
-     SEMICOLON = 268,
-     INTEGER = 269,
-     CHARACTER = 270,
-     FLOAT = 271,
-     STRING = 272,
-     DOUBLE = 273,
-     BOOLEAN = 274,
-     CONSTANT = 275,
-     VOID = 276,
-     VAL_INTEGER = 277,
-     VAL_FLOAT = 278,
-     VAL_DOUBLE = 279,
-     VAL_STRING = 280,
-     VAL_CHAR = 281,
-     VAL_BOOLEAN = 282,
-     IDETIFIER = 283,
-     OP_INCREMENT = 284,
-     OP_DECREMENT = 285,
-     OP_GREATER_THAN = 286,
-     OP_LESS_THAN = 287,
-     OP_GREATER_OR_EQUAL = 288,
-     OP_LESS_OR_EQUAL = 289,
-     OP_INEQUALITY = 290,
-     OP_EQUALITY = 291,
-     OP_LOGICAL_OR = 292,
-     OP_LOGICAL_AND = 293,
-     UMINUS = 294
+     DEFAULT = 265,
+     BREAK = 266,
+     CONTINUE = 267,
+     RETURN = 268,
+     SEMICOLON = 269,
+     INTEGER = 270,
+     CHARACTER = 271,
+     FLOAT = 272,
+     STRING = 273,
+     DOUBLE = 274,
+     BOOLEAN = 275,
+     CONSTANT = 276,
+     VOID = 277,
+     VAL_INTEGER = 278,
+     VAL_FLOAT = 279,
+     VAL_DOUBLE = 280,
+     VAL_STRING = 281,
+     VAL_CHAR = 282,
+     VAL_BOOLEAN = 283,
+     IDETIFIER = 284,
+     OP_INCREMENT = 285,
+     OP_DECREMENT = 286,
+     OP_GREATER_THAN = 287,
+     OP_LESS_THAN = 288,
+     OP_GREATER_OR_EQUAL = 289,
+     OP_LESS_OR_EQUAL = 290,
+     OP_INEQUALITY = 291,
+     OP_EQUALITY = 292,
+     OP_LOGICAL_OR = 293,
+     OP_LOGICAL_AND = 294,
+     UMINUS = 295
    };
 #endif
 /* Tokens.  */
@@ -86,36 +87,37 @@
 #define DO 262
 #define SWITCH 263
 #define CASE 264
-#define BREAK 265
-#define CONTINUE 266
-#define RETURN 267
-#define SEMICOLON 268
-#define INTEGER 269
-#define CHARACTER 270
-#define FLOAT 271
-#define STRING 272
-#define DOUBLE 273
-#define BOOLEAN 274
-#define CONSTANT 275
-#define VOID 276
-#define VAL_INTEGER 277
-#define VAL_FLOAT 278
-#define VAL_DOUBLE 279
-#define VAL_STRING 280
-#define VAL_CHAR 281
-#define VAL_BOOLEAN 282
-#define IDETIFIER 283
-#define OP_INCREMENT 284
-#define OP_DECREMENT 285
-#define OP_GREATER_THAN 286
-#define OP_LESS_THAN 287
-#define OP_GREATER_OR_EQUAL 288
-#define OP_LESS_OR_EQUAL 289
-#define OP_INEQUALITY 290
-#define OP_EQUALITY 291
-#define OP_LOGICAL_OR 292
-#define OP_LOGICAL_AND 293
-#define UMINUS 294
+#define DEFAULT 265
+#define BREAK 266
+#define CONTINUE 267
+#define RETURN 268
+#define SEMICOLON 269
+#define INTEGER 270
+#define CHARACTER 271
+#define FLOAT 272
+#define STRING 273
+#define DOUBLE 274
+#define BOOLEAN 275
+#define CONSTANT 276
+#define VOID 277
+#define VAL_INTEGER 278
+#define VAL_FLOAT 279
+#define VAL_DOUBLE 280
+#define VAL_STRING 281
+#define VAL_CHAR 282
+#define VAL_BOOLEAN 283
+#define IDETIFIER 284
+#define OP_INCREMENT 285
+#define OP_DECREMENT 286
+#define OP_GREATER_THAN 287
+#define OP_LESS_THAN 288
+#define OP_GREATER_OR_EQUAL 289
+#define OP_LESS_OR_EQUAL 290
+#define OP_INEQUALITY 291
+#define OP_EQUALITY 292
+#define OP_LOGICAL_OR 293
+#define OP_LOGICAL_AND 294
+#define UMINUS 295
 
 
 
@@ -130,7 +132,7 @@ int int_type; char var[32];
 
 
 /* Line 1676 of yacc.c  */
-#line 134 "y.tab.h"
+#line 136 "y.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
