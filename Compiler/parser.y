@@ -83,8 +83,13 @@ Statement			: VarDeclaration Starter
 					| 
 					;
 
-VarDeclaration		: DataType IDETIFIER ';' {printInFile("Variable Defined succefully\n");}
-					| DataType Assign
+OneLineDeclaration	: AssignExp ',' OneLineDeclaration
+					| AssignExp ';'
+					| IDETIFIER ',' OneLineDeclaration
+					| IDETIFIER ';'
+					;
+
+VarDeclaration		: DataType OneLineDeclaration {printInFile("Variable Defined succefully\n");}
 					| CONSTANT VarDeclaration
 					;
 

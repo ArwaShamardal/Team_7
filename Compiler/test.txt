@@ -1,1 +1,28 @@
-int s = 'd';
+int main()
+{
+	char Operator;
+	float result = 0;
+
+	int x, y;
+    const int x = 6, i = 1, z;
+
+  	switch(Operator)
+  	{
+  		case 4:
+  			result = num1 + num2;
+  			break;
+  		case 5:
+  			result = num1 - num2;
+  			break;  			
+  		case 8:
+  			result = num1 * num2;
+  			break;
+  		case 20:
+  			result = num1 / num2;
+  			break;
+		default:
+	}
+  
+	
+  	return 0;
+}
