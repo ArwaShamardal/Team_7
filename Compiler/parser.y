@@ -5,15 +5,23 @@
 	#include <stdio.h>
 	#include <string.h>
 	#define maxLinesToParse 256
-	FILE * yyin;
+	extern FILE * yyin;
     FILE * f1;
 	int lineCount=0;
 	char outputMessages [maxLinesToParse][maxLinesToParse];
 	void printInFile(char message[maxLinesToParse]);
 %}
 
-%union {int int_type; char var[32];}
-%start program
+%union {
+	int int_type;
+	float float_type;
+	double double_type;
+	char* string_type;	/* or char[MAX] */
+	char char_type;
+	short bool_type;	/* C doesn't support bool data type */
+	char var[32];
+}
+%start Starter
 
 /* Keywords tokens*/
 %token IF ELSE FOR WHILE DO SWITCH CASE BREAK CONTINUE RETURN SEMICOLON
@@ -22,26 +30,35 @@
 %token INTEGER CHARACTER FLOAT STRING DOUBLE BOOLEAN CONSTANT VOID
 
 /* Variables/Values*/
-%token VAL_INTEGER VAL_FLOAT VAL_DOUBLE VAL_STRING VAL_CHAR VAL_BOOLEAN
+%token <int_type>VAL_INTEGER
+%token <float_type>VAL_FLOAT
+%token <double_type>VAL_DOUBLE
+%token <string_type>VAL_STRING
+%token <char_type>VAL_CHAR
+%token <bool_type>VAL_BOOLEAN
 %token <var> IDETIFIER;
 
 /*Short assignment operators*/
-%token OP_INCREMENT OP_DECREMENT
+%token OP_INCREMENT OP_DECREMENT			/* ++ -- */
 
+ /* Precedence and associativity */
+%right OP_ADD_ASSIGN OP_SUB_ASSIGN OP_MUL_ASSIGN OP_DIV_ASSIGN OP_MOD_ASSIGN	/* += -= *= /= %= */
 %right '='
-%left OP_LESS_OR_EQUAL OP_GREATER_OR_EQUAL OP_LESS_THAN OP_GREATER_THAN 
-%left OP_LOGICAL_AND OP_LOGICAL_OR OP_EQUALITY OP_INEQUALITY
+%left OP_LOGICAL_OR							/* || */
+%left OP_LOGICAL_AND						/* && */
+%left OP_EQUALITY OP_INEQUALITY				/* == != */
+%left OP_LESS_OR_EQUAL OP_GREATER_OR_EQUAL OP_LESS_THAN OP_GREATER_THAN 		/* <= >= < > */
 %left '+' '-'
 %left '*' '/' '%'
-%left UMINUS
+%right UMINUS								/* Unary minus (-) */
+
+%left '(' ')'	 							/* Not sure */
 
 
 /*Grammars are written in UpperCamelCase*/
 
 %%
-program 			: Starter program
-    				| Starter
-					;
+
 
 Starter 			: {printInFile("empty file\n");} | Assign |DataType |Logic|Function
 					;

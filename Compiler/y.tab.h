@@ -67,15 +67,20 @@
      IDETIFIER = 283,
      OP_INCREMENT = 284,
      OP_DECREMENT = 285,
-     OP_GREATER_THAN = 286,
-     OP_LESS_THAN = 287,
-     OP_GREATER_OR_EQUAL = 288,
-     OP_LESS_OR_EQUAL = 289,
-     OP_INEQUALITY = 290,
-     OP_EQUALITY = 291,
-     OP_LOGICAL_OR = 292,
-     OP_LOGICAL_AND = 293,
-     UMINUS = 294
+     OP_MOD_ASSIGN = 286,
+     OP_DIV_ASSIGN = 287,
+     OP_MUL_ASSIGN = 288,
+     OP_SUB_ASSIGN = 289,
+     OP_ADD_ASSIGN = 290,
+     OP_LOGICAL_OR = 291,
+     OP_LOGICAL_AND = 292,
+     OP_INEQUALITY = 293,
+     OP_EQUALITY = 294,
+     OP_GREATER_THAN = 295,
+     OP_LESS_THAN = 296,
+     OP_GREATER_OR_EQUAL = 297,
+     OP_LESS_OR_EQUAL = 298,
+     UMINUS = 299
    };
 #endif
 /* Tokens.  */
@@ -107,15 +112,20 @@
 #define IDETIFIER 283
 #define OP_INCREMENT 284
 #define OP_DECREMENT 285
-#define OP_GREATER_THAN 286
-#define OP_LESS_THAN 287
-#define OP_GREATER_OR_EQUAL 288
-#define OP_LESS_OR_EQUAL 289
-#define OP_INEQUALITY 290
-#define OP_EQUALITY 291
-#define OP_LOGICAL_OR 292
-#define OP_LOGICAL_AND 293
-#define UMINUS 294
+#define OP_MOD_ASSIGN 286
+#define OP_DIV_ASSIGN 287
+#define OP_MUL_ASSIGN 288
+#define OP_SUB_ASSIGN 289
+#define OP_ADD_ASSIGN 290
+#define OP_LOGICAL_OR 291
+#define OP_LOGICAL_AND 292
+#define OP_INEQUALITY 293
+#define OP_EQUALITY 294
+#define OP_GREATER_THAN 295
+#define OP_LESS_THAN 296
+#define OP_GREATER_OR_EQUAL 297
+#define OP_LESS_OR_EQUAL 298
+#define UMINUS 299
 
 
 
@@ -126,11 +136,19 @@ typedef union YYSTYPE
 
 /* Line 1676 of yacc.c  */
 #line 15 "parser.y"
-int int_type; char var[32];
+
+	int int_type;
+	float float_type;
+	double double_type;
+	char* string_type;	/* or char[MAX] */
+	char char_type;
+	short bool_type;	/* C doesn't support bool data type */
+	char var[32];
+
 
 
 /* Line 1676 of yacc.c  */
-#line 134 "y.tab.h"
+#line 152 "y.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */

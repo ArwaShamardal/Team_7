@@ -5,6 +5,7 @@ and main() ***/
 #include <stdlib.h>
 #include <stdio.h>
 #include <limits.h>
+#include <string.h>
 #include "y.tab.h"
 void yyerror(const char *s);
 int count = 0;
@@ -18,11 +19,12 @@ digit			[0-9]
 skip_char 		[ \t\r\f\v]+
 variable 		(_|{letter})({letter}|{digit}|_)*
 /*{0,31}*/
+comment        	\/\/.*
 
 integer_val 	[1-9]{digit}*
-float_val		({digit}+[.])?{digit}+
+float_val		({digit}*[.])?{digit}+
 string_val		\"[^("|\')]*\"$
-char_val		\'.\'
+char_val		\'([^'\\]|\\.)\'
 bool_val		"true"|"false"|"1"|"0"
 /*double_val		({digit}+[.])?{digit}+ */
 
@@ -66,6 +68,13 @@ return			{return RETURN;}
 
 "++"			{ return OP_INCREMENT; }
 "--"			{ return OP_DECREMENT; }
+
+"+="            { return OP_ADD_ASSIGN; }
+"-="            { return OP_SUB_ASSIGN; }
+"*="            { return OP_MUL_ASSIGN; }
+"/="            { return OP_DIV_ASSIGN; }
+"%="            { return OP_MOD_ASSIGN; }
+
 "<="			{ return OP_LESS_OR_EQUAL; }
 ">="			{ return OP_GREATER_OR_EQUAL; }
 "<"				{ return OP_LESS_THAN; }
@@ -85,12 +94,14 @@ return			{return RETURN;}
 
 
 
-{bool_val}      {return VAL_BOOLEAN;}
-{variable}		{return IDETIFIER;}
-{integer_val}	{return VAL_INTEGER;}
-{float_val}		{return VAL_FLOAT;}
-{string_val}	{return VAL_STRING;}
-{char_val}		{return VAL_CHAR;}
+{bool_val}      {yylval.bool_type = atoi(yytext);       return VAL_BOOLEAN;}
+{variable}		{strcpy(yylval.var, yytext);             return IDETIFIER;}
+{integer_val}	{yylval.int_type = atoi(yytext);        return VAL_INTEGER;}
+{float_val}		{yylval.float_type = atof(yytext);      return VAL_FLOAT;}
+{string_val}	{strcpy(yylval.string_type, yytext);    return VAL_STRING;}
+{char_val}		{yylval.char_type = yytext[0];          return VAL_CHAR;}
+
+{comment}       ;
 
 
 {skip_char}		;
