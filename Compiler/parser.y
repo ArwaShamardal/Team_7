@@ -69,11 +69,15 @@ Statement			: VarDeclaration Statement
 					| Increment Statement
 					| Decrement Statement
 					| ArithmeticAssign Statement
+					| Return Statement
+					| BREAK ';' Statement
+					| CONTINUE ';' Statement
 					|
 					;
 
 VarDeclaration		: DataType IDETIFIER ';' {printInFile("Variable Defined succefully\n");}
 					| DataType Assign
+					| CONSTANT VarDeclaration
 					;
 
 
@@ -158,7 +162,9 @@ Increment			: IncrementExp ';' {printInFile("increment detected\n");}
 Decrement			: DecrementExp ';' {printInFile("decrement detected\n");}
 					;
 
-
+Return				: RETURN Expression ';'
+					| RETURN ';'
+					;
 
 /* Logic				: AssignLogic {printInFile("Logic operators detected\n");}
 					;
@@ -254,6 +260,7 @@ ValueTypeAll		: ValueTypeNumber
 
 DataTypeNoVoid		: INTEGER
 					| FLOAT
+					| DOUBLE
 					| CHARACTER
 					| STRING
 					| BOOLEAN
@@ -261,6 +268,7 @@ DataTypeNoVoid		: INTEGER
 
 DataType			: INTEGER
 					| FLOAT
+					| DOUBLE
 					| CHARACTER
 					| STRING
 					| BOOLEAN
