@@ -1,0 +1,25 @@
+Variable Defined succefully
+Variable Defined succefully
+Variable Defined succefully
+Variable Defined succefully
+Assigned succefully
+empty file
+empty file
+Assigned succefully
+empty file
+empty file
+Assigned succefully
+empty file
+empty file
+Assigned succefully
+empty file
+empty file
+Switch case constructed successfully
+empty file
+empty file
+empty file
+empty file
+empty file
+empty file
+Function constructed successfully
+empty file

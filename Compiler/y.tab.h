@@ -46,21 +46,42 @@
      DO = 262,
      SWITCH = 263,
      CASE = 264,
-     BREAK = 265,
-     CONTINUE = 266,
-     RETURN = 267,
-     INTEGER = 268,
-     CHARACTER = 269,
-     FLOAT = 270,
-     STRING = 271,
-     DOUBLE = 272,
-     BOOLEAN = 273,
-     CONSTANT = 274,
-     VOID = 275,
-     VAL_INTEGER = 276,
-     VAL_FLOAT = 277,
-     VARIABLE = 278,
-     UMINUS = 279
+     DEFAULT = 265,
+     BREAK = 266,
+     CONTINUE = 267,
+     RETURN = 268,
+     SEMICOLON = 269,
+     INTEGER = 270,
+     CHARACTER = 271,
+     FLOAT = 272,
+     STRING = 273,
+     DOUBLE = 274,
+     BOOLEAN = 275,
+     CONSTANT = 276,
+     VOID = 277,
+     VAL_INTEGER = 278,
+     VAL_FLOAT = 279,
+     VAL_DOUBLE = 280,
+     VAL_STRING = 281,
+     VAL_CHAR = 282,
+     VAL_BOOLEAN = 283,
+     IDETIFIER = 284,
+     OP_INCREMENT = 285,
+     OP_DECREMENT = 286,
+     OP_MODULO_EQUAL = 287,
+     OP_DIVIDE_EQUAL = 288,
+     OP_MULTIPLY_EQUAL = 289,
+     OP_MINUS_EQUAL = 290,
+     OP_PLUS_EQUAL = 291,
+     OP_LOGICAL_OR = 292,
+     OP_LOGICAL_AND = 293,
+     OP_INEQUALITY = 294,
+     OP_EQUALITY = 295,
+     OP_GREATER_THAN = 296,
+     OP_LESS_THAN = 297,
+     OP_GREATER_OR_EQUAL = 298,
+     OP_LESS_OR_EQUAL = 299,
+     OP_LOGICAL_NOT = 300
    };
 #endif
 /* Tokens.  */
@@ -71,21 +92,42 @@
 #define DO 262
 #define SWITCH 263
 #define CASE 264
-#define BREAK 265
-#define CONTINUE 266
-#define RETURN 267
-#define INTEGER 268
-#define CHARACTER 269
-#define FLOAT 270
-#define STRING 271
-#define DOUBLE 272
-#define BOOLEAN 273
-#define CONSTANT 274
-#define VOID 275
-#define VAL_INTEGER 276
-#define VAL_FLOAT 277
-#define VARIABLE 278
-#define UMINUS 279
+#define DEFAULT 265
+#define BREAK 266
+#define CONTINUE 267
+#define RETURN 268
+#define SEMICOLON 269
+#define INTEGER 270
+#define CHARACTER 271
+#define FLOAT 272
+#define STRING 273
+#define DOUBLE 274
+#define BOOLEAN 275
+#define CONSTANT 276
+#define VOID 277
+#define VAL_INTEGER 278
+#define VAL_FLOAT 279
+#define VAL_DOUBLE 280
+#define VAL_STRING 281
+#define VAL_CHAR 282
+#define VAL_BOOLEAN 283
+#define IDETIFIER 284
+#define OP_INCREMENT 285
+#define OP_DECREMENT 286
+#define OP_MODULO_EQUAL 287
+#define OP_DIVIDE_EQUAL 288
+#define OP_MULTIPLY_EQUAL 289
+#define OP_MINUS_EQUAL 290
+#define OP_PLUS_EQUAL 291
+#define OP_LOGICAL_OR 292
+#define OP_LOGICAL_AND 293
+#define OP_INEQUALITY 294
+#define OP_EQUALITY 295
+#define OP_GREATER_THAN 296
+#define OP_LESS_THAN 297
+#define OP_GREATER_OR_EQUAL 298
+#define OP_LESS_OR_EQUAL 299
+#define OP_LOGICAL_NOT 300
 
 
 
@@ -95,12 +137,12 @@ typedef union YYSTYPE
 {
 
 /* Line 1676 of yacc.c  */
-#line 8 "parser.y"
-int int_type; char variable[32];
+#line 15 "parser.y"
+int int_type; char var[32];
 
 
 /* Line 1676 of yacc.c  */
-#line 104 "y.tab.h"
+#line 146 "y.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
