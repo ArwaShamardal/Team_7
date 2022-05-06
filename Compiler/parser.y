@@ -12,6 +12,7 @@
 	void printInFile(char message[maxLinesToParse]);
 %}
 
+
 %union {int int_type; char var[32];}
 %start program
 
@@ -40,7 +41,6 @@
 %right OP_LOGICAL_NOT
  /* %right UMINUS */
 %left '(' ')'	 		
-
 
 /*Grammars are written in UpperCamelCase*/
 
@@ -112,7 +112,7 @@ ArithmeticExp		: Expression '+' Expression
 					| Expression '*' Expression
 					| Expression '/' Expression
 					| Expression '%' Expression
-					| '-' Expression
+					| '-' Expression %prec OP_LOGICAL_NOT	/* Let its precedence equate ! operator regarding the precedence table */
 					;
 
 RelationalExp		: Expression OP_EQUALITY Expression
