@@ -45,13 +45,13 @@
 /*Grammars are written in UpperCamelCase*/
 
 %%
-program 			: Starter program
-    				| Starter
+program 			: program Starter
+    				|
 					;
 
 Starter 			: {printInFile("empty file\n");} 
-					| Statement Starter
-					| Function Starter
+					| Statement
+					| Function
 					/* | Assign 
 					| DataType 
 					| Function 
@@ -80,7 +80,7 @@ Statement			: VarDeclaration Starter
 					| Return Starter
 					| BREAK ';' Starter
 					| CONTINUE ';' Starter
-					| 
+					|
 					;
 
 OneLineDeclaration	: AssignExp ',' OneLineDeclaration

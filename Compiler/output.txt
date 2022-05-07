@@ -1,25 +1,24 @@
 Variable Defined succefully
 Variable Defined succefully
-Variable Defined succefully
-Variable Defined succefully
+Assigned succefully
+Postfix increment Exp detected
+For Loop constructed successfully
+Assigned succefully
+Postfix decrement Exp detected
+Assigned succefully
+Postfix increment Exp detected
+Assigned succefully
+Assigned succefully
 Assigned succefully
 empty file
+UIf constructed successfully
 empty file
+For Loop constructed successfully
+empty file
+For Loop constructed successfully
 Assigned succefully
+Postfix increment Exp detected
 empty file
-empty file
-Assigned succefully
-empty file
-empty file
-Assigned succefully
-empty file
-empty file
-Switch case constructed successfully
-empty file
-empty file
-empty file
-empty file
-empty file
+For Loop constructed successfully
 empty file
 Function constructed successfully
-empty file

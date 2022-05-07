@@ -1,28 +1,24 @@
-int main()
-{
-	char Operator;
-	float result = 0;
+int shit = 0.6;
+int main(){
 
-	int x, y;
-    const int x = 6, i = 1, z;
+   int count, temp, i, j, number;
 
-  	switch(Operator)
-  	{
-  		case 4:
-  			result = num1 + num2;
-  			break;
-  		case 5:
-  			result = num1 - num2;
-  			break;  			
-  		case 8:
-  			result = num1 * num2;
-  			break;
-  		case 20:
-  			result = num1 / num2;
-  			break;
-		default:
-	}
+   for(i=0;i<count;i++){}
+
   
-	
-  	return 0;
+   for(i=count-2;i>=0;i--){
+      for(j=0;j<=i;j++){
+        if(number>number){
+           temp=number;
+           number=number;
+           number=temp;
+        }
+      }
+   }
+
+   for(i=0;i<count;i++){
+      printf(56, d+d3);
+	  }
+
+   return 0;
 }
