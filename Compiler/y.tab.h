@@ -81,7 +81,8 @@
      OP_LESS_THAN = 297,
      OP_GREATER_OR_EQUAL = 298,
      OP_LESS_OR_EQUAL = 299,
-     OP_LOGICAL_NOT = 300
+     OP_LOGICAL_NOT = 300,
+     LOWER_THAN_ELSE = 301
    };
 #endif
 /* Tokens.  */
@@ -128,6 +129,7 @@
 #define OP_GREATER_OR_EQUAL 298
 #define OP_LESS_OR_EQUAL 299
 #define OP_LOGICAL_NOT 300
+#define LOWER_THAN_ELSE 301
 
 
 
@@ -142,7 +144,7 @@ int int_type; char var[32];
 
 
 /* Line 1676 of yacc.c  */
-#line 146 "y.tab.h"
+#line 148 "y.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */

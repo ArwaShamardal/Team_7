@@ -42,28 +42,17 @@
  /* %right UMINUS */
 %left '(' ')'	 		
 
+%nonassoc LOWER_THAN_ELSE
+%nonassoc ELSE
+
 /*Grammars are written in UpperCamelCase*/
 
 %%
-program 			: Starter program 
-    				| Starter
+program 			: Starter  
 					;
 
-Starter 			: {printInFile("empty file\n");} 
-					| Statement
+Starter 			: Statement
 					| Function
-					/* | Assign 
-					| DataType 
-					| Function 
-					| VarDeclaration 
-					| Condition
-					| WhileLoop
-					| DoWhileLoop 
-					| ForLoop
-					| SwitchCase
-					| Increment
-					| Decrement
-					| FunctionCall */
 					;
 					
 Statement			: VarDeclaration Starter
