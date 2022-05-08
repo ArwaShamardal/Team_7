@@ -1,5 +1,6 @@
 int shoot = 0.6;
-char sad = 'f';
+char c = 'C';
+string sad = "sad" + "d";
 int main(){
 
    int count, temp, i, j, number;

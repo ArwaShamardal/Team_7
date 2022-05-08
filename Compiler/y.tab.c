@@ -2042,7 +2042,6 @@ yyreturn:
  */
 
 void yyerror (char const *s) {
-	fprintf (stderr, "%s\n", s);
 	char errorString[256];
 	strcpy(errorString,s);
 	printInFile(errorString);

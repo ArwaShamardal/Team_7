@@ -19,7 +19,7 @@ variable 		(_|{letter})({letter}|{digit}|_)*
 
 integer_val 	([1-9]{digit}*)|0
 float_val		({digit}*[.])?{digit}+
-string_val		\"[^(")]*\"$
+string_val		\"[^(")]*\"
 char_val		\'[^(\')]?\'
 bool_val		"true"|"false"|"1"|"0"
 /*double_val		({digit}+[.])?{digit}+ */
