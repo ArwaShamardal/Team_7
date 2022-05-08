@@ -1,7 +1,6 @@
 Variable Defined succefully
 Variable Defined succefully
 Variable Defined succefully
-UIf constructed successfully
 Variable Defined succefully
 Assigned succefully
 Postfix increment Exp detected
@@ -13,7 +12,6 @@ Postfix increment Exp detected
 Assigned succefully
 Assigned succefully
 Assigned succefully
-UIf constructed successfully
 For Loop constructed successfully
 For Loop constructed successfully
 Assigned succefully

@@ -42,13 +42,14 @@
  /* %right UMINUS */
 %left '(' ')'	 		
 
-%nonassoc LOWER_THAN_ELSE
+
+%nonassoc THEN
 %nonassoc ELSE
 
 /*Grammars are written in UpperCamelCase*/
 
 %%
-program 			: Starter  
+program 			: Starter
 					;
 
 Starter 			: Statement
@@ -196,17 +197,10 @@ Function			: DataType IDETIFIER '(' Parameters ')' '{' Statement '}' {printInFil
 
 
  /* If conditon */
-Condition			: Mif {printInFile("MIf constructed successfully\n");}
-					| Uif {printInFile("UIf constructed successfully\n");}
-					;
+Condition			: IF '(' Expression ')' '{' Statement '}' %prec THEN
+					| IF '(' Expression ')' '{' Statement '}' ELSE '{' Statement '}'
+    				;
 
-Mif					: IF '(' Expression ')' '{' Statement '}' ELSE Mif
-					| '{' Statement '}'
-					;
-
-Uif					: IF '(' Expression ')' '{' Statement '}'
-					| IF '(' Expression ')' '{' Statement '}' ELSE Condition
-					;
 
  /* loops */
 WhileLoop			: WHILE '(' Expression ')' '{' Statement '}' {printInFile("While Loop constructed successfully\n");}

@@ -82,7 +82,7 @@
      OP_GREATER_OR_EQUAL = 298,
      OP_LESS_OR_EQUAL = 299,
      OP_LOGICAL_NOT = 300,
-     LOWER_THAN_ELSE = 301
+     THEN = 301
    };
 #endif
 /* Tokens.  */
@@ -129,7 +129,7 @@
 #define OP_GREATER_OR_EQUAL 298
 #define OP_LESS_OR_EQUAL 299
 #define OP_LOGICAL_NOT 300
-#define LOWER_THAN_ELSE 301
+#define THEN 301
 
 
 
