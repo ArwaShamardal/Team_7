@@ -1,4 +1,5 @@
-int shit = 0.6;
+int shoot = 0.6;
+char sad = 'f';
 int main(){
 
    int count, temp, i, j, number;

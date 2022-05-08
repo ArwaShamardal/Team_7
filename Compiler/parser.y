@@ -45,8 +45,8 @@
 /*Grammars are written in UpperCamelCase*/
 
 %%
-program 			: program Starter
-    				|
+program 			: Starter program 
+    				| Starter
 					;
 
 Starter 			: {printInFile("empty file\n");} 
