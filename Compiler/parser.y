@@ -1,9 +1,10 @@
 %{
+
+
 	int yylex();
 	void yyerror(const char *s);
-	#include <stdlib.h>
-	#include <stdio.h>
-	#include <string.h>
+	#include "semanticAnalyzer.h"
+
 	#define maxLinesToParse 256
 	extern FILE * yyin;
     FILE * f1;
@@ -13,8 +14,15 @@
 %}
 
 
-%union {int int_type; char var[32];}
+
+
 %start program
+
+%union
+	{
+		int data_type;
+		struct entry* entry;
+	}
 
 /* Keywords tokens*/
 %token IF ELSE FOR WHILE DO SWITCH CASE DEFAULT BREAK CONTINUE RETURN SEMICOLON 
@@ -23,8 +31,40 @@
 %token INTEGER CHARACTER FLOAT STRING DOUBLE BOOLEAN CONSTANT VOID
 
 /* Variables/Values*/
+
 %token VAL_INTEGER VAL_FLOAT VAL_DOUBLE VAL_STRING VAL_CHAR VAL_BOOLEAN
-%token <var> IDETIFIER;
+%token IDETIFIER
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+%type <entry> IDETIFIER
+
+%type <data_type> ArithmeticExp Expression FunctionCallExp DataType VarDeclaration OneLineDeclaration
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 /*Short assignment operators*/
 %token OP_INCREMENT OP_DECREMENT /* Precedence check */
@@ -52,8 +92,8 @@
 program 			: Starter
 					;
 
-Starter 			: Statement
-					| Function
+Starter 			: Statement 
+					| Function 
 					;
 					
 Statement			: VarDeclaration Starter
@@ -61,10 +101,10 @@ Statement			: VarDeclaration Starter
 					| FunctionCall Starter
 					| Condition Starter
 					| WhileLoop Starter
-					| DoWhileLoop Starter
+					| DoWhileLoop Starter 
 					| ForLoop Starter
 					| SwitchCase Starter
-					| Increment Starter
+					| Increment Starter 
 					| Decrement Starter
 					| ArithmeticAssign Starter
 					| Return Starter
@@ -74,13 +114,16 @@ Statement			: VarDeclaration Starter
 					;
 
 OneLineDeclaration	: AssignExp ',' OneLineDeclaration
-					| AssignExp ';'
+					| AssignExp ';' 
 					| IDETIFIER ',' OneLineDeclaration
-					| IDETIFIER ';'
+					| IDETIFIER ';' {printEntry($1);}
 					;
 
-VarDeclaration		: DataType OneLineDeclaration {printInFile("Variable Defined succefully\n");}
-					| CONSTANT VarDeclaration
+VarDeclaration		: DataType OneLineDeclaration 			{	
+																printf("type number is : %d", $1 );
+																printInFile("Variable Defined succefully\n");
+															}
+					| CONSTANT VarDeclaration 
 					;
 
 
@@ -94,10 +137,10 @@ Expression			: ArithmeticExp
 					| IncrementExp
 					| DecrementExp
 					| ArithmeticAssignExp
-					| IDETIFIER
+					| IDETIFIER  							
 					;
 
-ArithmeticExp		: Expression '+' Expression
+ArithmeticExp		: Expression '+' Expression 			{ printf(" %d\n", $1);} 						
 					| Expression '-' Expression
 					| Expression '*' Expression
 					| Expression '/' Expression
@@ -121,7 +164,7 @@ LogicalExp			: Expression OP_LOGICAL_OR Expression
 
 
 
-AssignExp			: IDETIFIER '=' Expression
+AssignExp			: IDETIFIER '=' Expression 				
 					;
 
 Assign  			: AssignExp ';' {printInFile("Assigned succefully\n");}
@@ -137,22 +180,6 @@ ArithmeticAssignExp : IDETIFIER OP_PLUS_EQUAL Expression
 ArithmeticAssign 	: ArithmeticAssignExp ';'
 					;
 
-/* 
-Expression			: Expression '+' Term
-					| Expression '-' Term
-					| Term
-					;
-
-Term 				: Term '*' Factor 
-					| Term '/' Factor
-					| Term '%' Factor
-					| Factor
-					;
-					
-Factor				: '(' Expression ')'
-					| ValueTypeNumber
-					| IDETIFIER
-					; */
 IncrementExp		: OP_INCREMENT IDETIFIER {printInFile("Prefix increment Exp detected\n");}
 					| IDETIFIER OP_INCREMENT {printInFile("Postfix increment Exp detected\n");}
 					;
@@ -170,24 +197,6 @@ Decrement			: DecrementExp ';' {printInFile("decrement detected\n");}
 Return				: RETURN Expression ';'
 					| RETURN ';'
 					;
-
-/* Logic				: AssignLogic {printInFile("Logic operators detected\n");}
-					;
-
-AssignLogic			: AssignLogic OP_EQUALITY AssignLogic
-					| AssignLogic OP_INEQUALITY AssignLogic
-					| AssignLogic OP_GREATER_OR_EQUAL AssignLogic
-					| AssignLogic OP_LESS_OR_EQUAL AssignLogic
-					| AssignLogic OP_GREATER_THAN AssignLogic
-					| AssignLogic OP_LESS_THAN AssignLogic
-					| AssignLogic OP_LOGICAL_OR AssignLogic
-					| AssignLogic OP_LOGICAL_AND AssignLogic
-					| ValueTypeAll
-					| IDETIFIER
-					| '(' Expression ')'
-					; */
-
-
 
 
  /* Any 'Assign' written below is to be changed to a block of statements */
@@ -245,7 +254,7 @@ Arguments			: Expression ',' Arguments
 FunctionCallExp		: IDETIFIER '(' Arguments ')'
 FunctionCall		: FunctionCallExp ';'
 
-ValueTypeNumber		: VAL_INTEGER 
+ValueTypeNumber		: VAL_INTEGER 			
 					| VAL_FLOAT
 					;
 
@@ -254,11 +263,11 @@ ValueTypeLetter		: VAL_BOOLEAN
 					| VAL_STRING
 					;
 
-ValueTypeAll		: ValueTypeNumber
+ValueTypeAll		: ValueTypeNumber 
 					| ValueTypeLetter
 					;
 
-DataTypeNoVoid		: INTEGER
+DataTypeNoVoid		: INTEGER {printf(" ss \n");}
 					| FLOAT
 					| DOUBLE
 					| CHARACTER
@@ -266,13 +275,12 @@ DataTypeNoVoid		: INTEGER
 					| BOOLEAN
 					;
 
-DataType			: INTEGER
-					| FLOAT
-					| DOUBLE
-					| CHARACTER
-					| STRING
-					| BOOLEAN
-					| VOID
+DataType			: INTEGER 									{$$ = INTEGER;}
+					| FLOAT										{$$ = FLOAT;}
+					| CHARACTER									{$$ = CHARACTER;}
+					| STRING									{$$ = STRING;}
+					| BOOLEAN									{$$ = BOOLEAN;}
+					| VOID										{$$ = VOID;}
 					;
 
 %%
@@ -296,7 +304,7 @@ void printInFile(char message[maxLinesToParse]){
 
 
 int main(void) {
-    yyin = fopen("test.txt", "r");
+    yyin = fopen("test1.txt", "r");
 	f1=fopen("output.txt","w");
    if(!yyparse())
 	{

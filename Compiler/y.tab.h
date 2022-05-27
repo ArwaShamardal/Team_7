@@ -139,12 +139,15 @@ typedef union YYSTYPE
 {
 
 /* Line 1676 of yacc.c  */
-#line 16 "parser.y"
-int int_type; char var[32];
+#line 22 "parser.y"
+
+		int data_type;
+		struct entry* entry;
+	
 
 
 /* Line 1676 of yacc.c  */
-#line 148 "y.tab.h"
+#line 151 "y.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */

@@ -1,9 +1,8 @@
 
 %{
-#include <stdlib.h>
-#include <stdio.h>
-#include <limits.h>
+
 #include "y.tab.h"
+struct entry * create_entry( char *name, int value, int data_type);
 void yyerror(const char *s);
 int count = 0;
 %}
@@ -92,10 +91,12 @@ return			{return RETURN;}
 
 
 
-{integer_val}	{return VAL_INTEGER;}
+{integer_val}	{   yylval.data_type = atoi(yytext);
+                    return VAL_INTEGER;}
 {float_val}		{return VAL_FLOAT;}
 {bool_val}      {return VAL_BOOLEAN;}
-{variable}		{return IDETIFIER;}
+{variable}		{   yylval.entry = create_entry(yytext,0,INTEGER);
+                    return IDETIFIER;}
 {string_val}	{return VAL_STRING;}
 {char_val}		{return VAL_CHAR;}
 

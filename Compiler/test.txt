@@ -1,6 +1,6 @@
 int shoot = 0.6;
 char c = 'C';
-string sad = "sad" + "d";
+string sad = 2 + "d";
 if(i){}
 int main(){
 
@@ -20,7 +20,7 @@ int main(){
    }
 
    for(i=0;i<count;i++){
-      printf(56, d+d3);
+      printf(56, 50+d3);
 	  }
 
    return 0;
