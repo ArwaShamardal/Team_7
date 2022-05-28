@@ -5,6 +5,7 @@
 	void yyerror(const char *s);
 	#include "semanticAnalyzer.h"
 
+	extern struct entry** mainTable;
 	#define maxLinesToParse 256
 	extern FILE * yyin;
     FILE * f1;
@@ -12,6 +13,7 @@
 	char outputMessages [maxLinesToParse][maxLinesToParse];
 	void printInFile(char message[maxLinesToParse]);
 %}
+
 
 
 
@@ -116,7 +118,8 @@ Statement			: VarDeclaration Starter
 OneLineDeclaration	: AssignExp ',' OneLineDeclaration
 					| AssignExp ';' 
 					| IDETIFIER ',' OneLineDeclaration
-					| IDETIFIER ';' {printEntry($1);}
+					| IDETIFIER ';' {printf("siuuuuuuuuuuuuuuuu\n");
+									printEntry(mainTable[99]);}
 					;
 
 VarDeclaration		: DataType OneLineDeclaration 			{	
@@ -304,6 +307,7 @@ void printInFile(char message[maxLinesToParse]){
 
 
 int main(void) {
+	mainTable = CreateTable();
     yyin = fopen("test1.txt", "r");
 	f1=fopen("output.txt","w");
    if(!yyparse())

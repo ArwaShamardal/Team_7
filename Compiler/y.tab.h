@@ -139,7 +139,7 @@ typedef union YYSTYPE
 {
 
 /* Line 1676 of yacc.c  */
-#line 22 "parser.y"
+#line 24 "parser.y"
 
 		int data_type;
 		struct entry* entry;

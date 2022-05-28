@@ -2,7 +2,9 @@
 %{
 
 #include "y.tab.h"
-struct entry * create_entry( char *name, int value, int data_type);
+struct entry** mainTable;
+
+struct entry * insert( char *name, int value, int data_type, struct entry** mainTable);
 void yyerror(const char *s);
 int count = 0;
 %}
@@ -95,7 +97,7 @@ return			{return RETURN;}
                     return VAL_INTEGER;}
 {float_val}		{return VAL_FLOAT;}
 {bool_val}      {return VAL_BOOLEAN;}
-{variable}		{   yylval.entry = create_entry(yytext,0,INTEGER);
+{variable}		{   yylval.entry = insert(yytext,0,INTEGER, mainTable);
                     return IDETIFIER;}
 {string_val}	{return VAL_STRING;}
 {char_val}		{return VAL_CHAR;}

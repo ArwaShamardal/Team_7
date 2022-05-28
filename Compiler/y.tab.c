@@ -76,6 +76,7 @@
 	void yyerror(const char *s);
 	#include "semanticAnalyzer.h"
 
+	extern struct entry** mainTable;
 	#define maxLinesToParse 256
 	extern FILE * yyin;
     FILE * f1;
@@ -85,7 +86,7 @@
 
 
 /* Line 189 of yacc.c  */
-#line 89 "y.tab.c"
+#line 90 "y.tab.c"
 
 /* Enabling traces.  */
 #ifndef YYDEBUG
@@ -212,7 +213,7 @@ typedef union YYSTYPE
 {
 
 /* Line 214 of yacc.c  */
-#line 22 "parser.y"
+#line 24 "parser.y"
 
 		int data_type;
 		struct entry* entry;
@@ -220,7 +221,7 @@ typedef union YYSTYPE
 
 
 /* Line 214 of yacc.c  */
-#line 224 "y.tab.c"
+#line 225 "y.tab.c"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
@@ -232,7 +233,7 @@ typedef union YYSTYPE
 
 
 /* Line 264 of yacc.c  */
-#line 236 "y.tab.c"
+#line 237 "y.tab.c"
 
 #ifdef short
 # undef short
@@ -564,17 +565,17 @@ static const yytype_int8 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
-       0,    92,    92,    95,    96,    99,   100,   101,   102,   103,
-     104,   105,   106,   107,   108,   109,   110,   111,   112,   113,
-     116,   117,   118,   119,   122,   126,   130,   131,   132,   133,
-     134,   135,   136,   137,   138,   139,   140,   143,   144,   145,
-     146,   147,   148,   151,   152,   153,   154,   155,   156,   159,
-     160,   161,   167,   170,   173,   174,   175,   176,   177,   180,
-     183,   184,   187,   188,   191,   194,   197,   198,   204,   209,
-     210,   215,   218,   222,   223,   226,   229,   230,   233,   234,
-     235,   238,   242,   243,   244,   245,   248,   249,   250,   254,
-     255,   257,   258,   261,   262,   263,   266,   267,   270,   271,
-     272,   273,   274,   275,   278,   279,   280,   281,   282,   283
+       0,    94,    94,    97,    98,   101,   102,   103,   104,   105,
+     106,   107,   108,   109,   110,   111,   112,   113,   114,   115,
+     118,   119,   120,   121,   125,   129,   133,   134,   135,   136,
+     137,   138,   139,   140,   141,   142,   143,   146,   147,   148,
+     149,   150,   151,   154,   155,   156,   157,   158,   159,   162,
+     163,   164,   170,   173,   176,   177,   178,   179,   180,   183,
+     186,   187,   190,   191,   194,   197,   200,   201,   207,   212,
+     213,   218,   221,   225,   226,   229,   232,   233,   236,   237,
+     238,   241,   245,   246,   247,   248,   251,   252,   253,   257,
+     258,   260,   261,   264,   265,   266,   269,   270,   273,   274,
+     275,   276,   277,   278,   281,   282,   283,   284,   285,   286
 };
 #endif
 
@@ -1698,14 +1699,15 @@ yyreduce:
         case 23:
 
 /* Line 1455 of yacc.c  */
-#line 119 "parser.y"
-    {printEntry((yyvsp[(1) - (2)].entry));}
+#line 121 "parser.y"
+    {printf("siuuuuuuuuuuuuuuuu\n");
+									printEntry(mainTable[99]);}
     break;
 
   case 24:
 
 /* Line 1455 of yacc.c  */
-#line 122 "parser.y"
+#line 125 "parser.y"
     {	
 																printf("type number is : %d", (yyvsp[(1) - (2)].data_type) );
 																printInFile("Variable Defined succefully\n");
@@ -1715,147 +1717,147 @@ yyreduce:
   case 37:
 
 /* Line 1455 of yacc.c  */
-#line 143 "parser.y"
+#line 146 "parser.y"
     { printf(" %d\n", (yyvsp[(1) - (3)].data_type));}
     break;
 
   case 53:
 
 /* Line 1455 of yacc.c  */
-#line 170 "parser.y"
+#line 173 "parser.y"
     {printInFile("Assigned succefully\n");}
     break;
 
   case 60:
 
 /* Line 1455 of yacc.c  */
-#line 183 "parser.y"
+#line 186 "parser.y"
     {printInFile("Prefix increment Exp detected\n");}
     break;
 
   case 61:
 
 /* Line 1455 of yacc.c  */
-#line 184 "parser.y"
+#line 187 "parser.y"
     {printInFile("Postfix increment Exp detected\n");}
     break;
 
   case 62:
 
 /* Line 1455 of yacc.c  */
-#line 187 "parser.y"
+#line 190 "parser.y"
     {printInFile("Prefix decrement Exp detected\n");}
     break;
 
   case 63:
 
 /* Line 1455 of yacc.c  */
-#line 188 "parser.y"
+#line 191 "parser.y"
     {printInFile("Postfix decrement Exp detected\n");}
     break;
 
   case 64:
 
 /* Line 1455 of yacc.c  */
-#line 191 "parser.y"
+#line 194 "parser.y"
     {printInFile("increment detected\n");}
     break;
 
   case 65:
 
 /* Line 1455 of yacc.c  */
-#line 194 "parser.y"
+#line 197 "parser.y"
     {printInFile("decrement detected\n");}
     break;
 
   case 68:
 
 /* Line 1455 of yacc.c  */
-#line 204 "parser.y"
+#line 207 "parser.y"
     {printInFile("Function constructed successfully\n");}
     break;
 
   case 71:
 
 /* Line 1455 of yacc.c  */
-#line 215 "parser.y"
+#line 218 "parser.y"
     {printInFile("While Loop constructed successfully\n");}
     break;
 
   case 72:
 
 /* Line 1455 of yacc.c  */
-#line 218 "parser.y"
+#line 221 "parser.y"
     {printInFile("Do while Loop constructed successfully\n");}
     break;
 
   case 75:
 
 /* Line 1455 of yacc.c  */
-#line 226 "parser.y"
+#line 229 "parser.y"
     {printInFile("For Loop constructed successfully\n");}
     break;
 
   case 81:
 
 /* Line 1455 of yacc.c  */
-#line 238 "parser.y"
+#line 241 "parser.y"
     {printInFile("Switch case constructed successfully\n");}
     break;
 
   case 98:
 
 /* Line 1455 of yacc.c  */
-#line 270 "parser.y"
+#line 273 "parser.y"
     {printf(" ss \n");}
     break;
 
   case 104:
 
 /* Line 1455 of yacc.c  */
-#line 278 "parser.y"
+#line 281 "parser.y"
     {(yyval.data_type) = INTEGER;}
     break;
 
   case 105:
 
 /* Line 1455 of yacc.c  */
-#line 279 "parser.y"
+#line 282 "parser.y"
     {(yyval.data_type) = FLOAT;}
     break;
 
   case 106:
 
 /* Line 1455 of yacc.c  */
-#line 280 "parser.y"
+#line 283 "parser.y"
     {(yyval.data_type) = CHARACTER;}
     break;
 
   case 107:
 
 /* Line 1455 of yacc.c  */
-#line 281 "parser.y"
+#line 284 "parser.y"
     {(yyval.data_type) = STRING;}
     break;
 
   case 108:
 
 /* Line 1455 of yacc.c  */
-#line 282 "parser.y"
+#line 285 "parser.y"
     {(yyval.data_type) = BOOLEAN;}
     break;
 
   case 109:
 
 /* Line 1455 of yacc.c  */
-#line 283 "parser.y"
+#line 286 "parser.y"
     {(yyval.data_type) = VOID;}
     break;
 
 
 
 /* Line 1455 of yacc.c  */
-#line 1859 "y.tab.c"
+#line 1861 "y.tab.c"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);
@@ -2067,7 +2069,7 @@ yyreturn:
 
 
 /* Line 1675 of yacc.c  */
-#line 286 "parser.y"
+#line 289 "parser.y"
 
 
 /* {printf(" %d parser",VAL_INTEGER);}
@@ -2089,6 +2091,7 @@ void printInFile(char message[maxLinesToParse]){
 
 
 int main(void) {
+	mainTable = CreateTable();
     yyin = fopen("test1.txt", "r");
 	f1=fopen("output.txt","w");
    if(!yyparse())
