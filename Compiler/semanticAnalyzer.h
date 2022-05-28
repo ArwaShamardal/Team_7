@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <limits.h>
 #include <string.h>
+#include <math.h>
 
 typedef enum { false, true } bool;
 

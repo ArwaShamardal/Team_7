@@ -32,6 +32,20 @@
    This special exception was added by the Free Software Foundation in
    version 2.2 of Bison.  */
 
+/* "%code requires" blocks.  */
+
+/* Line 1676 of yacc.c  */
+#line 41 "parser.y"
+
+    struct node {
+        float value;
+        int type;
+    };
+
+
+
+/* Line 1676 of yacc.c  */
+#line 49 "y.tab.h"
 
 /* Tokens.  */
 #ifndef YYTOKENTYPE
@@ -139,16 +153,17 @@ typedef union YYSTYPE
 {
 
 /* Line 1676 of yacc.c  */
-#line 40 "parser.y"
+#line 49 "parser.y"
 
-		char* lex_token_str;
+		struct node node;
+		float float_type;
 		int data_type;
 		struct entry* entry;
 	
 
 
 /* Line 1676 of yacc.c  */
-#line 152 "y.tab.h"
+#line 167 "y.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */

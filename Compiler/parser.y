@@ -5,6 +5,7 @@
 	void yyerror(const char *s);
 	#include "semanticAnalyzer.h"
 	char* currentName;
+	float data_float;
 	int currentScope = 0;
 	int currentDataTypeNumber;
 	int yylineno;
@@ -36,9 +37,18 @@
 
 %start program
 
+
+%code requires {
+    struct node {
+        float value;
+        int type;
+    };
+}
+
 %union
 	{
-		char* lex_token_str;
+		struct node node;
+		float float_type;
 		int data_type;
 		struct entry* entry;
 	}
@@ -67,9 +77,11 @@
 
 
 
-%type <entry> IDETIFIER
+%type <entry> IDETIFIER 
+%type <node> ValueTypeAll Expression ValueTypeLetter ValueTypeNumber 
 
-%type <data_type> ArithmeticExp Expression FunctionCallExp DataType VarDeclaration OneLineDeclaration ValueTypeAll ValueTypeLetter ValueTypeNumber
+%type <data_type> FunctionCallExp DataType VarDeclaration OneLineDeclaration VAL_INTEGER VAL_FLOAT
+%type <float_type> ArithmeticExp
 
 
 
@@ -162,12 +174,12 @@ Expression			: ArithmeticExp
 					| IDETIFIER  							
 					;
 
-ArithmeticExp		: Expression '+' Expression 						{type_check($1,$3,0); } 						
-					| Expression '-' Expression							{type_check($1,$3,0); }
-					| Expression '*' Expression							{type_check($1,$3,0); }
-					| Expression '/' Expression							{type_check($1,$3,0); }
-					| Expression '%' Expression							{type_check($1,$3,0); }
-					| '-' Expression %prec OP_LOGICAL_NOT	/* Let its precedence equate ! operator regarding the precedence table */
+ArithmeticExp		: Expression '+' Expression 										{ type_check($1.type, $3.type,0); $$ = $1.value + $3.value;}																																					
+					| Expression '-' Expression											{ type_check($1.type, $3.type,0); $$ = $1.value - $3.value;}						
+					| Expression '*' Expression											{ type_check($1.type, $3.type,0); $$ = $1.value * $3.value;}
+					| Expression '/' Expression											{ type_check($1.type, $3.type,0); $$ = $1.value / $3.value;}
+					| Expression '%' Expression											{ type_check($1.type, $3.type,0); $$ = fmod($1.value,$3.value);}
+					| '-' Expression %prec OP_LOGICAL_NOT								{$$ = $2;}
 					;
 
 RelationalExp		: Expression OP_EQUALITY Expression
@@ -188,6 +200,9 @@ LogicalExp			: Expression OP_LOGICAL_OR Expression
 
 AssignExp			: IDETIFIER '=' Expression 	 								{ 	if(isDeclaration){
 																						currentEntry = YaccInsert(currentName,0,currentDataTypeNumber,mainTable);
+																						currentEntry->value = $3.value;
+																						$1 = currentEntry;
+																						printEntry($1);
 																						isDeclaration = 0;
 																						}
 																						
@@ -281,16 +296,18 @@ Arguments			: Expression ',' Arguments
 FunctionCallExp		: IDETIFIER '(' Arguments ')'
 FunctionCall		: FunctionCallExp ';'
 
-ValueTypeNumber		: VAL_INTEGER 								{$$ = INTEGER;}								
-					| VAL_FLOAT									{$$ = FLOAT; }
+ValueTypeNumber		: VAL_INTEGER 								{ 	$$.value = $1; $$.type = INTEGER; }																			
+					| VAL_FLOAT									{ 	$$.value = data_float; $$.type = FLOAT;
+																	
+																} 								
 					;
 
-ValueTypeLetter		: VAL_BOOLEAN								{$$ = BOOLEAN; }
-					| VAL_CHAR									{$$ = CHARACTER; }
-					| VAL_STRING								{$$ = STRING; }
+ValueTypeLetter		: VAL_BOOLEAN							
+					| VAL_CHAR									
+					| VAL_STRING								
 					;
 
-ValueTypeAll		: ValueTypeNumber 
+ValueTypeAll		: ValueTypeNumber 									
 					| ValueTypeLetter
 					;
 
