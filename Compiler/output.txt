@@ -1,5 +1,0 @@
-Variable Defined succefully
-Variable Defined succefully
-Variable Defined succefully
-Variable Defined succefully
-Error: Variable already declared in this scopeVariable Defined succefully

@@ -139,6 +139,7 @@ Statement			: VarDeclaration Starter
 					| Decrement Starter
 					| ArithmeticAssign Starter
 					| Return Starter
+					| '{' Statement '}' Starter							
 					| BREAK ';' Starter
 					| CONTINUE ';' Starter
 					|
@@ -179,7 +180,7 @@ ArithmeticExp		: Expression '+' Expression 										{ type_check($1.type, $3.ty
 					| Expression '*' Expression											{ type_check($1.type, $3.type,0); $$ = $1.value * $3.value;}
 					| Expression '/' Expression											{ type_check($1.type, $3.type,0); $$ = $1.value / $3.value;}
 					| Expression '%' Expression											{ type_check($1.type, $3.type,0); $$ = fmod($1.value,$3.value);}
-					| '-' Expression %prec OP_LOGICAL_NOT								{$$ = $2;}
+					| '-' Expression %prec OP_LOGICAL_NOT								
 					;
 
 RelationalExp		: Expression OP_EQUALITY Expression
@@ -205,6 +206,7 @@ AssignExp			: IDETIFIER '=' Expression 	 								{ 	if(isDeclaration){
 																						printEntry($1);
 																						isDeclaration = 0;
 																						}
+																					
 																						
 																				}			
 					;
@@ -254,10 +256,10 @@ Condition			: IF '(' Expression ')' '{' Statement '}' %prec THEN
 
 
  /* loops */
-WhileLoop			: WHILE '(' Expression ')' '{' Statement '}' {printInFile("While Loop constructed successfully\n");}
+WhileLoop			: WHILE '(' Expression ')' '{' Statement '}' 				{ printInFile("While Loop constructed successfully\n");}
 					;
 
-DoWhileLoop			: DO '{' Statement '}' WHILE '(' Expression ')' ';' {printInFile("Do while Loop constructed successfully\n");}
+DoWhileLoop			: DO '{' Statement '}' WHILE '(' Expression ')' ';' 		{printf("do while reached\n"); printInFile("Do while Loop constructed successfully\n");}
 					;
 
 
@@ -363,7 +365,7 @@ void printInFile(char message[maxLinesToParse]){
 
 int main(void) {
 	mainTable = Initialize();
-    yyin = fopen("test1.txt", "r");
+    yyin = fopen("expressions.txt", "r");
 	f1=fopen("output.txt","w");
    if(!yyparse())
 	{
