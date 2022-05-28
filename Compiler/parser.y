@@ -148,13 +148,16 @@ Statement			: VarDeclaration Starter
 OneLineDeclaration	: AssignExp ',' OneLineDeclaration
 					| AssignExp ';' 							
 					| IDETIFIER ',' OneLineDeclaration          
-					| IDETIFIER ';' 							{ 	currentEntry = YaccInsert(currentName,0,currentDataTypeNumber,mainTable);
+					| IDETIFIER ';' 							{ 	
+																	currentEntry = YaccInsert(currentName,0,currentDataTypeNumber,mainTable);
+																	isDeclaration = 0;
+													
 																}
 					;
 
 VarDeclaration		: DataType OneLineDeclaration 			{	
 																if(currentEntry!= NULL){	
-																	isDeclaration = 1; 
+																	isDeclaration = 0; 
 																	printInFile("Variable Defined succefully\n");
 																}
 															}
@@ -199,13 +202,13 @@ LogicalExp			: Expression OP_LOGICAL_OR Expression
 
 
 
-AssignExp			: IDETIFIER '=' Expression 	 								{ 	if(isDeclaration){
+AssignExp			: IDETIFIER '=' Expression 	 								{ 	
+																					if(isDeclaration){
 																						currentEntry = YaccInsert(currentName,0,currentDataTypeNumber,mainTable);
 																						currentEntry->value = $3.value;
 																						$1 = currentEntry;
-																						printEntry($1);
 																						isDeclaration = 0;
-																						}
+																					}
 																					
 																						
 																				}			
@@ -299,9 +302,7 @@ FunctionCallExp		: IDETIFIER '(' Arguments ')'
 FunctionCall		: FunctionCallExp ';'
 
 ValueTypeNumber		: VAL_INTEGER 								{ 	$$.value = $1; $$.type = INTEGER; }																			
-					| VAL_FLOAT									{ 	$$.value = data_float; $$.type = FLOAT;
-																	
-																} 								
+					| VAL_FLOAT									{ 	$$.value = data_float; $$.type = FLOAT;} 								
 					;
 
 ValueTypeLetter		: VAL_BOOLEAN							
@@ -320,12 +321,12 @@ DataTypeNoVoid		: INTEGER 									{currentDataTypeNumber = INTEGER; }
 					| BOOLEAN									{currentDataTypeNumber = BOOLEAN;}
 					;
 
-DataType			: INTEGER 									{currentDataTypeNumber = INTEGER; $$ = INTEGER;}
-					| FLOAT										{currentDataTypeNumber = FLOAT; $$ = FLOAT;}
-					| CHARACTER									{currentDataTypeNumber = CHARACTER; $$ = CHARACTER;}
-					| STRING									{currentDataTypeNumber = STRING; $$ = STRING;}
-					| BOOLEAN									{currentDataTypeNumber = BOOLEAN; $$ = BOOLEAN;}
-					| VOID										{currentDataTypeNumber = VOID; $$ = VOID;}
+DataType			: INTEGER 									{isDeclaration=1; currentDataTypeNumber = INTEGER; $$ = INTEGER;}
+					| FLOAT										{isDeclaration=1; currentDataTypeNumber = FLOAT; $$ = FLOAT;}
+					| CHARACTER									{isDeclaration=1; currentDataTypeNumber = CHARACTER; $$ = CHARACTER;}
+					| STRING									{isDeclaration=1; currentDataTypeNumber = STRING; $$ = STRING;}
+					| BOOLEAN									{isDeclaration=1; currentDataTypeNumber = BOOLEAN; $$ = BOOLEAN;}
+					| VOID										{isDeclaration=1; currentDataTypeNumber = VOID; $$ = VOID;}
 					;
 
 %%
@@ -365,7 +366,7 @@ void printInFile(char message[maxLinesToParse]){
 
 int main(void) {
 	mainTable = Initialize();
-    yyin = fopen("expressions.txt", "r");
+    yyin = fopen("test1.txt", "r");
 	f1=fopen("output.txt","w");
    if(!yyparse())
 	{
