@@ -2,11 +2,14 @@
 %{
 
 #include "y.tab.h"
+#include <string.h>
 struct entry** mainTable;
 
 struct entry * insert( char *name, int value, int data_type, struct entry** mainTable);
 void yyerror(const char *s);
 int count = 0;
+extern char* currentName;
+extern int yylineno;
 %}
 
 
@@ -97,11 +100,12 @@ return			{return RETURN;}
                     return VAL_INTEGER;}
 {float_val}		{return VAL_FLOAT;}
 {bool_val}      {return VAL_BOOLEAN;}
-{variable}		{   yylval.entry = insert(yytext,0,INTEGER, mainTable);
+{variable}		{   currentName = strdup(yytext) ;
                     return IDETIFIER;}
 {string_val}	{return VAL_STRING;}
 {char_val}		{return VAL_CHAR;}
 
+\n              {yylineno++;}
 {comment}       ;
 {skip_char}		;
 

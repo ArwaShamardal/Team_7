@@ -139,15 +139,16 @@ typedef union YYSTYPE
 {
 
 /* Line 1676 of yacc.c  */
-#line 24 "parser.y"
+#line 40 "parser.y"
 
+		char* lex_token_str;
 		int data_type;
 		struct entry* entry;
 	
 
 
 /* Line 1676 of yacc.c  */
-#line 151 "y.tab.h"
+#line 152 "y.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */

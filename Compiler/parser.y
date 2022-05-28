@@ -4,14 +4,30 @@
 	int yylex();
 	void yyerror(const char *s);
 	#include "semanticAnalyzer.h"
-
+	char* currentName;
+	int currentScope = 0;
+	int currentDataTypeNumber;
+	int yylineno;
+	struct entry* currentEntry = NULL;
 	extern struct entry** mainTable;
+	struct table* tableList;
+
+
+	int yylex(void);
 	#define maxLinesToParse 256
 	extern FILE * yyin;
     FILE * f1;
 	int lineCount=0;
 	char outputMessages [maxLinesToParse][maxLinesToParse];
+	int isLeftSide = 0;
+	int isDeclaration = 0; 
+
+	
+
+	struct entry * insert( char *name, int value, int data_type, struct entry** mainTable);
+	struct entry * YaccInsert(char* currentName,double number,int typeNumber,struct entry ** mainTable);
 	void printInFile(char message[maxLinesToParse]);
+	void type_check(int,int,int);
 %}
 
 
@@ -22,6 +38,7 @@
 
 %union
 	{
+		char* lex_token_str;
 		int data_type;
 		struct entry* entry;
 	}
@@ -52,7 +69,7 @@
 
 %type <entry> IDETIFIER
 
-%type <data_type> ArithmeticExp Expression FunctionCallExp DataType VarDeclaration OneLineDeclaration
+%type <data_type> ArithmeticExp Expression FunctionCallExp DataType VarDeclaration OneLineDeclaration ValueTypeAll ValueTypeLetter ValueTypeNumber
 
 
 
@@ -116,15 +133,17 @@ Statement			: VarDeclaration Starter
 					;
 
 OneLineDeclaration	: AssignExp ',' OneLineDeclaration
-					| AssignExp ';' 
-					| IDETIFIER ',' OneLineDeclaration
-					| IDETIFIER ';' {printf("siuuuuuuuuuuuuuuuu\n");
-									printEntry(mainTable[99]);}
+					| AssignExp ';' 							
+					| IDETIFIER ',' OneLineDeclaration          
+					| IDETIFIER ';' 							{ 	currentEntry = YaccInsert(currentName,0,currentDataTypeNumber,mainTable);
+																}
 					;
 
 VarDeclaration		: DataType OneLineDeclaration 			{	
-																printf("type number is : %d", $1 );
-																printInFile("Variable Defined succefully\n");
+																if(currentEntry!= NULL){	
+																	isDeclaration = 1; 
+																	printInFile("Variable Defined succefully\n");
+																}
 															}
 					| CONSTANT VarDeclaration 
 					;
@@ -135,19 +154,19 @@ Expression			: ArithmeticExp
 					| RelationalExp
 					| LogicalExp
 					| '(' Expression ')'
-					| ValueTypeAll
+					| ValueTypeAll										
 					| AssignExp
-					| IncrementExp
+					| IncrementExp			
 					| DecrementExp
 					| ArithmeticAssignExp
 					| IDETIFIER  							
 					;
 
-ArithmeticExp		: Expression '+' Expression 			{ printf(" %d\n", $1);} 						
-					| Expression '-' Expression
-					| Expression '*' Expression
-					| Expression '/' Expression
-					| Expression '%' Expression
+ArithmeticExp		: Expression '+' Expression 						{type_check($1,$3,0); } 						
+					| Expression '-' Expression							{type_check($1,$3,0); }
+					| Expression '*' Expression							{type_check($1,$3,0); }
+					| Expression '/' Expression							{type_check($1,$3,0); }
+					| Expression '%' Expression							{type_check($1,$3,0); }
 					| '-' Expression %prec OP_LOGICAL_NOT	/* Let its precedence equate ! operator regarding the precedence table */
 					;
 
@@ -167,7 +186,12 @@ LogicalExp			: Expression OP_LOGICAL_OR Expression
 
 
 
-AssignExp			: IDETIFIER '=' Expression 				
+AssignExp			: IDETIFIER '=' Expression 	 								{ 	if(isDeclaration){
+																						currentEntry = YaccInsert(currentName,0,currentDataTypeNumber,mainTable);
+																						isDeclaration = 0;
+																						}
+																						
+																				}			
 					;
 
 Assign  			: AssignExp ';' {printInFile("Assigned succefully\n");}
@@ -257,44 +281,58 @@ Arguments			: Expression ',' Arguments
 FunctionCallExp		: IDETIFIER '(' Arguments ')'
 FunctionCall		: FunctionCallExp ';'
 
-ValueTypeNumber		: VAL_INTEGER 			
-					| VAL_FLOAT
+ValueTypeNumber		: VAL_INTEGER 								{$$ = INTEGER;}								
+					| VAL_FLOAT									{$$ = FLOAT; }
 					;
 
-ValueTypeLetter		: VAL_BOOLEAN
-					| VAL_CHAR
-					| VAL_STRING
+ValueTypeLetter		: VAL_BOOLEAN								{$$ = BOOLEAN; }
+					| VAL_CHAR									{$$ = CHARACTER; }
+					| VAL_STRING								{$$ = STRING; }
 					;
 
 ValueTypeAll		: ValueTypeNumber 
 					| ValueTypeLetter
 					;
 
-DataTypeNoVoid		: INTEGER {printf(" ss \n");}
-					| FLOAT
-					| DOUBLE
-					| CHARACTER
-					| STRING
-					| BOOLEAN
+DataTypeNoVoid		: INTEGER 									{currentDataTypeNumber = INTEGER; }
+					| FLOAT										{currentDataTypeNumber = FLOAT;}
+					| CHARACTER									{currentDataTypeNumber = CHARACTER;}
+					| STRING									{currentDataTypeNumber = STRING;}
+					| BOOLEAN									{currentDataTypeNumber = BOOLEAN;}
 					;
 
-DataType			: INTEGER 									{$$ = INTEGER;}
-					| FLOAT										{$$ = FLOAT;}
-					| CHARACTER									{$$ = CHARACTER;}
-					| STRING									{$$ = STRING;}
-					| BOOLEAN									{$$ = BOOLEAN;}
-					| VOID										{$$ = VOID;}
+DataType			: INTEGER 									{currentDataTypeNumber = INTEGER; $$ = INTEGER;}
+					| FLOAT										{currentDataTypeNumber = FLOAT; $$ = FLOAT;}
+					| CHARACTER									{currentDataTypeNumber = CHARACTER; $$ = CHARACTER;}
+					| STRING									{currentDataTypeNumber = STRING; $$ = STRING;}
+					| BOOLEAN									{currentDataTypeNumber = BOOLEAN; $$ = BOOLEAN;}
+					| VOID										{currentDataTypeNumber = VOID; $$ = VOID;}
 					;
 
 %%
 
-/* {printf(" %d parser",VAL_INTEGER);}
-	
+void type_check(int left, int right, int flag){
+	if(left != right)
+	{	
+		switch(flag)
+		{
+			case 0: yyerror("Error: Type mismatch in arithmetic expression"); break;
+			case 1: yyerror("Error: Type mismatch in assignment expression"); break;
+			case 2: yyerror("Error: Type mismatch in logical expression"); break;
+		}
+	}
+}
 
- */
+struct entry * YaccInsert(char* currentName,double number,int typeNumber,struct entry ** mainTable){
+	currentEntry = insert(currentName,number,typeNumber,mainTable);
+	if(currentEntry == NULL){
+		yyerror("Error: Variable already declared in this scope");
+	}
+}
 
 void yyerror (char const *s) {
-	fprintf (stderr, "%s\n", s);
+	int value = yylineno + 1;
+	printf ("%s in line number : %d\n", s, value);
 	char errorString[256];
 	strcpy(errorString,s);
 	printInFile(errorString);
@@ -307,7 +345,7 @@ void printInFile(char message[maxLinesToParse]){
 
 
 int main(void) {
-	mainTable = CreateTable();
+	mainTable = Initialize();
     yyin = fopen("test1.txt", "r");
 	f1=fopen("output.txt","w");
    if(!yyparse())
@@ -315,6 +353,7 @@ int main(void) {
 		printf("\nParsing complete\n");
 		for(int i=0; i<lineCount ; i++)
 			fprintf(f1,outputMessages[i]);
+		printTableData(tableList);	
 	}
 	else
 	{
@@ -327,12 +366,3 @@ int main(void) {
 	fclose(f1);
     return 0;
 }
-
-/*int main (void)
-{
-	int a=1;
-	while(1){
-		yyparse ();
-	}
-  	return 0;
-}*/

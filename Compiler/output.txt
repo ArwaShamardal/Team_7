@@ -1,0 +1,5 @@
+Variable Defined succefully
+Variable Defined succefully
+Error: Type mismatch in arithmetic expressionVariable Defined succefully
+Variable Defined succefully
+Error: Variable already declared in this scopeVariable Defined succefully

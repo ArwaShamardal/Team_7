@@ -1,1 +1,5 @@
-int c;
+int j;
+int a;
+int c = 8.00 + 6;
+int b;
+int a;
