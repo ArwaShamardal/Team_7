@@ -175,7 +175,9 @@ Expression			: ArithmeticExp
 					| IncrementExp			
 					| DecrementExp
 					| LHS 																{rightHandSide=1; isDeclaration=0;
-																						$$.type = $1->data_type; $$.value = $1->value;}																			
+																						if($1 != NULL){
+																							$$.type = $1->data_type; $$.value = $1->value;
+																						}}																			
 					;
 
 ArithmeticExp		: Expression '+' Expression 										{ type_check($1.type, $3.type,0); $$ = $1.value + $3.value;
@@ -221,13 +223,16 @@ LogicalExp			: Expression OP_LOGICAL_OR Expression
 AssignExp			: LHS AssignOperator Expression 	 						{ 	rightHandSide = 0;
 																					// found = findEntry(currentName);
 																					// printf("found %d\n", found);
-																					if(findEntry(currentName) == 1)
+																					if($1 != NULL)
 																						{
 																							$1->value = $3.value;
-																							printf("found %s\n", currentName);
+																							$1->data_type = $3.type;
+																							// printf("found %s\n", currentName);
 																						}
 																					else{
-																							printf("not found %s\n", currentName);
+																							$1 = NULL;
+																							yyerror("Error: Variable not declared yet");
+																							// printf("not found %s\n", currentName);
 																						}
 																				}			
 					;
