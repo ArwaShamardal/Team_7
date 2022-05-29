@@ -3,3 +3,5 @@ ADD y 10 10
 MOV k 0 - 
 MUL k 10 10 
 MOV j 0 - 
+ADD y 100 20 
+MOV f 0 - 

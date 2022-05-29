@@ -604,14 +604,14 @@ static const yytype_uint16 yyrline[] =
        0,   128,   128,   131,   132,   135,   136,   137,   138,   139,
      140,   141,   142,   143,   144,   145,   146,   147,   148,   149,
      152,   153,   154,   155,   158,   164,   168,   169,   170,   171,
-     172,   173,   174,   175,   176,   177,   181,   186,   190,   194,
-     198,   202,   205,   206,   207,   208,   209,   210,   213,   214,
-     215,   221,   237,   261,   264,   265,   266,   267,   268,   269,
-     273,   274,   277,   278,   281,   284,   287,   288,   294,   299,
-     300,   305,   308,   312,   313,   316,   319,   320,   323,   324,
-     325,   328,   332,   333,   334,   335,   338,   339,   340,   344,
-     345,   347,   348,   351,   352,   353,   356,   357,   360,   361,
-     362,   363,   364,   367,   368,   369,   370,   371,   372
+     172,   173,   174,   175,   176,   177,   183,   188,   192,   196,
+     200,   204,   207,   208,   209,   210,   211,   212,   215,   216,
+     217,   223,   242,   266,   269,   270,   271,   272,   273,   274,
+     278,   279,   282,   283,   286,   289,   292,   293,   299,   304,
+     305,   310,   313,   317,   318,   321,   324,   325,   328,   329,
+     330,   333,   337,   338,   339,   340,   343,   344,   345,   349,
+     350,   352,   353,   356,   357,   358,   361,   362,   365,   366,
+     367,   368,   369,   372,   373,   374,   375,   376,   377
 };
 #endif
 
@@ -1760,13 +1760,15 @@ yyreduce:
 /* Line 1455 of yacc.c  */
 #line 177 "parser.y"
     {rightHandSide=1; isDeclaration=0;
-																						(yyval.node).type = (yyvsp[(1) - (1)].entry)->data_type; (yyval.node).value = (yyvsp[(1) - (1)].entry)->value;}
+																						if((yyvsp[(1) - (1)].entry) != NULL){
+																							(yyval.node).type = (yyvsp[(1) - (1)].entry)->data_type; (yyval.node).value = (yyvsp[(1) - (1)].entry)->value;
+																						}}
     break;
 
   case 36:
 
 /* Line 1455 of yacc.c  */
-#line 181 "parser.y"
+#line 183 "parser.y"
     { type_check((yyvsp[(1) - (3)].node).type, (yyvsp[(3) - (3)].node).type,0); (yyval.float_type) = (yyvsp[(1) - (3)].node).value + (yyvsp[(3) - (3)].node).value;
 
 																							write_arithmetic("ADD", currentName, (yyvsp[(1) - (3)].node).value, (yyvsp[(3) - (3)].node).value);
@@ -1777,7 +1779,7 @@ yyreduce:
   case 37:
 
 /* Line 1455 of yacc.c  */
-#line 186 "parser.y"
+#line 188 "parser.y"
     { 
 																							type_check((yyvsp[(1) - (3)].node).type, (yyvsp[(3) - (3)].node).type,0); (yyval.float_type) = (yyvsp[(1) - (3)].node).value - (yyvsp[(3) - (3)].node).value;
 																							write_arithmetic("SUB", currentName, (yyvsp[(1) - (3)].node).value, (yyvsp[(3) - (3)].node).value);
@@ -1787,7 +1789,7 @@ yyreduce:
   case 38:
 
 /* Line 1455 of yacc.c  */
-#line 190 "parser.y"
+#line 192 "parser.y"
     { 
 																							type_check((yyvsp[(1) - (3)].node).type, (yyvsp[(3) - (3)].node).type,0); (yyval.float_type) = (yyvsp[(1) - (3)].node).value * (yyvsp[(3) - (3)].node).value;
 																							write_arithmetic("MUL", currentName, (yyvsp[(1) - (3)].node).value, (yyvsp[(3) - (3)].node).value);
@@ -1797,7 +1799,7 @@ yyreduce:
   case 39:
 
 /* Line 1455 of yacc.c  */
-#line 194 "parser.y"
+#line 196 "parser.y"
     {
 																							 type_check((yyvsp[(1) - (3)].node).type, (yyvsp[(3) - (3)].node).type,0); (yyval.float_type) = (yyvsp[(1) - (3)].node).value / (yyvsp[(3) - (3)].node).value;
 																							 write_arithmetic("DIV", currentName, (yyvsp[(1) - (3)].node).value, (yyvsp[(3) - (3)].node).value);
@@ -1807,7 +1809,7 @@ yyreduce:
   case 40:
 
 /* Line 1455 of yacc.c  */
-#line 198 "parser.y"
+#line 200 "parser.y"
     { 
 																							type_check((yyvsp[(1) - (3)].node).type, (yyvsp[(3) - (3)].node).type,0); (yyval.float_type) = fmod((yyvsp[(1) - (3)].node).value,(yyvsp[(3) - (3)].node).value);
 																							write_arithmetic("MOD", currentName, (yyvsp[(1) - (3)].node).value, (yyvsp[(3) - (3)].node).value);
@@ -1817,66 +1819,69 @@ yyreduce:
   case 41:
 
 /* Line 1455 of yacc.c  */
-#line 202 "parser.y"
+#line 204 "parser.y"
     {(yyval.float_type) = -((yyvsp[(2) - (2)].node).value); write_mov("NEG", currentName, (yyvsp[(2) - (2)].node).value, "-");}
     break;
 
   case 42:
 
 /* Line 1455 of yacc.c  */
-#line 205 "parser.y"
+#line 207 "parser.y"
     {write_arithmetic("EQ", currentName, (yyvsp[(1) - (3)].node).value, (yyvsp[(3) - (3)].node).value);}
     break;
 
   case 43:
 
 /* Line 1455 of yacc.c  */
-#line 206 "parser.y"
+#line 208 "parser.y"
     {write_arithmetic("NEQ", currentName, (yyvsp[(1) - (3)].node).value, (yyvsp[(3) - (3)].node).value);}
     break;
 
   case 44:
 
 /* Line 1455 of yacc.c  */
-#line 207 "parser.y"
+#line 209 "parser.y"
     {write_arithmetic("GEQ", currentName, (yyvsp[(1) - (3)].node).value, (yyvsp[(3) - (3)].node).value);}
     break;
 
   case 45:
 
 /* Line 1455 of yacc.c  */
-#line 208 "parser.y"
+#line 210 "parser.y"
     {write_arithmetic("LEQ", currentName, (yyvsp[(1) - (3)].node).value, (yyvsp[(3) - (3)].node).value);}
     break;
 
   case 46:
 
 /* Line 1455 of yacc.c  */
-#line 209 "parser.y"
+#line 211 "parser.y"
     {write_arithmetic("GRT", currentName, (yyvsp[(1) - (3)].node).value, (yyvsp[(3) - (3)].node).value);}
     break;
 
   case 47:
 
 /* Line 1455 of yacc.c  */
-#line 210 "parser.y"
+#line 212 "parser.y"
     {write_arithmetic("LSS", currentName, (yyvsp[(1) - (3)].node).value, (yyvsp[(3) - (3)].node).value);}
     break;
 
   case 51:
 
 /* Line 1455 of yacc.c  */
-#line 221 "parser.y"
+#line 223 "parser.y"
     { 	rightHandSide = 0;
 																					// found = findEntry(currentName);
 																					// printf("found %d\n", found);
-																					if(findEntry(currentName) == 1)
+																					if((yyvsp[(1) - (3)].entry) != NULL)
 																						{
 																							(yyvsp[(1) - (3)].entry)->value = (yyvsp[(3) - (3)].node).value;
-																							printf("found %s\n", currentName);
+																							(yyvsp[(1) - (3)].entry)->data_type = (yyvsp[(3) - (3)].node).type;
+																							// printf("found %s\n", currentName);
 																						}
 																					else{
-																							printf("not found %s\n", currentName);
+																							(yyvsp[(1) - (3)].entry) = NULL;
+																							yyerror("Error: Variable not declared yet");
+																							// printf("not found %s\n", currentName);
 																						}
 																				}
     break;
@@ -1884,7 +1889,7 @@ yyreduce:
   case 52:
 
 /* Line 1455 of yacc.c  */
-#line 237 "parser.y"
+#line 242 "parser.y"
     {
 																					if(isDeclaration==1 && rightHandSide==0){
 																						currentEntry = YaccInsert(currentName,0,currentDataTypeNumber,mainTable);
@@ -1911,224 +1916,224 @@ yyreduce:
   case 53:
 
 /* Line 1455 of yacc.c  */
-#line 261 "parser.y"
+#line 266 "parser.y"
     {printInFile("Assigned succefully\n");}
     break;
 
   case 54:
 
 /* Line 1455 of yacc.c  */
-#line 264 "parser.y"
+#line 269 "parser.y"
     {rightHandSide = 1;}
     break;
 
   case 55:
 
 /* Line 1455 of yacc.c  */
-#line 265 "parser.y"
+#line 270 "parser.y"
     {rightHandSide = 1;}
     break;
 
   case 56:
 
 /* Line 1455 of yacc.c  */
-#line 266 "parser.y"
+#line 271 "parser.y"
     {rightHandSide = 1;}
     break;
 
   case 57:
 
 /* Line 1455 of yacc.c  */
-#line 267 "parser.y"
+#line 272 "parser.y"
     {rightHandSide = 1;}
     break;
 
   case 58:
 
 /* Line 1455 of yacc.c  */
-#line 268 "parser.y"
+#line 273 "parser.y"
     {rightHandSide = 1;}
     break;
 
   case 59:
 
 /* Line 1455 of yacc.c  */
-#line 269 "parser.y"
+#line 274 "parser.y"
     {rightHandSide = 1;}
     break;
 
   case 60:
 
 /* Line 1455 of yacc.c  */
-#line 273 "parser.y"
+#line 278 "parser.y"
     {printInFile("Prefix increment Exp detected\n");}
     break;
 
   case 61:
 
 /* Line 1455 of yacc.c  */
-#line 274 "parser.y"
+#line 279 "parser.y"
     {printInFile("Postfix increment Exp detected\n");}
     break;
 
   case 62:
 
 /* Line 1455 of yacc.c  */
-#line 277 "parser.y"
+#line 282 "parser.y"
     {printInFile("Prefix decrement Exp detected\n");}
     break;
 
   case 63:
 
 /* Line 1455 of yacc.c  */
-#line 278 "parser.y"
+#line 283 "parser.y"
     {printInFile("Postfix decrement Exp detected\n");}
     break;
 
   case 64:
 
 /* Line 1455 of yacc.c  */
-#line 281 "parser.y"
+#line 286 "parser.y"
     {printInFile("increment detected\n");}
     break;
 
   case 65:
 
 /* Line 1455 of yacc.c  */
-#line 284 "parser.y"
+#line 289 "parser.y"
     {printInFile("decrement detected\n");}
     break;
 
   case 68:
 
 /* Line 1455 of yacc.c  */
-#line 294 "parser.y"
+#line 299 "parser.y"
     {printInFile("Function constructed successfully\n");}
     break;
 
   case 71:
 
 /* Line 1455 of yacc.c  */
-#line 305 "parser.y"
+#line 310 "parser.y"
     { printInFile("While Loop constructed successfully\n");}
     break;
 
   case 72:
 
 /* Line 1455 of yacc.c  */
-#line 308 "parser.y"
+#line 313 "parser.y"
     {printf("do while reached\n"); printInFile("Do while Loop constructed successfully\n");}
     break;
 
   case 75:
 
 /* Line 1455 of yacc.c  */
-#line 316 "parser.y"
+#line 321 "parser.y"
     {printInFile("For Loop constructed successfully\n");}
     break;
 
   case 81:
 
 /* Line 1455 of yacc.c  */
-#line 328 "parser.y"
+#line 333 "parser.y"
     {printInFile("Switch case constructed successfully\n");}
     break;
 
   case 91:
 
 /* Line 1455 of yacc.c  */
-#line 347 "parser.y"
+#line 352 "parser.y"
     { 	(yyval.node).value = (yyvsp[(1) - (1)].data_type); (yyval.node).type = INTEGER; }
     break;
 
   case 92:
 
 /* Line 1455 of yacc.c  */
-#line 348 "parser.y"
+#line 353 "parser.y"
     { 	(yyval.node).value = data_float; (yyval.node).type = FLOAT;}
     break;
 
   case 98:
 
 /* Line 1455 of yacc.c  */
-#line 360 "parser.y"
+#line 365 "parser.y"
     {currentDataTypeNumber = INTEGER; }
     break;
 
   case 99:
 
 /* Line 1455 of yacc.c  */
-#line 361 "parser.y"
+#line 366 "parser.y"
     {currentDataTypeNumber = FLOAT;}
     break;
 
   case 100:
 
 /* Line 1455 of yacc.c  */
-#line 362 "parser.y"
+#line 367 "parser.y"
     {currentDataTypeNumber = CHARACTER;}
     break;
 
   case 101:
 
 /* Line 1455 of yacc.c  */
-#line 363 "parser.y"
+#line 368 "parser.y"
     {currentDataTypeNumber = STRING;}
     break;
 
   case 102:
 
 /* Line 1455 of yacc.c  */
-#line 364 "parser.y"
+#line 369 "parser.y"
     {currentDataTypeNumber = BOOLEAN;}
     break;
 
   case 103:
 
 /* Line 1455 of yacc.c  */
-#line 367 "parser.y"
+#line 372 "parser.y"
     {isDeclaration=1; currentDataTypeNumber = INTEGER; (yyval.data_type) = INTEGER;}
     break;
 
   case 104:
 
 /* Line 1455 of yacc.c  */
-#line 368 "parser.y"
+#line 373 "parser.y"
     {isDeclaration=1; currentDataTypeNumber = FLOAT; (yyval.data_type) = FLOAT;}
     break;
 
   case 105:
 
 /* Line 1455 of yacc.c  */
-#line 369 "parser.y"
+#line 374 "parser.y"
     {isDeclaration=1; currentDataTypeNumber = CHARACTER; (yyval.data_type) = CHARACTER;}
     break;
 
   case 106:
 
 /* Line 1455 of yacc.c  */
-#line 370 "parser.y"
+#line 375 "parser.y"
     {isDeclaration=1; currentDataTypeNumber = STRING; (yyval.data_type) = STRING;}
     break;
 
   case 107:
 
 /* Line 1455 of yacc.c  */
-#line 371 "parser.y"
+#line 376 "parser.y"
     {isDeclaration=1; currentDataTypeNumber = BOOLEAN; (yyval.data_type) = BOOLEAN;}
     break;
 
   case 108:
 
 /* Line 1455 of yacc.c  */
-#line 372 "parser.y"
+#line 377 "parser.y"
     {isDeclaration=1; currentDataTypeNumber = VOID; (yyval.data_type) = VOID;}
     break;
 
 
 
 /* Line 1455 of yacc.c  */
-#line 2132 "y.tab.c"
+#line 2137 "y.tab.c"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);
@@ -2340,7 +2345,7 @@ yyreturn:
 
 
 /* Line 1675 of yacc.c  */
-#line 375 "parser.y"
+#line 380 "parser.y"
 
 
 void type_check(int left, int right, int flag){
@@ -2358,7 +2363,6 @@ void type_check(int left, int right, int flag){
 
 bool findEntry(char* myEntryName){
 	bool find = searchInCurrentAndParent(myEntryName);
-	printf("dsdsa\n");
 	if(find)
 	{
 		return true;
