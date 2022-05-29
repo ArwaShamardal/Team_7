@@ -1,3 +1,8 @@
+Nonterminals useless in grammar
+
+   DataTypeNoVoid
+
+
 Terminals unused in grammar
 
    SEMICOLON
@@ -5,7 +10,16 @@ Terminals unused in grammar
    VAL_DOUBLE
 
 
-State 134 conflicts: 13 shift/reduce
+Rules useless in grammar
+
+  104 DataTypeNoVoid: INTEGER
+  105               | FLOAT
+  106               | CHARACTER
+  107               | STRING
+  108               | BOOLEAN
+
+
+State 135 conflicts: 13 shift/reduce
 
 
 Grammar
@@ -15,7 +29,7 @@ Grammar
     1 program: Starter
 
     2 Starter: Statement
-    3        | Function
+    3        | Function Starter
 
     4 Statement: VarDeclaration Starter
     5          | Assign Starter
@@ -100,106 +114,101 @@ Grammar
 
    68 Condition: IF '(' Expression ')' '{' Statement '}'
    69          | IF '(' Expression ')' '{' Statement '}' ELSE '{' Statement '}'
+   70          | IF '(' Expression ')' '{' Statement '}' ELSE Condition
 
-   70 WhileLoop: WHILE '(' Expression ')' '{' Statement '}'
+   71 WhileLoop: WHILE '(' Expression ')' '{' Statement '}'
 
-   71 DoWhileLoop: DO '{' Statement '}' WHILE '(' Expression ')' ';'
+   72 DoWhileLoop: DO '{' Statement '}' WHILE '(' Expression ')' ';'
 
-   72 ForLoopInit: VarDeclaration
-   73            | Assign
+   73 ForLoopInit: VarDeclaration
+   74            | Assign
 
-   74 ForLoop: FOR '(' ForLoopInit Expression ';' Expression ')' '{' Statement '}'
+   75 ForLoop: FOR '(' ForLoopInit Expression ';' Expression ')' '{' Statement '}'
 
-   75 SwitchValueTypes: VAL_INTEGER
-   76                 | VAL_CHAR
+   76 SwitchValueTypes: VAL_INTEGER
+   77                 | VAL_CHAR
 
-   77 Case: CASE SwitchValueTypes ':' Statement Case
-   78     | DEFAULT ':' Statement
-   79     | /* empty */
+   78 Case: CASE SwitchValueTypes ':' Statement Case
+   79     | DEFAULT ':' Statement
+   80     | /* empty */
 
-   80 SwitchCase: SWITCH '(' IDETIFIER ')' '{' Case '}'
+   81 SwitchCase: SWITCH '(' IDETIFIER ')' '{' Case '}'
 
-   81 Parameters: DataTypeNoVoid IDETIFIER ',' DataTypeNoVoid IDETIFIER
-   82           | DataTypeNoVoid IDETIFIER
-   83           | VOID
-   84           | /* empty */
+   82 Parameters: DataType LHS ',' DataType LHS
+   83           | DataType LHS
+   84           | VOID
+   85           | /* empty */
 
-   85 Arguments: Expression ',' Arguments
-   86          | Expression
-   87          | /* empty */
+   86 Arguments: Expression ',' Arguments
+   87          | Expression
+   88          | /* empty */
 
-   88 FunctionCallExp: IDETIFIER '(' Arguments ')'
+   89 FunctionCallExp: IDETIFIER '(' Arguments ')'
 
-   89 FunctionCall: FunctionCallExp ';'
+   90 FunctionCall: FunctionCallExp ';'
 
-   90 ValueTypeNumber: VAL_INTEGER
-   91                | VAL_FLOAT
+   91 ValueTypeNumber: VAL_INTEGER
+   92                | VAL_FLOAT
 
-   92 ValueTypeLetter: VAL_BOOLEAN
-   93                | VAL_CHAR
-   94                | VAL_STRING
+   93 ValueTypeLetter: VAL_BOOLEAN
+   94                | VAL_CHAR
+   95                | VAL_STRING
 
-   95 ValueTypeAll: ValueTypeNumber
-   96             | ValueTypeLetter
+   96 ValueTypeAll: ValueTypeNumber
+   97             | ValueTypeLetter
 
-   97 DataTypeNoVoid: INTEGER
-   98               | FLOAT
-   99               | CHARACTER
-  100               | STRING
-  101               | BOOLEAN
-
-  102 DataType: INTEGER
-  103         | FLOAT
-  104         | CHARACTER
-  105         | STRING
-  106         | BOOLEAN
-  107         | VOID
+   98 DataType: INTEGER
+   99         | FLOAT
+  100         | CHARACTER
+  101         | STRING
+  102         | BOOLEAN
+  103         | VOID
 
 
 Terminals, with rules where they appear
 
 $end (0) 0
 '%' (37) 39
-'(' (40) 29 67 68 69 70 71 74 80 88
-')' (41) 29 67 68 69 70 71 74 80 88
+'(' (40) 29 67 68 69 70 71 72 75 81 89
+')' (41) 29 67 68 69 70 71 72 75 81 89
 '*' (42) 37
 '+' (43) 35
-',' (44) 19 21 81 85
+',' (44) 19 21 82 86
 '-' (45) 36 40
 '/' (47) 38
-':' (58) 77 78
-';' (59) 16 17 20 22 52 63 64 65 66 71 74 89
+':' (58) 78 79
+';' (59) 16 17 20 22 52 63 64 65 66 72 75 90
 '=' (61) 53
-'{' (123) 15 67 68 69 70 71 74 80
-'}' (125) 15 67 68 69 70 71 74 80
+'{' (123) 15 67 68 69 70 71 72 75 81
+'}' (125) 15 67 68 69 70 71 72 75 81
 error (256)
-IF (258) 68 69
-ELSE (259) 69
-FOR (260) 74
-WHILE (261) 70 71
-DO (262) 71
-SWITCH (263) 80
-CASE (264) 77
-DEFAULT (265) 78
+IF (258) 68 69 70
+ELSE (259) 69 70
+FOR (260) 75
+WHILE (261) 71 72
+DO (262) 72
+SWITCH (263) 81
+CASE (264) 78
+DEFAULT (265) 79
 BREAK (266) 16
 CONTINUE (267) 17
 RETURN (268) 65 66
 SEMICOLON (269)
-INTEGER (270) 97 102
-CHARACTER (271) 99 104
-FLOAT (272) 98 103
-STRING (273) 100 105
+INTEGER (270) 98
+CHARACTER (271) 100
+FLOAT (272) 99
+STRING (273) 101
 DOUBLE (274)
-BOOLEAN (275) 101 106
+BOOLEAN (275) 102
 CONSTANT (276) 24
-VOID (277) 83 107
-VAL_INTEGER (278) 75 90
-VAL_FLOAT (279) 91
+VOID (277) 84 103
+VAL_INTEGER (278) 76 91
+VAL_FLOAT (279) 92
 VAL_DOUBLE (280)
-VAL_STRING (281) 94
-VAL_CHAR (282) 76 93
-VAL_BOOLEAN (283) 92
-IDETIFIER (284) 51 59 60 61 62 67 80 81 82 88
+VAL_STRING (281) 95
+VAL_CHAR (282) 77 94
+VAL_BOOLEAN (283) 93
+IDETIFIER (284) 51 59 60 61 62 67 81 89
 OP_INCREMENT (285) 59 60
 OP_DECREMENT (286) 61 62
 OP_MODULO_EQUAL (287) 58
@@ -226,17 +235,17 @@ $accept (60)
 program (61)
     on left: 1, on right: 0
 Starter (62)
-    on left: 2 3, on right: 1 4 5 6 7 8 9 10 11 12 13 14 15 16 17
+    on left: 2 3, on right: 1 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17
 Statement (63)
     on left: 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18, on right: 2 15
-    67 68 69 70 71 74 77 78
+    67 68 69 70 71 72 75 78 79
 OneLineDeclaration (64)
     on left: 19 20 21 22, on right: 19 21 23
 VarDeclaration (65)
-    on left: 23 24, on right: 4 24 72
+    on left: 23 24, on right: 4 24 73
 Expression (66)
     on left: 25 26 27 28 29 30 31 32 33 34, on right: 29 35 36 37 38
-    39 40 41 42 43 44 45 46 47 48 49 50 65 68 69 70 71 74 85 86
+    39 40 41 42 43 44 45 46 47 48 49 50 65 68 69 70 71 72 75 86 87
 ArithmeticExp (67)
     on left: 35 36 37 38 39 40, on right: 25
 RelationalExp (68)
@@ -246,9 +255,9 @@ LogicalExp (69)
 AssignExp (70)
     on left: 50, on right: 19 20 31 52
 LHS (71)
-    on left: 51, on right: 21 22 34 50
+    on left: 51, on right: 21 22 34 50 82 83
 Assign (72)
-    on left: 52, on right: 5 73
+    on left: 52, on right: 5 74
 AssignOperator (73)
     on left: 53 54 55 56 57 58, on right: 50
 IncrementExp (74)
@@ -264,39 +273,37 @@ Return (78)
 Function (79)
     on left: 67, on right: 3
 Condition (80)
-    on left: 68 69, on right: 7
+    on left: 68 69 70, on right: 7 70
 WhileLoop (81)
-    on left: 70, on right: 8
+    on left: 71, on right: 8
 DoWhileLoop (82)
-    on left: 71, on right: 9
+    on left: 72, on right: 9
 ForLoopInit (83)
-    on left: 72 73, on right: 74
+    on left: 73 74, on right: 75
 ForLoop (84)
-    on left: 74, on right: 10
+    on left: 75, on right: 10
 SwitchValueTypes (85)
-    on left: 75 76, on right: 77
+    on left: 76 77, on right: 78
 Case (86)
-    on left: 77 78 79, on right: 77 80
+    on left: 78 79 80, on right: 78 81
 SwitchCase (87)
-    on left: 80, on right: 11
+    on left: 81, on right: 11
 Parameters (88)
-    on left: 81 82 83 84, on right: 67
+    on left: 82 83 84 85, on right: 67
 Arguments (89)
-    on left: 85 86 87, on right: 85 88
+    on left: 86 87 88, on right: 86 89
 FunctionCallExp (90)
-    on left: 88, on right: 26 89
+    on left: 89, on right: 26 90
 FunctionCall (91)
-    on left: 89, on right: 6
+    on left: 90, on right: 6
 ValueTypeNumber (92)
-    on left: 90 91, on right: 95
+    on left: 91 92, on right: 96
 ValueTypeLetter (93)
-    on left: 92 93 94, on right: 96
+    on left: 93 94 95, on right: 97
 ValueTypeAll (94)
-    on left: 95 96, on right: 30
-DataTypeNoVoid (95)
-    on left: 97 98 99 100 101, on right: 81 82
-DataType (96)
-    on left: 102 103 104 105 106 107, on right: 23 67
+    on left: 96 97, on right: 30
+DataType (95)
+    on left: 98 99 100 101 102 103, on right: 23 67 82 83
 
 
 state 0
@@ -352,34 +359,35 @@ state 1
 
    68 Condition: IF . '(' Expression ')' '{' Statement '}'
    69          | IF . '(' Expression ')' '{' Statement '}' ELSE '{' Statement '}'
+   70          | IF . '(' Expression ')' '{' Statement '}' ELSE Condition
 
     '('  shift, and go to state 41
 
 
 state 2
 
-   74 ForLoop: FOR . '(' ForLoopInit Expression ';' Expression ')' '{' Statement '}'
+   75 ForLoop: FOR . '(' ForLoopInit Expression ';' Expression ')' '{' Statement '}'
 
     '('  shift, and go to state 42
 
 
 state 3
 
-   70 WhileLoop: WHILE . '(' Expression ')' '{' Statement '}'
+   71 WhileLoop: WHILE . '(' Expression ')' '{' Statement '}'
 
     '('  shift, and go to state 43
 
 
 state 4
 
-   71 DoWhileLoop: DO . '{' Statement '}' WHILE '(' Expression ')' ';'
+   72 DoWhileLoop: DO . '{' Statement '}' WHILE '(' Expression ')' ';'
 
     '{'  shift, and go to state 44
 
 
 state 5
 
-   80 SwitchCase: SWITCH . '(' IDETIFIER ')' '{' Case '}'
+   81 SwitchCase: SWITCH . '(' IDETIFIER ')' '{' Case '}'
 
     '('  shift, and go to state 45
 
@@ -432,37 +440,37 @@ state 8
 
 state 9
 
-  102 DataType: INTEGER .
+   98 DataType: INTEGER .
 
-    $default  reduce using rule 102 (DataType)
+    $default  reduce using rule 98 (DataType)
 
 
 state 10
 
-  104 DataType: CHARACTER .
+  100 DataType: CHARACTER .
 
-    $default  reduce using rule 104 (DataType)
+    $default  reduce using rule 100 (DataType)
 
 
 state 11
 
-  103 DataType: FLOAT .
+   99 DataType: FLOAT .
 
-    $default  reduce using rule 103 (DataType)
+    $default  reduce using rule 99 (DataType)
 
 
 state 12
 
-  105 DataType: STRING .
+  101 DataType: STRING .
 
-    $default  reduce using rule 105 (DataType)
+    $default  reduce using rule 101 (DataType)
 
 
 state 13
 
-  106 DataType: BOOLEAN .
+  102 DataType: BOOLEAN .
 
-    $default  reduce using rule 106 (DataType)
+    $default  reduce using rule 102 (DataType)
 
 
 state 14
@@ -483,9 +491,9 @@ state 14
 
 state 15
 
-  107 DataType: VOID .
+  103 DataType: VOID .
 
-    $default  reduce using rule 107 (DataType)
+    $default  reduce using rule 103 (DataType)
 
 
 state 16
@@ -493,7 +501,7 @@ state 16
    51 LHS: IDETIFIER .
    60 IncrementExp: IDETIFIER . OP_INCREMENT
    62 DecrementExp: IDETIFIER . OP_DECREMENT
-   88 FunctionCallExp: IDETIFIER . '(' Arguments ')'
+   89 FunctionCallExp: IDETIFIER . '(' Arguments ')'
 
     OP_INCREMENT  shift, and go to state 71
     OP_DECREMENT  shift, and go to state 72
@@ -860,9 +868,50 @@ state 31
 
 state 32
 
-    3 Starter: Function .
+    3 Starter: Function . Starter
 
-    $default  reduce using rule 3 (Starter)
+    IF            shift, and go to state 1
+    FOR           shift, and go to state 2
+    WHILE         shift, and go to state 3
+    DO            shift, and go to state 4
+    SWITCH        shift, and go to state 5
+    BREAK         shift, and go to state 6
+    CONTINUE      shift, and go to state 7
+    RETURN        shift, and go to state 8
+    INTEGER       shift, and go to state 9
+    CHARACTER     shift, and go to state 10
+    FLOAT         shift, and go to state 11
+    STRING        shift, and go to state 12
+    BOOLEAN       shift, and go to state 13
+    CONSTANT      shift, and go to state 14
+    VOID          shift, and go to state 15
+    IDETIFIER     shift, and go to state 16
+    OP_INCREMENT  shift, and go to state 17
+    OP_DECREMENT  shift, and go to state 18
+    '{'           shift, and go to state 19
+
+    $default  reduce using rule 18 (Statement)
+
+    Starter          go to state 93
+    Statement        go to state 22
+    VarDeclaration   go to state 23
+    AssignExp        go to state 24
+    LHS              go to state 25
+    Assign           go to state 26
+    IncrementExp     go to state 27
+    DecrementExp     go to state 28
+    Increment        go to state 29
+    Decrement        go to state 30
+    Return           go to state 31
+    Function         go to state 32
+    Condition        go to state 33
+    WhileLoop        go to state 34
+    DoWhileLoop      go to state 35
+    ForLoop          go to state 36
+    SwitchCase       go to state 37
+    FunctionCallExp  go to state 38
+    FunctionCall     go to state 39
+    DataType         go to state 40
 
 
 state 33
@@ -891,7 +940,7 @@ state 33
 
     $default  reduce using rule 18 (Statement)
 
-    Starter          go to state 93
+    Starter          go to state 94
     Statement        go to state 22
     VarDeclaration   go to state 23
     AssignExp        go to state 24
@@ -939,7 +988,7 @@ state 34
 
     $default  reduce using rule 18 (Statement)
 
-    Starter          go to state 94
+    Starter          go to state 95
     Statement        go to state 22
     VarDeclaration   go to state 23
     AssignExp        go to state 24
@@ -987,7 +1036,7 @@ state 35
 
     $default  reduce using rule 18 (Statement)
 
-    Starter          go to state 95
+    Starter          go to state 96
     Statement        go to state 22
     VarDeclaration   go to state 23
     AssignExp        go to state 24
@@ -1035,7 +1084,7 @@ state 36
 
     $default  reduce using rule 18 (Statement)
 
-    Starter          go to state 96
+    Starter          go to state 97
     Statement        go to state 22
     VarDeclaration   go to state 23
     AssignExp        go to state 24
@@ -1083,7 +1132,7 @@ state 37
 
     $default  reduce using rule 18 (Statement)
 
-    Starter          go to state 97
+    Starter          go to state 98
     Statement        go to state 22
     VarDeclaration   go to state 23
     AssignExp        go to state 24
@@ -1107,9 +1156,9 @@ state 37
 
 state 38
 
-   89 FunctionCall: FunctionCallExp . ';'
+   90 FunctionCall: FunctionCallExp . ';'
 
-    ';'  shift, and go to state 98
+    ';'  shift, and go to state 99
 
 
 state 39
@@ -1138,7 +1187,7 @@ state 39
 
     $default  reduce using rule 18 (Statement)
 
-    Starter          go to state 99
+    Starter          go to state 100
     Statement        go to state 22
     VarDeclaration   go to state 23
     AssignExp        go to state 24
@@ -1165,17 +1214,18 @@ state 40
    23 VarDeclaration: DataType . OneLineDeclaration
    67 Function: DataType . IDETIFIER '(' Parameters ')' '{' Statement '}'
 
-    IDETIFIER  shift, and go to state 100
+    IDETIFIER  shift, and go to state 101
 
-    OneLineDeclaration  go to state 101
-    AssignExp           go to state 102
-    LHS                 go to state 103
+    OneLineDeclaration  go to state 102
+    AssignExp           go to state 103
+    LHS                 go to state 104
 
 
 state 41
 
    68 Condition: IF '(' . Expression ')' '{' Statement '}'
    69          | IF '(' . Expression ')' '{' Statement '}' ELSE '{' Statement '}'
+   70          | IF '(' . Expression ')' '{' Statement '}' ELSE Condition
 
     VAL_INTEGER     shift, and go to state 48
     VAL_FLOAT       shift, and go to state 49
@@ -1189,7 +1239,7 @@ state 41
     OP_LOGICAL_NOT  shift, and go to state 54
     '('             shift, and go to state 55
 
-    Expression       go to state 104
+    Expression       go to state 105
     ArithmeticExp    go to state 58
     RelationalExp    go to state 59
     LogicalExp       go to state 60
@@ -1205,7 +1255,7 @@ state 41
 
 state 42
 
-   74 ForLoop: FOR '(' . ForLoopInit Expression ';' Expression ')' '{' Statement '}'
+   75 ForLoop: FOR '(' . ForLoopInit Expression ';' Expression ')' '{' Statement '}'
 
     INTEGER    shift, and go to state 9
     CHARACTER  shift, and go to state 10
@@ -1214,19 +1264,19 @@ state 42
     BOOLEAN    shift, and go to state 13
     CONSTANT   shift, and go to state 14
     VOID       shift, and go to state 15
-    IDETIFIER  shift, and go to state 105
+    IDETIFIER  shift, and go to state 106
 
-    VarDeclaration  go to state 106
+    VarDeclaration  go to state 107
     AssignExp       go to state 24
     LHS             go to state 25
-    Assign          go to state 107
-    ForLoopInit     go to state 108
+    Assign          go to state 108
+    ForLoopInit     go to state 109
     DataType        go to state 70
 
 
 state 43
 
-   70 WhileLoop: WHILE '(' . Expression ')' '{' Statement '}'
+   71 WhileLoop: WHILE '(' . Expression ')' '{' Statement '}'
 
     VAL_INTEGER     shift, and go to state 48
     VAL_FLOAT       shift, and go to state 49
@@ -1240,7 +1290,7 @@ state 43
     OP_LOGICAL_NOT  shift, and go to state 54
     '('             shift, and go to state 55
 
-    Expression       go to state 109
+    Expression       go to state 110
     ArithmeticExp    go to state 58
     RelationalExp    go to state 59
     LogicalExp       go to state 60
@@ -1256,7 +1306,7 @@ state 43
 
 state 44
 
-   71 DoWhileLoop: DO '{' . Statement '}' WHILE '(' Expression ')' ';'
+   72 DoWhileLoop: DO '{' . Statement '}' WHILE '(' Expression ')' ';'
 
     IF            shift, and go to state 1
     FOR           shift, and go to state 2
@@ -1280,7 +1330,7 @@ state 44
 
     $default  reduce using rule 18 (Statement)
 
-    Statement        go to state 110
+    Statement        go to state 111
     VarDeclaration   go to state 23
     AssignExp        go to state 24
     LHS              go to state 25
@@ -1302,9 +1352,9 @@ state 44
 
 state 45
 
-   80 SwitchCase: SWITCH '(' . IDETIFIER ')' '{' Case '}'
+   81 SwitchCase: SWITCH '(' . IDETIFIER ')' '{' Case '}'
 
-    IDETIFIER  shift, and go to state 111
+    IDETIFIER  shift, and go to state 112
 
 
 state 46
@@ -1333,7 +1383,7 @@ state 46
 
     $default  reduce using rule 18 (Statement)
 
-    Starter          go to state 112
+    Starter          go to state 113
     Statement        go to state 22
     VarDeclaration   go to state 23
     AssignExp        go to state 24
@@ -1381,7 +1431,7 @@ state 47
 
     $default  reduce using rule 18 (Statement)
 
-    Starter          go to state 113
+    Starter          go to state 114
     Statement        go to state 22
     VarDeclaration   go to state 23
     AssignExp        go to state 24
@@ -1405,37 +1455,37 @@ state 47
 
 state 48
 
-   90 ValueTypeNumber: VAL_INTEGER .
-
-    $default  reduce using rule 90 (ValueTypeNumber)
-
-
-state 49
-
-   91 ValueTypeNumber: VAL_FLOAT .
+   91 ValueTypeNumber: VAL_INTEGER .
 
     $default  reduce using rule 91 (ValueTypeNumber)
 
 
+state 49
+
+   92 ValueTypeNumber: VAL_FLOAT .
+
+    $default  reduce using rule 92 (ValueTypeNumber)
+
+
 state 50
 
-   94 ValueTypeLetter: VAL_STRING .
+   95 ValueTypeLetter: VAL_STRING .
 
-    $default  reduce using rule 94 (ValueTypeLetter)
+    $default  reduce using rule 95 (ValueTypeLetter)
 
 
 state 51
 
-   93 ValueTypeLetter: VAL_CHAR .
+   94 ValueTypeLetter: VAL_CHAR .
 
-    $default  reduce using rule 93 (ValueTypeLetter)
+    $default  reduce using rule 94 (ValueTypeLetter)
 
 
 state 52
 
-   92 ValueTypeLetter: VAL_BOOLEAN .
+   93 ValueTypeLetter: VAL_BOOLEAN .
 
-    $default  reduce using rule 92 (ValueTypeLetter)
+    $default  reduce using rule 93 (ValueTypeLetter)
 
 
 state 53
@@ -1454,7 +1504,7 @@ state 53
     OP_LOGICAL_NOT  shift, and go to state 54
     '('             shift, and go to state 55
 
-    Expression       go to state 114
+    Expression       go to state 115
     ArithmeticExp    go to state 58
     RelationalExp    go to state 59
     LogicalExp       go to state 60
@@ -1484,7 +1534,7 @@ state 54
     OP_LOGICAL_NOT  shift, and go to state 54
     '('             shift, and go to state 55
 
-    Expression       go to state 115
+    Expression       go to state 116
     ArithmeticExp    go to state 58
     RelationalExp    go to state 59
     LogicalExp       go to state 60
@@ -1514,7 +1564,7 @@ state 55
     OP_LOGICAL_NOT  shift, and go to state 54
     '('             shift, and go to state 55
 
-    Expression       go to state 116
+    Expression       go to state 117
     ArithmeticExp    go to state 58
     RelationalExp    go to state 59
     LogicalExp       go to state 60
@@ -1552,20 +1602,20 @@ state 57
    48           | Expression . OP_LOGICAL_AND Expression
    65 Return: RETURN Expression . ';'
 
-    OP_LOGICAL_OR        shift, and go to state 117
-    OP_LOGICAL_AND       shift, and go to state 118
-    OP_INEQUALITY        shift, and go to state 119
-    OP_EQUALITY          shift, and go to state 120
-    OP_GREATER_THAN      shift, and go to state 121
-    OP_LESS_THAN         shift, and go to state 122
-    OP_GREATER_OR_EQUAL  shift, and go to state 123
-    OP_LESS_OR_EQUAL     shift, and go to state 124
-    '+'                  shift, and go to state 125
-    '-'                  shift, and go to state 126
-    '*'                  shift, and go to state 127
-    '/'                  shift, and go to state 128
-    '%'                  shift, and go to state 129
-    ';'                  shift, and go to state 130
+    OP_LOGICAL_OR        shift, and go to state 118
+    OP_LOGICAL_AND       shift, and go to state 119
+    OP_INEQUALITY        shift, and go to state 120
+    OP_EQUALITY          shift, and go to state 121
+    OP_GREATER_THAN      shift, and go to state 122
+    OP_LESS_THAN         shift, and go to state 123
+    OP_GREATER_OR_EQUAL  shift, and go to state 124
+    OP_LESS_OR_EQUAL     shift, and go to state 125
+    '+'                  shift, and go to state 126
+    '-'                  shift, and go to state 127
+    '*'                  shift, and go to state 128
+    '/'                  shift, and go to state 129
+    '%'                  shift, and go to state 130
+    ';'                  shift, and go to state 131
 
 
 state 58
@@ -1636,16 +1686,16 @@ state 65
 
 state 66
 
-   95 ValueTypeAll: ValueTypeNumber .
+   96 ValueTypeAll: ValueTypeNumber .
 
-    $default  reduce using rule 95 (ValueTypeAll)
+    $default  reduce using rule 96 (ValueTypeAll)
 
 
 state 67
 
-   96 ValueTypeAll: ValueTypeLetter .
+   97 ValueTypeAll: ValueTypeLetter .
 
-    $default  reduce using rule 96 (ValueTypeAll)
+    $default  reduce using rule 97 (ValueTypeAll)
 
 
 state 68
@@ -1666,11 +1716,11 @@ state 70
 
    23 VarDeclaration: DataType . OneLineDeclaration
 
-    IDETIFIER  shift, and go to state 105
+    IDETIFIER  shift, and go to state 106
 
-    OneLineDeclaration  go to state 101
-    AssignExp           go to state 102
-    LHS                 go to state 103
+    OneLineDeclaration  go to state 102
+    AssignExp           go to state 103
+    LHS                 go to state 104
 
 
 state 71
@@ -1689,7 +1739,7 @@ state 72
 
 state 73
 
-   88 FunctionCallExp: IDETIFIER '(' . Arguments ')'
+   89 FunctionCallExp: IDETIFIER '(' . Arguments ')'
 
     VAL_INTEGER     shift, and go to state 48
     VAL_FLOAT       shift, and go to state 49
@@ -1703,9 +1753,9 @@ state 73
     OP_LOGICAL_NOT  shift, and go to state 54
     '('             shift, and go to state 55
 
-    $default  reduce using rule 87 (Arguments)
+    $default  reduce using rule 88 (Arguments)
 
-    Expression       go to state 131
+    Expression       go to state 132
     ArithmeticExp    go to state 58
     RelationalExp    go to state 59
     LogicalExp       go to state 60
@@ -1713,7 +1763,7 @@ state 73
     LHS              go to state 62
     IncrementExp     go to state 63
     DecrementExp     go to state 64
-    Arguments        go to state 132
+    Arguments        go to state 133
     FunctionCallExp  go to state 65
     ValueTypeNumber  go to state 66
     ValueTypeLetter  go to state 67
@@ -1738,7 +1788,7 @@ state 76
 
    15 Statement: '{' Statement . '}' Starter
 
-    '}'  shift, and go to state 133
+    '}'  shift, and go to state 134
 
 
 state 77
@@ -1820,7 +1870,7 @@ state 86
     OP_LOGICAL_NOT  shift, and go to state 54
     '('             shift, and go to state 55
 
-    Expression       go to state 134
+    Expression       go to state 135
     ArithmeticExp    go to state 58
     RelationalExp    go to state 59
     LogicalExp       go to state 60
@@ -1878,80 +1928,87 @@ state 92
 
 state 93
 
+    3 Starter: Function Starter .
+
+    $default  reduce using rule 3 (Starter)
+
+
+state 94
+
     7 Statement: Condition Starter .
 
     $default  reduce using rule 7 (Statement)
 
 
-state 94
+state 95
 
     8 Statement: WhileLoop Starter .
 
     $default  reduce using rule 8 (Statement)
 
 
-state 95
+state 96
 
     9 Statement: DoWhileLoop Starter .
 
     $default  reduce using rule 9 (Statement)
 
 
-state 96
+state 97
 
    10 Statement: ForLoop Starter .
 
     $default  reduce using rule 10 (Statement)
 
 
-state 97
+state 98
 
    11 Statement: SwitchCase Starter .
 
     $default  reduce using rule 11 (Statement)
 
 
-state 98
-
-   89 FunctionCall: FunctionCallExp ';' .
-
-    $default  reduce using rule 89 (FunctionCall)
-
-
 state 99
+
+   90 FunctionCall: FunctionCallExp ';' .
+
+    $default  reduce using rule 90 (FunctionCall)
+
+
+state 100
 
     6 Statement: FunctionCall Starter .
 
     $default  reduce using rule 6 (Statement)
 
 
-state 100
+state 101
 
    51 LHS: IDETIFIER .
    67 Function: DataType IDETIFIER . '(' Parameters ')' '{' Statement '}'
 
-    '('  shift, and go to state 135
+    '('  shift, and go to state 136
 
     $default  reduce using rule 51 (LHS)
 
 
-state 101
+state 102
 
    23 VarDeclaration: DataType OneLineDeclaration .
 
     $default  reduce using rule 23 (VarDeclaration)
 
 
-state 102
+state 103
 
    19 OneLineDeclaration: AssignExp . ',' OneLineDeclaration
    20                   | AssignExp . ';'
 
-    ';'  shift, and go to state 136
-    ','  shift, and go to state 137
+    ';'  shift, and go to state 137
+    ','  shift, and go to state 138
 
 
-state 103
+state 104
 
    21 OneLineDeclaration: LHS . ',' OneLineDeclaration
    22                   | LHS . ';'
@@ -1963,13 +2020,13 @@ state 103
     OP_MINUS_EQUAL     shift, and go to state 83
     OP_PLUS_EQUAL      shift, and go to state 84
     '='                shift, and go to state 85
-    ';'                shift, and go to state 138
-    ','                shift, and go to state 139
+    ';'                shift, and go to state 139
+    ','                shift, and go to state 140
 
     AssignOperator  go to state 86
 
 
-state 104
+state 105
 
    35 ArithmeticExp: Expression . '+' Expression
    36              | Expression . '-' Expression
@@ -1986,47 +2043,48 @@ state 104
    48           | Expression . OP_LOGICAL_AND Expression
    68 Condition: IF '(' Expression . ')' '{' Statement '}'
    69          | IF '(' Expression . ')' '{' Statement '}' ELSE '{' Statement '}'
+   70          | IF '(' Expression . ')' '{' Statement '}' ELSE Condition
 
-    OP_LOGICAL_OR        shift, and go to state 117
-    OP_LOGICAL_AND       shift, and go to state 118
-    OP_INEQUALITY        shift, and go to state 119
-    OP_EQUALITY          shift, and go to state 120
-    OP_GREATER_THAN      shift, and go to state 121
-    OP_LESS_THAN         shift, and go to state 122
-    OP_GREATER_OR_EQUAL  shift, and go to state 123
-    OP_LESS_OR_EQUAL     shift, and go to state 124
-    '+'                  shift, and go to state 125
-    '-'                  shift, and go to state 126
-    '*'                  shift, and go to state 127
-    '/'                  shift, and go to state 128
-    '%'                  shift, and go to state 129
-    ')'                  shift, and go to state 140
+    OP_LOGICAL_OR        shift, and go to state 118
+    OP_LOGICAL_AND       shift, and go to state 119
+    OP_INEQUALITY        shift, and go to state 120
+    OP_EQUALITY          shift, and go to state 121
+    OP_GREATER_THAN      shift, and go to state 122
+    OP_LESS_THAN         shift, and go to state 123
+    OP_GREATER_OR_EQUAL  shift, and go to state 124
+    OP_LESS_OR_EQUAL     shift, and go to state 125
+    '+'                  shift, and go to state 126
+    '-'                  shift, and go to state 127
+    '*'                  shift, and go to state 128
+    '/'                  shift, and go to state 129
+    '%'                  shift, and go to state 130
+    ')'                  shift, and go to state 141
 
 
-state 105
+state 106
 
    51 LHS: IDETIFIER .
 
     $default  reduce using rule 51 (LHS)
 
 
-state 106
-
-   72 ForLoopInit: VarDeclaration .
-
-    $default  reduce using rule 72 (ForLoopInit)
-
-
 state 107
 
-   73 ForLoopInit: Assign .
+   73 ForLoopInit: VarDeclaration .
 
     $default  reduce using rule 73 (ForLoopInit)
 
 
 state 108
 
-   74 ForLoop: FOR '(' ForLoopInit . Expression ';' Expression ')' '{' Statement '}'
+   74 ForLoopInit: Assign .
+
+    $default  reduce using rule 74 (ForLoopInit)
+
+
+state 109
+
+   75 ForLoop: FOR '(' ForLoopInit . Expression ';' Expression ')' '{' Statement '}'
 
     VAL_INTEGER     shift, and go to state 48
     VAL_FLOAT       shift, and go to state 49
@@ -2040,7 +2098,7 @@ state 108
     OP_LOGICAL_NOT  shift, and go to state 54
     '('             shift, and go to state 55
 
-    Expression       go to state 141
+    Expression       go to state 142
     ArithmeticExp    go to state 58
     RelationalExp    go to state 59
     LogicalExp       go to state 60
@@ -2054,7 +2112,7 @@ state 108
     ValueTypeAll     go to state 68
 
 
-state 109
+state 110
 
    35 ArithmeticExp: Expression . '+' Expression
    36              | Expression . '-' Expression
@@ -2069,53 +2127,53 @@ state 109
    46              | Expression . OP_LESS_THAN Expression
    47 LogicalExp: Expression . OP_LOGICAL_OR Expression
    48           | Expression . OP_LOGICAL_AND Expression
-   70 WhileLoop: WHILE '(' Expression . ')' '{' Statement '}'
+   71 WhileLoop: WHILE '(' Expression . ')' '{' Statement '}'
 
-    OP_LOGICAL_OR        shift, and go to state 117
-    OP_LOGICAL_AND       shift, and go to state 118
-    OP_INEQUALITY        shift, and go to state 119
-    OP_EQUALITY          shift, and go to state 120
-    OP_GREATER_THAN      shift, and go to state 121
-    OP_LESS_THAN         shift, and go to state 122
-    OP_GREATER_OR_EQUAL  shift, and go to state 123
-    OP_LESS_OR_EQUAL     shift, and go to state 124
-    '+'                  shift, and go to state 125
-    '-'                  shift, and go to state 126
-    '*'                  shift, and go to state 127
-    '/'                  shift, and go to state 128
-    '%'                  shift, and go to state 129
-    ')'                  shift, and go to state 142
-
-
-state 110
-
-   71 DoWhileLoop: DO '{' Statement . '}' WHILE '(' Expression ')' ';'
-
-    '}'  shift, and go to state 143
+    OP_LOGICAL_OR        shift, and go to state 118
+    OP_LOGICAL_AND       shift, and go to state 119
+    OP_INEQUALITY        shift, and go to state 120
+    OP_EQUALITY          shift, and go to state 121
+    OP_GREATER_THAN      shift, and go to state 122
+    OP_LESS_THAN         shift, and go to state 123
+    OP_GREATER_OR_EQUAL  shift, and go to state 124
+    OP_LESS_OR_EQUAL     shift, and go to state 125
+    '+'                  shift, and go to state 126
+    '-'                  shift, and go to state 127
+    '*'                  shift, and go to state 128
+    '/'                  shift, and go to state 129
+    '%'                  shift, and go to state 130
+    ')'                  shift, and go to state 143
 
 
 state 111
 
-   80 SwitchCase: SWITCH '(' IDETIFIER . ')' '{' Case '}'
+   72 DoWhileLoop: DO '{' Statement . '}' WHILE '(' Expression ')' ';'
 
-    ')'  shift, and go to state 144
+    '}'  shift, and go to state 144
 
 
 state 112
+
+   81 SwitchCase: SWITCH '(' IDETIFIER . ')' '{' Case '}'
+
+    ')'  shift, and go to state 145
+
+
+state 113
 
    16 Statement: BREAK ';' Starter .
 
     $default  reduce using rule 16 (Statement)
 
 
-state 113
+state 114
 
    17 Statement: CONTINUE ';' Starter .
 
     $default  reduce using rule 17 (Statement)
 
 
-state 114
+state 115
 
    35 ArithmeticExp: Expression . '+' Expression
    36              | Expression . '-' Expression
@@ -2135,7 +2193,7 @@ state 114
     $default  reduce using rule 40 (ArithmeticExp)
 
 
-state 115
+state 116
 
    35 ArithmeticExp: Expression . '+' Expression
    36              | Expression . '-' Expression
@@ -2155,7 +2213,7 @@ state 115
     $default  reduce using rule 49 (LogicalExp)
 
 
-state 116
+state 117
 
    29 Expression: '(' Expression . ')'
    35 ArithmeticExp: Expression . '+' Expression
@@ -2172,55 +2230,25 @@ state 116
    47 LogicalExp: Expression . OP_LOGICAL_OR Expression
    48           | Expression . OP_LOGICAL_AND Expression
 
-    OP_LOGICAL_OR        shift, and go to state 117
-    OP_LOGICAL_AND       shift, and go to state 118
-    OP_INEQUALITY        shift, and go to state 119
-    OP_EQUALITY          shift, and go to state 120
-    OP_GREATER_THAN      shift, and go to state 121
-    OP_LESS_THAN         shift, and go to state 122
-    OP_GREATER_OR_EQUAL  shift, and go to state 123
-    OP_LESS_OR_EQUAL     shift, and go to state 124
-    '+'                  shift, and go to state 125
-    '-'                  shift, and go to state 126
-    '*'                  shift, and go to state 127
-    '/'                  shift, and go to state 128
-    '%'                  shift, and go to state 129
-    ')'                  shift, and go to state 145
-
-
-state 117
-
-   47 LogicalExp: Expression OP_LOGICAL_OR . Expression
-
-    VAL_INTEGER     shift, and go to state 48
-    VAL_FLOAT       shift, and go to state 49
-    VAL_STRING      shift, and go to state 50
-    VAL_CHAR        shift, and go to state 51
-    VAL_BOOLEAN     shift, and go to state 52
-    IDETIFIER       shift, and go to state 16
-    OP_INCREMENT    shift, and go to state 17
-    OP_DECREMENT    shift, and go to state 18
-    '-'             shift, and go to state 53
-    OP_LOGICAL_NOT  shift, and go to state 54
-    '('             shift, and go to state 55
-
-    Expression       go to state 146
-    ArithmeticExp    go to state 58
-    RelationalExp    go to state 59
-    LogicalExp       go to state 60
-    AssignExp        go to state 61
-    LHS              go to state 62
-    IncrementExp     go to state 63
-    DecrementExp     go to state 64
-    FunctionCallExp  go to state 65
-    ValueTypeNumber  go to state 66
-    ValueTypeLetter  go to state 67
-    ValueTypeAll     go to state 68
+    OP_LOGICAL_OR        shift, and go to state 118
+    OP_LOGICAL_AND       shift, and go to state 119
+    OP_INEQUALITY        shift, and go to state 120
+    OP_EQUALITY          shift, and go to state 121
+    OP_GREATER_THAN      shift, and go to state 122
+    OP_LESS_THAN         shift, and go to state 123
+    OP_GREATER_OR_EQUAL  shift, and go to state 124
+    OP_LESS_OR_EQUAL     shift, and go to state 125
+    '+'                  shift, and go to state 126
+    '-'                  shift, and go to state 127
+    '*'                  shift, and go to state 128
+    '/'                  shift, and go to state 129
+    '%'                  shift, and go to state 130
+    ')'                  shift, and go to state 146
 
 
 state 118
 
-   48 LogicalExp: Expression OP_LOGICAL_AND . Expression
+   47 LogicalExp: Expression OP_LOGICAL_OR . Expression
 
     VAL_INTEGER     shift, and go to state 48
     VAL_FLOAT       shift, and go to state 49
@@ -2250,7 +2278,7 @@ state 118
 
 state 119
 
-   42 RelationalExp: Expression OP_INEQUALITY . Expression
+   48 LogicalExp: Expression OP_LOGICAL_AND . Expression
 
     VAL_INTEGER     shift, and go to state 48
     VAL_FLOAT       shift, and go to state 49
@@ -2280,7 +2308,7 @@ state 119
 
 state 120
 
-   41 RelationalExp: Expression OP_EQUALITY . Expression
+   42 RelationalExp: Expression OP_INEQUALITY . Expression
 
     VAL_INTEGER     shift, and go to state 48
     VAL_FLOAT       shift, and go to state 49
@@ -2310,7 +2338,7 @@ state 120
 
 state 121
 
-   45 RelationalExp: Expression OP_GREATER_THAN . Expression
+   41 RelationalExp: Expression OP_EQUALITY . Expression
 
     VAL_INTEGER     shift, and go to state 48
     VAL_FLOAT       shift, and go to state 49
@@ -2340,7 +2368,7 @@ state 121
 
 state 122
 
-   46 RelationalExp: Expression OP_LESS_THAN . Expression
+   45 RelationalExp: Expression OP_GREATER_THAN . Expression
 
     VAL_INTEGER     shift, and go to state 48
     VAL_FLOAT       shift, and go to state 49
@@ -2370,7 +2398,7 @@ state 122
 
 state 123
 
-   43 RelationalExp: Expression OP_GREATER_OR_EQUAL . Expression
+   46 RelationalExp: Expression OP_LESS_THAN . Expression
 
     VAL_INTEGER     shift, and go to state 48
     VAL_FLOAT       shift, and go to state 49
@@ -2400,7 +2428,7 @@ state 123
 
 state 124
 
-   44 RelationalExp: Expression OP_LESS_OR_EQUAL . Expression
+   43 RelationalExp: Expression OP_GREATER_OR_EQUAL . Expression
 
     VAL_INTEGER     shift, and go to state 48
     VAL_FLOAT       shift, and go to state 49
@@ -2430,7 +2458,7 @@ state 124
 
 state 125
 
-   35 ArithmeticExp: Expression '+' . Expression
+   44 RelationalExp: Expression OP_LESS_OR_EQUAL . Expression
 
     VAL_INTEGER     shift, and go to state 48
     VAL_FLOAT       shift, and go to state 49
@@ -2460,7 +2488,7 @@ state 125
 
 state 126
 
-   36 ArithmeticExp: Expression '-' . Expression
+   35 ArithmeticExp: Expression '+' . Expression
 
     VAL_INTEGER     shift, and go to state 48
     VAL_FLOAT       shift, and go to state 49
@@ -2490,7 +2518,7 @@ state 126
 
 state 127
 
-   37 ArithmeticExp: Expression '*' . Expression
+   36 ArithmeticExp: Expression '-' . Expression
 
     VAL_INTEGER     shift, and go to state 48
     VAL_FLOAT       shift, and go to state 49
@@ -2520,7 +2548,7 @@ state 127
 
 state 128
 
-   38 ArithmeticExp: Expression '/' . Expression
+   37 ArithmeticExp: Expression '*' . Expression
 
     VAL_INTEGER     shift, and go to state 48
     VAL_FLOAT       shift, and go to state 49
@@ -2550,7 +2578,7 @@ state 128
 
 state 129
 
-   39 ArithmeticExp: Expression '%' . Expression
+   38 ArithmeticExp: Expression '/' . Expression
 
     VAL_INTEGER     shift, and go to state 48
     VAL_FLOAT       shift, and go to state 49
@@ -2580,12 +2608,42 @@ state 129
 
 state 130
 
+   39 ArithmeticExp: Expression '%' . Expression
+
+    VAL_INTEGER     shift, and go to state 48
+    VAL_FLOAT       shift, and go to state 49
+    VAL_STRING      shift, and go to state 50
+    VAL_CHAR        shift, and go to state 51
+    VAL_BOOLEAN     shift, and go to state 52
+    IDETIFIER       shift, and go to state 16
+    OP_INCREMENT    shift, and go to state 17
+    OP_DECREMENT    shift, and go to state 18
+    '-'             shift, and go to state 53
+    OP_LOGICAL_NOT  shift, and go to state 54
+    '('             shift, and go to state 55
+
+    Expression       go to state 159
+    ArithmeticExp    go to state 58
+    RelationalExp    go to state 59
+    LogicalExp       go to state 60
+    AssignExp        go to state 61
+    LHS              go to state 62
+    IncrementExp     go to state 63
+    DecrementExp     go to state 64
+    FunctionCallExp  go to state 65
+    ValueTypeNumber  go to state 66
+    ValueTypeLetter  go to state 67
+    ValueTypeAll     go to state 68
+
+
+state 131
+
    65 Return: RETURN Expression ';' .
 
     $default  reduce using rule 65 (Return)
 
 
-state 131
+state 132
 
    35 ArithmeticExp: Expression . '+' Expression
    36              | Expression . '-' Expression
@@ -2600,35 +2658,35 @@ state 131
    46              | Expression . OP_LESS_THAN Expression
    47 LogicalExp: Expression . OP_LOGICAL_OR Expression
    48           | Expression . OP_LOGICAL_AND Expression
-   85 Arguments: Expression . ',' Arguments
-   86          | Expression .
+   86 Arguments: Expression . ',' Arguments
+   87          | Expression .
 
-    OP_LOGICAL_OR        shift, and go to state 117
-    OP_LOGICAL_AND       shift, and go to state 118
-    OP_INEQUALITY        shift, and go to state 119
-    OP_EQUALITY          shift, and go to state 120
-    OP_GREATER_THAN      shift, and go to state 121
-    OP_LESS_THAN         shift, and go to state 122
-    OP_GREATER_OR_EQUAL  shift, and go to state 123
-    OP_LESS_OR_EQUAL     shift, and go to state 124
-    '+'                  shift, and go to state 125
-    '-'                  shift, and go to state 126
-    '*'                  shift, and go to state 127
-    '/'                  shift, and go to state 128
-    '%'                  shift, and go to state 129
-    ','                  shift, and go to state 159
+    OP_LOGICAL_OR        shift, and go to state 118
+    OP_LOGICAL_AND       shift, and go to state 119
+    OP_INEQUALITY        shift, and go to state 120
+    OP_EQUALITY          shift, and go to state 121
+    OP_GREATER_THAN      shift, and go to state 122
+    OP_LESS_THAN         shift, and go to state 123
+    OP_GREATER_OR_EQUAL  shift, and go to state 124
+    OP_LESS_OR_EQUAL     shift, and go to state 125
+    '+'                  shift, and go to state 126
+    '-'                  shift, and go to state 127
+    '*'                  shift, and go to state 128
+    '/'                  shift, and go to state 129
+    '%'                  shift, and go to state 130
+    ','                  shift, and go to state 160
 
-    $default  reduce using rule 86 (Arguments)
-
-
-state 132
-
-   88 FunctionCallExp: IDETIFIER '(' Arguments . ')'
-
-    ')'  shift, and go to state 160
+    $default  reduce using rule 87 (Arguments)
 
 
 state 133
+
+   89 FunctionCallExp: IDETIFIER '(' Arguments . ')'
+
+    ')'  shift, and go to state 161
+
+
+state 134
 
    15 Statement: '{' Statement '}' . Starter
 
@@ -2654,7 +2712,7 @@ state 133
 
     $default  reduce using rule 18 (Statement)
 
-    Starter          go to state 161
+    Starter          go to state 162
     Statement        go to state 22
     VarDeclaration   go to state 23
     AssignExp        go to state 24
@@ -2676,7 +2734,7 @@ state 133
     DataType         go to state 40
 
 
-state 134
+state 135
 
    35 ArithmeticExp: Expression . '+' Expression
    36              | Expression . '-' Expression
@@ -2693,19 +2751,19 @@ state 134
    48           | Expression . OP_LOGICAL_AND Expression
    50 AssignExp: LHS AssignOperator Expression .
 
-    OP_LOGICAL_OR        shift, and go to state 117
-    OP_LOGICAL_AND       shift, and go to state 118
-    OP_INEQUALITY        shift, and go to state 119
-    OP_EQUALITY          shift, and go to state 120
-    OP_GREATER_THAN      shift, and go to state 121
-    OP_LESS_THAN         shift, and go to state 122
-    OP_GREATER_OR_EQUAL  shift, and go to state 123
-    OP_LESS_OR_EQUAL     shift, and go to state 124
-    '+'                  shift, and go to state 125
-    '-'                  shift, and go to state 126
-    '*'                  shift, and go to state 127
-    '/'                  shift, and go to state 128
-    '%'                  shift, and go to state 129
+    OP_LOGICAL_OR        shift, and go to state 118
+    OP_LOGICAL_AND       shift, and go to state 119
+    OP_INEQUALITY        shift, and go to state 120
+    OP_EQUALITY          shift, and go to state 121
+    OP_GREATER_THAN      shift, and go to state 122
+    OP_LESS_THAN         shift, and go to state 123
+    OP_GREATER_OR_EQUAL  shift, and go to state 124
+    OP_LESS_OR_EQUAL     shift, and go to state 125
+    '+'                  shift, and go to state 126
+    '-'                  shift, and go to state 127
+    '*'                  shift, and go to state 128
+    '/'                  shift, and go to state 129
+    '%'                  shift, and go to state 130
 
     OP_LOGICAL_OR        [reduce using rule 50 (AssignExp)]
     OP_LOGICAL_AND       [reduce using rule 50 (AssignExp)]
@@ -2723,130 +2781,70 @@ state 134
     $default             reduce using rule 50 (AssignExp)
 
 
-state 135
+state 136
 
    67 Function: DataType IDETIFIER '(' . Parameters ')' '{' Statement '}'
 
-    INTEGER    shift, and go to state 162
-    CHARACTER  shift, and go to state 163
-    FLOAT      shift, and go to state 164
-    STRING     shift, and go to state 165
-    BOOLEAN    shift, and go to state 166
-    VOID       shift, and go to state 167
+    INTEGER    shift, and go to state 9
+    CHARACTER  shift, and go to state 10
+    FLOAT      shift, and go to state 11
+    STRING     shift, and go to state 12
+    BOOLEAN    shift, and go to state 13
+    VOID       shift, and go to state 163
 
-    $default  reduce using rule 84 (Parameters)
+    $default  reduce using rule 85 (Parameters)
 
-    Parameters      go to state 168
-    DataTypeNoVoid  go to state 169
+    Parameters  go to state 164
+    DataType    go to state 165
 
 
-state 136
+state 137
 
    20 OneLineDeclaration: AssignExp ';' .
 
     $default  reduce using rule 20 (OneLineDeclaration)
 
 
-state 137
+state 138
 
    19 OneLineDeclaration: AssignExp ',' . OneLineDeclaration
 
-    IDETIFIER  shift, and go to state 105
+    IDETIFIER  shift, and go to state 106
 
-    OneLineDeclaration  go to state 170
-    AssignExp           go to state 102
-    LHS                 go to state 103
+    OneLineDeclaration  go to state 166
+    AssignExp           go to state 103
+    LHS                 go to state 104
 
 
-state 138
+state 139
 
    22 OneLineDeclaration: LHS ';' .
 
     $default  reduce using rule 22 (OneLineDeclaration)
 
 
-state 139
+state 140
 
    21 OneLineDeclaration: LHS ',' . OneLineDeclaration
 
-    IDETIFIER  shift, and go to state 105
+    IDETIFIER  shift, and go to state 106
 
-    OneLineDeclaration  go to state 171
-    AssignExp           go to state 102
-    LHS                 go to state 103
-
-
-state 140
-
-   68 Condition: IF '(' Expression ')' . '{' Statement '}'
-   69          | IF '(' Expression ')' . '{' Statement '}' ELSE '{' Statement '}'
-
-    '{'  shift, and go to state 172
+    OneLineDeclaration  go to state 167
+    AssignExp           go to state 103
+    LHS                 go to state 104
 
 
 state 141
 
-   35 ArithmeticExp: Expression . '+' Expression
-   36              | Expression . '-' Expression
-   37              | Expression . '*' Expression
-   38              | Expression . '/' Expression
-   39              | Expression . '%' Expression
-   41 RelationalExp: Expression . OP_EQUALITY Expression
-   42              | Expression . OP_INEQUALITY Expression
-   43              | Expression . OP_GREATER_OR_EQUAL Expression
-   44              | Expression . OP_LESS_OR_EQUAL Expression
-   45              | Expression . OP_GREATER_THAN Expression
-   46              | Expression . OP_LESS_THAN Expression
-   47 LogicalExp: Expression . OP_LOGICAL_OR Expression
-   48           | Expression . OP_LOGICAL_AND Expression
-   74 ForLoop: FOR '(' ForLoopInit Expression . ';' Expression ')' '{' Statement '}'
+   68 Condition: IF '(' Expression ')' . '{' Statement '}'
+   69          | IF '(' Expression ')' . '{' Statement '}' ELSE '{' Statement '}'
+   70          | IF '(' Expression ')' . '{' Statement '}' ELSE Condition
 
-    OP_LOGICAL_OR        shift, and go to state 117
-    OP_LOGICAL_AND       shift, and go to state 118
-    OP_INEQUALITY        shift, and go to state 119
-    OP_EQUALITY          shift, and go to state 120
-    OP_GREATER_THAN      shift, and go to state 121
-    OP_LESS_THAN         shift, and go to state 122
-    OP_GREATER_OR_EQUAL  shift, and go to state 123
-    OP_LESS_OR_EQUAL     shift, and go to state 124
-    '+'                  shift, and go to state 125
-    '-'                  shift, and go to state 126
-    '*'                  shift, and go to state 127
-    '/'                  shift, and go to state 128
-    '%'                  shift, and go to state 129
-    ';'                  shift, and go to state 173
+    '{'  shift, and go to state 168
 
 
 state 142
 
-   70 WhileLoop: WHILE '(' Expression ')' . '{' Statement '}'
-
-    '{'  shift, and go to state 174
-
-
-state 143
-
-   71 DoWhileLoop: DO '{' Statement '}' . WHILE '(' Expression ')' ';'
-
-    WHILE  shift, and go to state 175
-
-
-state 144
-
-   80 SwitchCase: SWITCH '(' IDETIFIER ')' . '{' Case '}'
-
-    '{'  shift, and go to state 176
-
-
-state 145
-
-   29 Expression: '(' Expression ')' .
-
-    $default  reduce using rule 29 (Expression)
-
-
-state 146
-
    35 ArithmeticExp: Expression . '+' Expression
    36              | Expression . '-' Expression
    37              | Expression . '*' Expression
@@ -2859,23 +2857,51 @@ state 146
    45              | Expression . OP_GREATER_THAN Expression
    46              | Expression . OP_LESS_THAN Expression
    47 LogicalExp: Expression . OP_LOGICAL_OR Expression
-   47           | Expression OP_LOGICAL_OR Expression .
    48           | Expression . OP_LOGICAL_AND Expression
+   75 ForLoop: FOR '(' ForLoopInit Expression . ';' Expression ')' '{' Statement '}'
 
-    OP_LOGICAL_AND       shift, and go to state 118
-    OP_INEQUALITY        shift, and go to state 119
-    OP_EQUALITY          shift, and go to state 120
-    OP_GREATER_THAN      shift, and go to state 121
-    OP_LESS_THAN         shift, and go to state 122
-    OP_GREATER_OR_EQUAL  shift, and go to state 123
-    OP_LESS_OR_EQUAL     shift, and go to state 124
-    '+'                  shift, and go to state 125
-    '-'                  shift, and go to state 126
-    '*'                  shift, and go to state 127
-    '/'                  shift, and go to state 128
-    '%'                  shift, and go to state 129
+    OP_LOGICAL_OR        shift, and go to state 118
+    OP_LOGICAL_AND       shift, and go to state 119
+    OP_INEQUALITY        shift, and go to state 120
+    OP_EQUALITY          shift, and go to state 121
+    OP_GREATER_THAN      shift, and go to state 122
+    OP_LESS_THAN         shift, and go to state 123
+    OP_GREATER_OR_EQUAL  shift, and go to state 124
+    OP_LESS_OR_EQUAL     shift, and go to state 125
+    '+'                  shift, and go to state 126
+    '-'                  shift, and go to state 127
+    '*'                  shift, and go to state 128
+    '/'                  shift, and go to state 129
+    '%'                  shift, and go to state 130
+    ';'                  shift, and go to state 169
 
-    $default  reduce using rule 47 (LogicalExp)
+
+state 143
+
+   71 WhileLoop: WHILE '(' Expression ')' . '{' Statement '}'
+
+    '{'  shift, and go to state 170
+
+
+state 144
+
+   72 DoWhileLoop: DO '{' Statement '}' . WHILE '(' Expression ')' ';'
+
+    WHILE  shift, and go to state 171
+
+
+state 145
+
+   81 SwitchCase: SWITCH '(' IDETIFIER ')' . '{' Case '}'
+
+    '{'  shift, and go to state 172
+
+
+state 146
+
+   29 Expression: '(' Expression ')' .
+
+    $default  reduce using rule 29 (Expression)
 
 
 state 147
@@ -2892,25 +2918,58 @@ state 147
    45              | Expression . OP_GREATER_THAN Expression
    46              | Expression . OP_LESS_THAN Expression
    47 LogicalExp: Expression . OP_LOGICAL_OR Expression
+   47           | Expression OP_LOGICAL_OR Expression .
+   48           | Expression . OP_LOGICAL_AND Expression
+
+    OP_LOGICAL_AND       shift, and go to state 119
+    OP_INEQUALITY        shift, and go to state 120
+    OP_EQUALITY          shift, and go to state 121
+    OP_GREATER_THAN      shift, and go to state 122
+    OP_LESS_THAN         shift, and go to state 123
+    OP_GREATER_OR_EQUAL  shift, and go to state 124
+    OP_LESS_OR_EQUAL     shift, and go to state 125
+    '+'                  shift, and go to state 126
+    '-'                  shift, and go to state 127
+    '*'                  shift, and go to state 128
+    '/'                  shift, and go to state 129
+    '%'                  shift, and go to state 130
+
+    $default  reduce using rule 47 (LogicalExp)
+
+
+state 148
+
+   35 ArithmeticExp: Expression . '+' Expression
+   36              | Expression . '-' Expression
+   37              | Expression . '*' Expression
+   38              | Expression . '/' Expression
+   39              | Expression . '%' Expression
+   41 RelationalExp: Expression . OP_EQUALITY Expression
+   42              | Expression . OP_INEQUALITY Expression
+   43              | Expression . OP_GREATER_OR_EQUAL Expression
+   44              | Expression . OP_LESS_OR_EQUAL Expression
+   45              | Expression . OP_GREATER_THAN Expression
+   46              | Expression . OP_LESS_THAN Expression
+   47 LogicalExp: Expression . OP_LOGICAL_OR Expression
    48           | Expression . OP_LOGICAL_AND Expression
    48           | Expression OP_LOGICAL_AND Expression .
 
-    OP_INEQUALITY        shift, and go to state 119
-    OP_EQUALITY          shift, and go to state 120
-    OP_GREATER_THAN      shift, and go to state 121
-    OP_LESS_THAN         shift, and go to state 122
-    OP_GREATER_OR_EQUAL  shift, and go to state 123
-    OP_LESS_OR_EQUAL     shift, and go to state 124
-    '+'                  shift, and go to state 125
-    '-'                  shift, and go to state 126
-    '*'                  shift, and go to state 127
-    '/'                  shift, and go to state 128
-    '%'                  shift, and go to state 129
+    OP_INEQUALITY        shift, and go to state 120
+    OP_EQUALITY          shift, and go to state 121
+    OP_GREATER_THAN      shift, and go to state 122
+    OP_LESS_THAN         shift, and go to state 123
+    OP_GREATER_OR_EQUAL  shift, and go to state 124
+    OP_LESS_OR_EQUAL     shift, and go to state 125
+    '+'                  shift, and go to state 126
+    '-'                  shift, and go to state 127
+    '*'                  shift, and go to state 128
+    '/'                  shift, and go to state 129
+    '%'                  shift, and go to state 130
 
     $default  reduce using rule 48 (LogicalExp)
 
 
-state 148
+state 149
 
    35 ArithmeticExp: Expression . '+' Expression
    36              | Expression . '-' Expression
@@ -2927,20 +2986,20 @@ state 148
    47 LogicalExp: Expression . OP_LOGICAL_OR Expression
    48           | Expression . OP_LOGICAL_AND Expression
 
-    OP_GREATER_THAN      shift, and go to state 121
-    OP_LESS_THAN         shift, and go to state 122
-    OP_GREATER_OR_EQUAL  shift, and go to state 123
-    OP_LESS_OR_EQUAL     shift, and go to state 124
-    '+'                  shift, and go to state 125
-    '-'                  shift, and go to state 126
-    '*'                  shift, and go to state 127
-    '/'                  shift, and go to state 128
-    '%'                  shift, and go to state 129
+    OP_GREATER_THAN      shift, and go to state 122
+    OP_LESS_THAN         shift, and go to state 123
+    OP_GREATER_OR_EQUAL  shift, and go to state 124
+    OP_LESS_OR_EQUAL     shift, and go to state 125
+    '+'                  shift, and go to state 126
+    '-'                  shift, and go to state 127
+    '*'                  shift, and go to state 128
+    '/'                  shift, and go to state 129
+    '%'                  shift, and go to state 130
 
     $default  reduce using rule 42 (RelationalExp)
 
 
-state 149
+state 150
 
    35 ArithmeticExp: Expression . '+' Expression
    36              | Expression . '-' Expression
@@ -2957,20 +3016,20 @@ state 149
    47 LogicalExp: Expression . OP_LOGICAL_OR Expression
    48           | Expression . OP_LOGICAL_AND Expression
 
-    OP_GREATER_THAN      shift, and go to state 121
-    OP_LESS_THAN         shift, and go to state 122
-    OP_GREATER_OR_EQUAL  shift, and go to state 123
-    OP_LESS_OR_EQUAL     shift, and go to state 124
-    '+'                  shift, and go to state 125
-    '-'                  shift, and go to state 126
-    '*'                  shift, and go to state 127
-    '/'                  shift, and go to state 128
-    '%'                  shift, and go to state 129
+    OP_GREATER_THAN      shift, and go to state 122
+    OP_LESS_THAN         shift, and go to state 123
+    OP_GREATER_OR_EQUAL  shift, and go to state 124
+    OP_LESS_OR_EQUAL     shift, and go to state 125
+    '+'                  shift, and go to state 126
+    '-'                  shift, and go to state 127
+    '*'                  shift, and go to state 128
+    '/'                  shift, and go to state 129
+    '%'                  shift, and go to state 130
 
     $default  reduce using rule 41 (RelationalExp)
 
 
-state 150
+state 151
 
    35 ArithmeticExp: Expression . '+' Expression
    36              | Expression . '-' Expression
@@ -2987,16 +3046,16 @@ state 150
    47 LogicalExp: Expression . OP_LOGICAL_OR Expression
    48           | Expression . OP_LOGICAL_AND Expression
 
-    '+'  shift, and go to state 125
-    '-'  shift, and go to state 126
-    '*'  shift, and go to state 127
-    '/'  shift, and go to state 128
-    '%'  shift, and go to state 129
+    '+'  shift, and go to state 126
+    '-'  shift, and go to state 127
+    '*'  shift, and go to state 128
+    '/'  shift, and go to state 129
+    '%'  shift, and go to state 130
 
     $default  reduce using rule 45 (RelationalExp)
 
 
-state 151
+state 152
 
    35 ArithmeticExp: Expression . '+' Expression
    36              | Expression . '-' Expression
@@ -3013,16 +3072,16 @@ state 151
    47 LogicalExp: Expression . OP_LOGICAL_OR Expression
    48           | Expression . OP_LOGICAL_AND Expression
 
-    '+'  shift, and go to state 125
-    '-'  shift, and go to state 126
-    '*'  shift, and go to state 127
-    '/'  shift, and go to state 128
-    '%'  shift, and go to state 129
+    '+'  shift, and go to state 126
+    '-'  shift, and go to state 127
+    '*'  shift, and go to state 128
+    '/'  shift, and go to state 129
+    '%'  shift, and go to state 130
 
     $default  reduce using rule 46 (RelationalExp)
 
 
-state 152
+state 153
 
    35 ArithmeticExp: Expression . '+' Expression
    36              | Expression . '-' Expression
@@ -3039,16 +3098,16 @@ state 152
    47 LogicalExp: Expression . OP_LOGICAL_OR Expression
    48           | Expression . OP_LOGICAL_AND Expression
 
-    '+'  shift, and go to state 125
-    '-'  shift, and go to state 126
-    '*'  shift, and go to state 127
-    '/'  shift, and go to state 128
-    '%'  shift, and go to state 129
+    '+'  shift, and go to state 126
+    '-'  shift, and go to state 127
+    '*'  shift, and go to state 128
+    '/'  shift, and go to state 129
+    '%'  shift, and go to state 130
 
     $default  reduce using rule 43 (RelationalExp)
 
 
-state 153
+state 154
 
    35 ArithmeticExp: Expression . '+' Expression
    36              | Expression . '-' Expression
@@ -3065,16 +3124,16 @@ state 153
    47 LogicalExp: Expression . OP_LOGICAL_OR Expression
    48           | Expression . OP_LOGICAL_AND Expression
 
-    '+'  shift, and go to state 125
-    '-'  shift, and go to state 126
-    '*'  shift, and go to state 127
-    '/'  shift, and go to state 128
-    '%'  shift, and go to state 129
+    '+'  shift, and go to state 126
+    '-'  shift, and go to state 127
+    '*'  shift, and go to state 128
+    '/'  shift, and go to state 129
+    '%'  shift, and go to state 130
 
     $default  reduce using rule 44 (RelationalExp)
 
 
-state 154
+state 155
 
    35 ArithmeticExp: Expression . '+' Expression
    35              | Expression '+' Expression .
@@ -3091,14 +3150,14 @@ state 154
    47 LogicalExp: Expression . OP_LOGICAL_OR Expression
    48           | Expression . OP_LOGICAL_AND Expression
 
-    '*'  shift, and go to state 127
-    '/'  shift, and go to state 128
-    '%'  shift, and go to state 129
+    '*'  shift, and go to state 128
+    '/'  shift, and go to state 129
+    '%'  shift, and go to state 130
 
     $default  reduce using rule 35 (ArithmeticExp)
 
 
-state 155
+state 156
 
    35 ArithmeticExp: Expression . '+' Expression
    36              | Expression . '-' Expression
@@ -3115,14 +3174,14 @@ state 155
    47 LogicalExp: Expression . OP_LOGICAL_OR Expression
    48           | Expression . OP_LOGICAL_AND Expression
 
-    '*'  shift, and go to state 127
-    '/'  shift, and go to state 128
-    '%'  shift, and go to state 129
+    '*'  shift, and go to state 128
+    '/'  shift, and go to state 129
+    '%'  shift, and go to state 130
 
     $default  reduce using rule 36 (ArithmeticExp)
 
 
-state 156
+state 157
 
    35 ArithmeticExp: Expression . '+' Expression
    36              | Expression . '-' Expression
@@ -3142,7 +3201,7 @@ state 156
     $default  reduce using rule 37 (ArithmeticExp)
 
 
-state 157
+state 158
 
    35 ArithmeticExp: Expression . '+' Expression
    36              | Expression . '-' Expression
@@ -3162,7 +3221,7 @@ state 157
     $default  reduce using rule 38 (ArithmeticExp)
 
 
-state 158
+state 159
 
    35 ArithmeticExp: Expression . '+' Expression
    36              | Expression . '-' Expression
@@ -3182,9 +3241,9 @@ state 158
     $default  reduce using rule 39 (ArithmeticExp)
 
 
-state 159
+state 160
 
-   85 Arguments: Expression ',' . Arguments
+   86 Arguments: Expression ',' . Arguments
 
     VAL_INTEGER     shift, and go to state 48
     VAL_FLOAT       shift, and go to state 49
@@ -3198,9 +3257,9 @@ state 159
     OP_LOGICAL_NOT  shift, and go to state 54
     '('             shift, and go to state 55
 
-    $default  reduce using rule 87 (Arguments)
+    $default  reduce using rule 88 (Arguments)
 
-    Expression       go to state 131
+    Expression       go to state 132
     ArithmeticExp    go to state 58
     RelationalExp    go to state 59
     LogicalExp       go to state 60
@@ -3208,102 +3267,72 @@ state 159
     LHS              go to state 62
     IncrementExp     go to state 63
     DecrementExp     go to state 64
-    Arguments        go to state 177
+    Arguments        go to state 173
     FunctionCallExp  go to state 65
     ValueTypeNumber  go to state 66
     ValueTypeLetter  go to state 67
     ValueTypeAll     go to state 68
 
 
-state 160
-
-   88 FunctionCallExp: IDETIFIER '(' Arguments ')' .
-
-    $default  reduce using rule 88 (FunctionCallExp)
-
-
 state 161
+
+   89 FunctionCallExp: IDETIFIER '(' Arguments ')' .
+
+    $default  reduce using rule 89 (FunctionCallExp)
+
+
+state 162
 
    15 Statement: '{' Statement '}' Starter .
 
     $default  reduce using rule 15 (Statement)
 
 
-state 162
-
-   97 DataTypeNoVoid: INTEGER .
-
-    $default  reduce using rule 97 (DataTypeNoVoid)
-
-
 state 163
 
-   99 DataTypeNoVoid: CHARACTER .
+   84 Parameters: VOID .
+  103 DataType: VOID .
 
-    $default  reduce using rule 99 (DataTypeNoVoid)
+    IDETIFIER  reduce using rule 103 (DataType)
+    $default   reduce using rule 84 (Parameters)
 
 
 state 164
 
-   98 DataTypeNoVoid: FLOAT .
+   67 Function: DataType IDETIFIER '(' Parameters . ')' '{' Statement '}'
 
-    $default  reduce using rule 98 (DataTypeNoVoid)
+    ')'  shift, and go to state 174
 
 
 state 165
 
-  100 DataTypeNoVoid: STRING .
+   82 Parameters: DataType . LHS ',' DataType LHS
+   83           | DataType . LHS
 
-    $default  reduce using rule 100 (DataTypeNoVoid)
+    IDETIFIER  shift, and go to state 106
+
+    LHS  go to state 175
 
 
 state 166
-
-  101 DataTypeNoVoid: BOOLEAN .
-
-    $default  reduce using rule 101 (DataTypeNoVoid)
-
-
-state 167
-
-   83 Parameters: VOID .
-
-    $default  reduce using rule 83 (Parameters)
-
-
-state 168
-
-   67 Function: DataType IDETIFIER '(' Parameters . ')' '{' Statement '}'
-
-    ')'  shift, and go to state 178
-
-
-state 169
-
-   81 Parameters: DataTypeNoVoid . IDETIFIER ',' DataTypeNoVoid IDETIFIER
-   82           | DataTypeNoVoid . IDETIFIER
-
-    IDETIFIER  shift, and go to state 179
-
-
-state 170
 
    19 OneLineDeclaration: AssignExp ',' OneLineDeclaration .
 
     $default  reduce using rule 19 (OneLineDeclaration)
 
 
-state 171
+state 167
 
    21 OneLineDeclaration: LHS ',' OneLineDeclaration .
 
     $default  reduce using rule 21 (OneLineDeclaration)
 
 
-state 172
+state 168
 
    68 Condition: IF '(' Expression ')' '{' . Statement '}'
    69          | IF '(' Expression ')' '{' . Statement '}' ELSE '{' Statement '}'
+   70          | IF '(' Expression ')' '{' . Statement '}' ELSE Condition
 
     IF            shift, and go to state 1
     FOR           shift, and go to state 2
@@ -3327,7 +3356,7 @@ state 172
 
     $default  reduce using rule 18 (Statement)
 
-    Statement        go to state 180
+    Statement        go to state 176
     VarDeclaration   go to state 23
     AssignExp        go to state 24
     LHS              go to state 25
@@ -3347,9 +3376,9 @@ state 172
     DataType         go to state 70
 
 
-state 173
+state 169
 
-   74 ForLoop: FOR '(' ForLoopInit Expression ';' . Expression ')' '{' Statement '}'
+   75 ForLoop: FOR '(' ForLoopInit Expression ';' . Expression ')' '{' Statement '}'
 
     VAL_INTEGER     shift, and go to state 48
     VAL_FLOAT       shift, and go to state 49
@@ -3363,7 +3392,7 @@ state 173
     OP_LOGICAL_NOT  shift, and go to state 54
     '('             shift, and go to state 55
 
-    Expression       go to state 181
+    Expression       go to state 177
     ArithmeticExp    go to state 58
     RelationalExp    go to state 59
     LogicalExp       go to state 60
@@ -3377,9 +3406,9 @@ state 173
     ValueTypeAll     go to state 68
 
 
-state 174
+state 170
 
-   70 WhileLoop: WHILE '(' Expression ')' '{' . Statement '}'
+   71 WhileLoop: WHILE '(' Expression ')' '{' . Statement '}'
 
     IF            shift, and go to state 1
     FOR           shift, and go to state 2
@@ -3403,7 +3432,7 @@ state 174
 
     $default  reduce using rule 18 (Statement)
 
-    Statement        go to state 182
+    Statement        go to state 178
     VarDeclaration   go to state 23
     AssignExp        go to state 24
     LHS              go to state 25
@@ -3423,58 +3452,59 @@ state 174
     DataType         go to state 70
 
 
+state 171
+
+   72 DoWhileLoop: DO '{' Statement '}' WHILE . '(' Expression ')' ';'
+
+    '('  shift, and go to state 179
+
+
+state 172
+
+   81 SwitchCase: SWITCH '(' IDETIFIER ')' '{' . Case '}'
+
+    CASE     shift, and go to state 180
+    DEFAULT  shift, and go to state 181
+
+    $default  reduce using rule 80 (Case)
+
+    Case  go to state 182
+
+
+state 173
+
+   86 Arguments: Expression ',' Arguments .
+
+    $default  reduce using rule 86 (Arguments)
+
+
+state 174
+
+   67 Function: DataType IDETIFIER '(' Parameters ')' . '{' Statement '}'
+
+    '{'  shift, and go to state 183
+
+
 state 175
 
-   71 DoWhileLoop: DO '{' Statement '}' WHILE . '(' Expression ')' ';'
+   82 Parameters: DataType LHS . ',' DataType LHS
+   83           | DataType LHS .
 
-    '('  shift, and go to state 183
+    ','  shift, and go to state 184
+
+    $default  reduce using rule 83 (Parameters)
 
 
 state 176
 
-   80 SwitchCase: SWITCH '(' IDETIFIER ')' '{' . Case '}'
+   68 Condition: IF '(' Expression ')' '{' Statement . '}'
+   69          | IF '(' Expression ')' '{' Statement . '}' ELSE '{' Statement '}'
+   70          | IF '(' Expression ')' '{' Statement . '}' ELSE Condition
 
-    CASE     shift, and go to state 184
-    DEFAULT  shift, and go to state 185
-
-    $default  reduce using rule 79 (Case)
-
-    Case  go to state 186
+    '}'  shift, and go to state 185
 
 
 state 177
-
-   85 Arguments: Expression ',' Arguments .
-
-    $default  reduce using rule 85 (Arguments)
-
-
-state 178
-
-   67 Function: DataType IDETIFIER '(' Parameters ')' . '{' Statement '}'
-
-    '{'  shift, and go to state 187
-
-
-state 179
-
-   81 Parameters: DataTypeNoVoid IDETIFIER . ',' DataTypeNoVoid IDETIFIER
-   82           | DataTypeNoVoid IDETIFIER .
-
-    ','  shift, and go to state 188
-
-    $default  reduce using rule 82 (Parameters)
-
-
-state 180
-
-   68 Condition: IF '(' Expression ')' '{' Statement . '}'
-   69          | IF '(' Expression ')' '{' Statement . '}' ELSE '{' Statement '}'
-
-    '}'  shift, and go to state 189
-
-
-state 181
 
    35 ArithmeticExp: Expression . '+' Expression
    36              | Expression . '-' Expression
@@ -3489,34 +3519,34 @@ state 181
    46              | Expression . OP_LESS_THAN Expression
    47 LogicalExp: Expression . OP_LOGICAL_OR Expression
    48           | Expression . OP_LOGICAL_AND Expression
-   74 ForLoop: FOR '(' ForLoopInit Expression ';' Expression . ')' '{' Statement '}'
+   75 ForLoop: FOR '(' ForLoopInit Expression ';' Expression . ')' '{' Statement '}'
 
-    OP_LOGICAL_OR        shift, and go to state 117
-    OP_LOGICAL_AND       shift, and go to state 118
-    OP_INEQUALITY        shift, and go to state 119
-    OP_EQUALITY          shift, and go to state 120
-    OP_GREATER_THAN      shift, and go to state 121
-    OP_LESS_THAN         shift, and go to state 122
-    OP_GREATER_OR_EQUAL  shift, and go to state 123
-    OP_LESS_OR_EQUAL     shift, and go to state 124
-    '+'                  shift, and go to state 125
-    '-'                  shift, and go to state 126
-    '*'                  shift, and go to state 127
-    '/'                  shift, and go to state 128
-    '%'                  shift, and go to state 129
-    ')'                  shift, and go to state 190
-
-
-state 182
-
-   70 WhileLoop: WHILE '(' Expression ')' '{' Statement . '}'
-
-    '}'  shift, and go to state 191
+    OP_LOGICAL_OR        shift, and go to state 118
+    OP_LOGICAL_AND       shift, and go to state 119
+    OP_INEQUALITY        shift, and go to state 120
+    OP_EQUALITY          shift, and go to state 121
+    OP_GREATER_THAN      shift, and go to state 122
+    OP_LESS_THAN         shift, and go to state 123
+    OP_GREATER_OR_EQUAL  shift, and go to state 124
+    OP_LESS_OR_EQUAL     shift, and go to state 125
+    '+'                  shift, and go to state 126
+    '-'                  shift, and go to state 127
+    '*'                  shift, and go to state 128
+    '/'                  shift, and go to state 129
+    '%'                  shift, and go to state 130
+    ')'                  shift, and go to state 186
 
 
-state 183
+state 178
 
-   71 DoWhileLoop: DO '{' Statement '}' WHILE '(' . Expression ')' ';'
+   71 WhileLoop: WHILE '(' Expression ')' '{' Statement . '}'
+
+    '}'  shift, and go to state 187
+
+
+state 179
+
+   72 DoWhileLoop: DO '{' Statement '}' WHILE '(' . Expression ')' ';'
 
     VAL_INTEGER     shift, and go to state 48
     VAL_FLOAT       shift, and go to state 49
@@ -3530,7 +3560,7 @@ state 183
     OP_LOGICAL_NOT  shift, and go to state 54
     '('             shift, and go to state 55
 
-    Expression       go to state 192
+    Expression       go to state 188
     ArithmeticExp    go to state 58
     RelationalExp    go to state 59
     LogicalExp       go to state 60
@@ -3544,31 +3574,31 @@ state 183
     ValueTypeAll     go to state 68
 
 
-state 184
+state 180
 
-   77 Case: CASE . SwitchValueTypes ':' Statement Case
+   78 Case: CASE . SwitchValueTypes ':' Statement Case
 
-    VAL_INTEGER  shift, and go to state 193
-    VAL_CHAR     shift, and go to state 194
+    VAL_INTEGER  shift, and go to state 189
+    VAL_CHAR     shift, and go to state 190
 
-    SwitchValueTypes  go to state 195
-
-
-state 185
-
-   78 Case: DEFAULT . ':' Statement
-
-    ':'  shift, and go to state 196
+    SwitchValueTypes  go to state 191
 
 
-state 186
+state 181
 
-   80 SwitchCase: SWITCH '(' IDETIFIER ')' '{' Case . '}'
+   79 Case: DEFAULT . ':' Statement
 
-    '}'  shift, and go to state 197
+    ':'  shift, and go to state 192
 
 
-state 187
+state 182
+
+   81 SwitchCase: SWITCH '(' IDETIFIER ')' '{' Case . '}'
+
+    '}'  shift, and go to state 193
+
+
+state 183
 
    67 Function: DataType IDETIFIER '(' Parameters ')' '{' . Statement '}'
 
@@ -3594,7 +3624,7 @@ state 187
 
     $default  reduce using rule 18 (Statement)
 
-    Statement        go to state 198
+    Statement        go to state 194
     VarDeclaration   go to state 23
     AssignExp        go to state 24
     LHS              go to state 25
@@ -3614,44 +3644,46 @@ state 187
     DataType         go to state 70
 
 
-state 188
+state 184
 
-   81 Parameters: DataTypeNoVoid IDETIFIER ',' . DataTypeNoVoid IDETIFIER
+   82 Parameters: DataType LHS ',' . DataType LHS
 
-    INTEGER    shift, and go to state 162
-    CHARACTER  shift, and go to state 163
-    FLOAT      shift, and go to state 164
-    STRING     shift, and go to state 165
-    BOOLEAN    shift, and go to state 166
+    INTEGER    shift, and go to state 9
+    CHARACTER  shift, and go to state 10
+    FLOAT      shift, and go to state 11
+    STRING     shift, and go to state 12
+    BOOLEAN    shift, and go to state 13
+    VOID       shift, and go to state 15
 
-    DataTypeNoVoid  go to state 199
+    DataType  go to state 195
 
 
-state 189
+state 185
 
    68 Condition: IF '(' Expression ')' '{' Statement '}' .
    69          | IF '(' Expression ')' '{' Statement '}' . ELSE '{' Statement '}'
+   70          | IF '(' Expression ')' '{' Statement '}' . ELSE Condition
 
-    ELSE  shift, and go to state 200
+    ELSE  shift, and go to state 196
 
     $default  reduce using rule 68 (Condition)
 
 
-state 190
+state 186
 
-   74 ForLoop: FOR '(' ForLoopInit Expression ';' Expression ')' . '{' Statement '}'
+   75 ForLoop: FOR '(' ForLoopInit Expression ';' Expression ')' . '{' Statement '}'
 
-    '{'  shift, and go to state 201
-
-
-state 191
-
-   70 WhileLoop: WHILE '(' Expression ')' '{' Statement '}' .
-
-    $default  reduce using rule 70 (WhileLoop)
+    '{'  shift, and go to state 197
 
 
-state 192
+state 187
+
+   71 WhileLoop: WHILE '(' Expression ')' '{' Statement '}' .
+
+    $default  reduce using rule 71 (WhileLoop)
+
+
+state 188
 
    35 ArithmeticExp: Expression . '+' Expression
    36              | Expression . '-' Expression
@@ -3666,48 +3698,48 @@ state 192
    46              | Expression . OP_LESS_THAN Expression
    47 LogicalExp: Expression . OP_LOGICAL_OR Expression
    48           | Expression . OP_LOGICAL_AND Expression
-   71 DoWhileLoop: DO '{' Statement '}' WHILE '(' Expression . ')' ';'
+   72 DoWhileLoop: DO '{' Statement '}' WHILE '(' Expression . ')' ';'
 
-    OP_LOGICAL_OR        shift, and go to state 117
-    OP_LOGICAL_AND       shift, and go to state 118
-    OP_INEQUALITY        shift, and go to state 119
-    OP_EQUALITY          shift, and go to state 120
-    OP_GREATER_THAN      shift, and go to state 121
-    OP_LESS_THAN         shift, and go to state 122
-    OP_GREATER_OR_EQUAL  shift, and go to state 123
-    OP_LESS_OR_EQUAL     shift, and go to state 124
-    '+'                  shift, and go to state 125
-    '-'                  shift, and go to state 126
-    '*'                  shift, and go to state 127
-    '/'                  shift, and go to state 128
-    '%'                  shift, and go to state 129
-    ')'                  shift, and go to state 202
-
-
-state 193
-
-   75 SwitchValueTypes: VAL_INTEGER .
-
-    $default  reduce using rule 75 (SwitchValueTypes)
+    OP_LOGICAL_OR        shift, and go to state 118
+    OP_LOGICAL_AND       shift, and go to state 119
+    OP_INEQUALITY        shift, and go to state 120
+    OP_EQUALITY          shift, and go to state 121
+    OP_GREATER_THAN      shift, and go to state 122
+    OP_LESS_THAN         shift, and go to state 123
+    OP_GREATER_OR_EQUAL  shift, and go to state 124
+    OP_LESS_OR_EQUAL     shift, and go to state 125
+    '+'                  shift, and go to state 126
+    '-'                  shift, and go to state 127
+    '*'                  shift, and go to state 128
+    '/'                  shift, and go to state 129
+    '%'                  shift, and go to state 130
+    ')'                  shift, and go to state 198
 
 
-state 194
+state 189
 
-   76 SwitchValueTypes: VAL_CHAR .
+   76 SwitchValueTypes: VAL_INTEGER .
 
     $default  reduce using rule 76 (SwitchValueTypes)
 
 
-state 195
+state 190
 
-   77 Case: CASE SwitchValueTypes . ':' Statement Case
+   77 SwitchValueTypes: VAL_CHAR .
 
-    ':'  shift, and go to state 203
+    $default  reduce using rule 77 (SwitchValueTypes)
 
 
-state 196
+state 191
 
-   78 Case: DEFAULT ':' . Statement
+   78 Case: CASE SwitchValueTypes . ':' Statement Case
+
+    ':'  shift, and go to state 199
+
+
+state 192
+
+   79 Case: DEFAULT ':' . Statement
 
     IF            shift, and go to state 1
     FOR           shift, and go to state 2
@@ -3731,7 +3763,7 @@ state 196
 
     $default  reduce using rule 18 (Statement)
 
-    Statement        go to state 204
+    Statement        go to state 200
     VarDeclaration   go to state 23
     AssignExp        go to state 24
     LHS              go to state 25
@@ -3751,37 +3783,163 @@ state 196
     DataType         go to state 70
 
 
+state 193
+
+   81 SwitchCase: SWITCH '(' IDETIFIER ')' '{' Case '}' .
+
+    $default  reduce using rule 81 (SwitchCase)
+
+
+state 194
+
+   67 Function: DataType IDETIFIER '(' Parameters ')' '{' Statement . '}'
+
+    '}'  shift, and go to state 201
+
+
+state 195
+
+   82 Parameters: DataType LHS ',' DataType . LHS
+
+    IDETIFIER  shift, and go to state 106
+
+    LHS  go to state 202
+
+
+state 196
+
+   69 Condition: IF '(' Expression ')' '{' Statement '}' ELSE . '{' Statement '}'
+   70          | IF '(' Expression ')' '{' Statement '}' ELSE . Condition
+
+    IF   shift, and go to state 1
+    '{'  shift, and go to state 203
+
+    Condition  go to state 204
+
+
 state 197
 
-   80 SwitchCase: SWITCH '(' IDETIFIER ')' '{' Case '}' .
+   75 ForLoop: FOR '(' ForLoopInit Expression ';' Expression ')' '{' . Statement '}'
 
-    $default  reduce using rule 80 (SwitchCase)
+    IF            shift, and go to state 1
+    FOR           shift, and go to state 2
+    WHILE         shift, and go to state 3
+    DO            shift, and go to state 4
+    SWITCH        shift, and go to state 5
+    BREAK         shift, and go to state 6
+    CONTINUE      shift, and go to state 7
+    RETURN        shift, and go to state 8
+    INTEGER       shift, and go to state 9
+    CHARACTER     shift, and go to state 10
+    FLOAT         shift, and go to state 11
+    STRING        shift, and go to state 12
+    BOOLEAN       shift, and go to state 13
+    CONSTANT      shift, and go to state 14
+    VOID          shift, and go to state 15
+    IDETIFIER     shift, and go to state 16
+    OP_INCREMENT  shift, and go to state 17
+    OP_DECREMENT  shift, and go to state 18
+    '{'           shift, and go to state 19
+
+    $default  reduce using rule 18 (Statement)
+
+    Statement        go to state 205
+    VarDeclaration   go to state 23
+    AssignExp        go to state 24
+    LHS              go to state 25
+    Assign           go to state 26
+    IncrementExp     go to state 27
+    DecrementExp     go to state 28
+    Increment        go to state 29
+    Decrement        go to state 30
+    Return           go to state 31
+    Condition        go to state 33
+    WhileLoop        go to state 34
+    DoWhileLoop      go to state 35
+    ForLoop          go to state 36
+    SwitchCase       go to state 37
+    FunctionCallExp  go to state 38
+    FunctionCall     go to state 39
+    DataType         go to state 70
 
 
 state 198
 
-   67 Function: DataType IDETIFIER '(' Parameters ')' '{' Statement . '}'
+   72 DoWhileLoop: DO '{' Statement '}' WHILE '(' Expression ')' . ';'
 
-    '}'  shift, and go to state 205
+    ';'  shift, and go to state 206
 
 
 state 199
 
-   81 Parameters: DataTypeNoVoid IDETIFIER ',' DataTypeNoVoid . IDETIFIER
+   78 Case: CASE SwitchValueTypes ':' . Statement Case
 
-    IDETIFIER  shift, and go to state 206
+    IF            shift, and go to state 1
+    FOR           shift, and go to state 2
+    WHILE         shift, and go to state 3
+    DO            shift, and go to state 4
+    SWITCH        shift, and go to state 5
+    BREAK         shift, and go to state 6
+    CONTINUE      shift, and go to state 7
+    RETURN        shift, and go to state 8
+    INTEGER       shift, and go to state 9
+    CHARACTER     shift, and go to state 10
+    FLOAT         shift, and go to state 11
+    STRING        shift, and go to state 12
+    BOOLEAN       shift, and go to state 13
+    CONSTANT      shift, and go to state 14
+    VOID          shift, and go to state 15
+    IDETIFIER     shift, and go to state 16
+    OP_INCREMENT  shift, and go to state 17
+    OP_DECREMENT  shift, and go to state 18
+    '{'           shift, and go to state 19
+
+    $default  reduce using rule 18 (Statement)
+
+    Statement        go to state 207
+    VarDeclaration   go to state 23
+    AssignExp        go to state 24
+    LHS              go to state 25
+    Assign           go to state 26
+    IncrementExp     go to state 27
+    DecrementExp     go to state 28
+    Increment        go to state 29
+    Decrement        go to state 30
+    Return           go to state 31
+    Condition        go to state 33
+    WhileLoop        go to state 34
+    DoWhileLoop      go to state 35
+    ForLoop          go to state 36
+    SwitchCase       go to state 37
+    FunctionCallExp  go to state 38
+    FunctionCall     go to state 39
+    DataType         go to state 70
 
 
 state 200
 
-   69 Condition: IF '(' Expression ')' '{' Statement '}' ELSE . '{' Statement '}'
+   79 Case: DEFAULT ':' Statement .
 
-    '{'  shift, and go to state 207
+    $default  reduce using rule 79 (Case)
 
 
 state 201
 
-   74 ForLoop: FOR '(' ForLoopInit Expression ';' Expression ')' '{' . Statement '}'
+   67 Function: DataType IDETIFIER '(' Parameters ')' '{' Statement '}' .
+
+    $default  reduce using rule 67 (Function)
+
+
+state 202
+
+   82 Parameters: DataType LHS ',' DataType LHS .
+
+    $default  reduce using rule 82 (Parameters)
+
+
+state 203
+
+   69 Condition: IF '(' Expression ')' '{' Statement '}' ELSE '{' . Statement '}'
 
     IF            shift, and go to state 1
     FOR           shift, and go to state 2
@@ -3825,174 +3983,61 @@ state 201
     DataType         go to state 70
 
 
-state 202
-
-   71 DoWhileLoop: DO '{' Statement '}' WHILE '(' Expression ')' . ';'
-
-    ';'  shift, and go to state 209
-
-
-state 203
-
-   77 Case: CASE SwitchValueTypes ':' . Statement Case
-
-    IF            shift, and go to state 1
-    FOR           shift, and go to state 2
-    WHILE         shift, and go to state 3
-    DO            shift, and go to state 4
-    SWITCH        shift, and go to state 5
-    BREAK         shift, and go to state 6
-    CONTINUE      shift, and go to state 7
-    RETURN        shift, and go to state 8
-    INTEGER       shift, and go to state 9
-    CHARACTER     shift, and go to state 10
-    FLOAT         shift, and go to state 11
-    STRING        shift, and go to state 12
-    BOOLEAN       shift, and go to state 13
-    CONSTANT      shift, and go to state 14
-    VOID          shift, and go to state 15
-    IDETIFIER     shift, and go to state 16
-    OP_INCREMENT  shift, and go to state 17
-    OP_DECREMENT  shift, and go to state 18
-    '{'           shift, and go to state 19
-
-    $default  reduce using rule 18 (Statement)
-
-    Statement        go to state 210
-    VarDeclaration   go to state 23
-    AssignExp        go to state 24
-    LHS              go to state 25
-    Assign           go to state 26
-    IncrementExp     go to state 27
-    DecrementExp     go to state 28
-    Increment        go to state 29
-    Decrement        go to state 30
-    Return           go to state 31
-    Condition        go to state 33
-    WhileLoop        go to state 34
-    DoWhileLoop      go to state 35
-    ForLoop          go to state 36
-    SwitchCase       go to state 37
-    FunctionCallExp  go to state 38
-    FunctionCall     go to state 39
-    DataType         go to state 70
-
-
 state 204
 
-   78 Case: DEFAULT ':' Statement .
+   70 Condition: IF '(' Expression ')' '{' Statement '}' ELSE Condition .
 
-    $default  reduce using rule 78 (Case)
+    $default  reduce using rule 70 (Condition)
 
 
 state 205
 
-   67 Function: DataType IDETIFIER '(' Parameters ')' '{' Statement '}' .
+   75 ForLoop: FOR '(' ForLoopInit Expression ';' Expression ')' '{' Statement . '}'
 
-    $default  reduce using rule 67 (Function)
+    '}'  shift, and go to state 209
 
 
 state 206
 
-   81 Parameters: DataTypeNoVoid IDETIFIER ',' DataTypeNoVoid IDETIFIER .
+   72 DoWhileLoop: DO '{' Statement '}' WHILE '(' Expression ')' ';' .
 
-    $default  reduce using rule 81 (Parameters)
+    $default  reduce using rule 72 (DoWhileLoop)
 
 
 state 207
 
-   69 Condition: IF '(' Expression ')' '{' Statement '}' ELSE '{' . Statement '}'
+   78 Case: CASE SwitchValueTypes ':' Statement . Case
 
-    IF            shift, and go to state 1
-    FOR           shift, and go to state 2
-    WHILE         shift, and go to state 3
-    DO            shift, and go to state 4
-    SWITCH        shift, and go to state 5
-    BREAK         shift, and go to state 6
-    CONTINUE      shift, and go to state 7
-    RETURN        shift, and go to state 8
-    INTEGER       shift, and go to state 9
-    CHARACTER     shift, and go to state 10
-    FLOAT         shift, and go to state 11
-    STRING        shift, and go to state 12
-    BOOLEAN       shift, and go to state 13
-    CONSTANT      shift, and go to state 14
-    VOID          shift, and go to state 15
-    IDETIFIER     shift, and go to state 16
-    OP_INCREMENT  shift, and go to state 17
-    OP_DECREMENT  shift, and go to state 18
-    '{'           shift, and go to state 19
+    CASE     shift, and go to state 180
+    DEFAULT  shift, and go to state 181
 
-    $default  reduce using rule 18 (Statement)
+    $default  reduce using rule 80 (Case)
 
-    Statement        go to state 211
-    VarDeclaration   go to state 23
-    AssignExp        go to state 24
-    LHS              go to state 25
-    Assign           go to state 26
-    IncrementExp     go to state 27
-    DecrementExp     go to state 28
-    Increment        go to state 29
-    Decrement        go to state 30
-    Return           go to state 31
-    Condition        go to state 33
-    WhileLoop        go to state 34
-    DoWhileLoop      go to state 35
-    ForLoop          go to state 36
-    SwitchCase       go to state 37
-    FunctionCallExp  go to state 38
-    FunctionCall     go to state 39
-    DataType         go to state 70
+    Case  go to state 210
 
 
 state 208
 
-   74 ForLoop: FOR '(' ForLoopInit Expression ';' Expression ')' '{' Statement . '}'
+   69 Condition: IF '(' Expression ')' '{' Statement '}' ELSE '{' Statement . '}'
 
-    '}'  shift, and go to state 212
+    '}'  shift, and go to state 211
 
 
 state 209
 
-   71 DoWhileLoop: DO '{' Statement '}' WHILE '(' Expression ')' ';' .
+   75 ForLoop: FOR '(' ForLoopInit Expression ';' Expression ')' '{' Statement '}' .
 
-    $default  reduce using rule 71 (DoWhileLoop)
+    $default  reduce using rule 75 (ForLoop)
 
 
 state 210
 
-   77 Case: CASE SwitchValueTypes ':' Statement . Case
+   78 Case: CASE SwitchValueTypes ':' Statement Case .
 
-    CASE     shift, and go to state 184
-    DEFAULT  shift, and go to state 185
-
-    $default  reduce using rule 79 (Case)
-
-    Case  go to state 213
+    $default  reduce using rule 78 (Case)
 
 
 state 211
-
-   69 Condition: IF '(' Expression ')' '{' Statement '}' ELSE '{' Statement . '}'
-
-    '}'  shift, and go to state 214
-
-
-state 212
-
-   74 ForLoop: FOR '(' ForLoopInit Expression ';' Expression ')' '{' Statement '}' .
-
-    $default  reduce using rule 74 (ForLoop)
-
-
-state 213
-
-   77 Case: CASE SwitchValueTypes ':' Statement Case .
-
-    $default  reduce using rule 77 (Case)
-
-
-state 214
 
    69 Condition: IF '(' Expression ')' '{' Statement '}' ELSE '{' Statement '}' .
 

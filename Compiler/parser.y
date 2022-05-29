@@ -125,7 +125,7 @@ program 			: Starter
 					;
 
 Starter 			: Statement 
-					| Function 
+					| Function Starter
 					;
 					
 Statement			: VarDeclaration Starter
@@ -206,7 +206,7 @@ AssignExp			: LHS AssignOperator Expression 	 						{ 	rightHandSide = 0;
 																					if($1 != NULL)
 																						{
 																							$1->value = $3.value;
-																							$1->data_type = $3.type;
+																							type_check($1->data_type, $3.type,1);
 																							// printf("found %s\n", currentName);
 																						}
 																					else{
@@ -282,6 +282,7 @@ Function			: DataType IDETIFIER '(' Parameters ')' '{' Statement '}' {printInFil
  /* If conditon */
 Condition			: IF '(' Expression ')' '{' Statement '}' %prec THEN
 					| IF '(' Expression ')' '{' Statement '}' ELSE '{' Statement '}'
+					| IF '(' Expression ')' '{' Statement '}' ELSE Condition
     				;
 
 
@@ -313,8 +314,8 @@ SwitchCase			: SWITCH '(' IDETIFIER ')' '{' Case '}'	{printInFile("Switch case c
 					;
 
 
-Parameters			: DataTypeNoVoid IDETIFIER ',' DataTypeNoVoid IDETIFIER 
-					| DataTypeNoVoid IDETIFIER
+Parameters			: DataType LHS ',' DataType LHS 
+					| DataType LHS
 					| VOID
 					|
 					;
