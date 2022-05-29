@@ -1,4 +1,4 @@
 Variable Defined succefully
 Variable Defined succefully
-Variable Defined succefully
+Error: Variable not declared yetAssigned succefully
 Variable Defined succefully
