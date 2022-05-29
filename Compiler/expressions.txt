@@ -1,0 +1,4 @@
+int a;
+char y = '9';
+float e = 8.56 - 3;
+float z = 55 / 9 - 2 * 30;

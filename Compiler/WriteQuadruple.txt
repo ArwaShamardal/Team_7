@@ -1,0 +1,7 @@
+MOV y 0 - 
+SUB e 8 3 
+MOV e 5 - 
+DIV z 55 9 
+MUL z 2 30 
+SUB z 6 60 
+MOV z -53 - 

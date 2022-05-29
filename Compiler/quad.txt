@@ -1,0 +1,7 @@
+MOV
+ADD
+SUB
+MOD
+DIV
+MUL
+NEG

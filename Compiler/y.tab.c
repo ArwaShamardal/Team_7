@@ -75,6 +75,8 @@
 	int yylex();
 	void yyerror(const char *s);
 	#include "semanticAnalyzer.h"
+	#include "WritingQuadruples.h"
+
 	char* currentName;
 	float data_float;
 	int currentScope = 0;
@@ -89,6 +91,7 @@
 	#define maxLinesToParse 256
 	extern FILE * yyin;
     FILE * f1;
+	FILE * f2;
 	int lineCount=0;
 	char outputMessages [maxLinesToParse][maxLinesToParse];
 	int isLeftSide = 0;
@@ -100,10 +103,11 @@
 	struct entry * YaccInsert(char* currentName,double number,int typeNumber,struct entry ** mainTable);
 	void printInFile(char message[maxLinesToParse]);
 	void type_check(int,int,int);
+	/* void WriteQuadruple(char *); */
 
 
 /* Line 189 of yacc.c  */
-#line 107 "y.tab.c"
+#line 111 "y.tab.c"
 
 /* Enabling traces.  */
 #ifndef YYDEBUG
@@ -126,7 +130,7 @@
 /* "%code requires" blocks.  */
 
 /* Line 209 of yacc.c  */
-#line 41 "parser.y"
+#line 45 "parser.y"
 
     struct node {
         float value;
@@ -136,7 +140,7 @@
 
 
 /* Line 209 of yacc.c  */
-#line 140 "y.tab.c"
+#line 144 "y.tab.c"
 
 /* Tokens.  */
 #ifndef YYTOKENTYPE
@@ -244,7 +248,7 @@ typedef union YYSTYPE
 {
 
 /* Line 214 of yacc.c  */
-#line 49 "parser.y"
+#line 53 "parser.y"
 
 		struct node node;
 		float float_type;
@@ -254,7 +258,7 @@ typedef union YYSTYPE
 
 
 /* Line 214 of yacc.c  */
-#line 258 "y.tab.c"
+#line 262 "y.tab.c"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
@@ -266,7 +270,7 @@ typedef union YYSTYPE
 
 
 /* Line 264 of yacc.c  */
-#line 270 "y.tab.c"
+#line 274 "y.tab.c"
 
 #ifdef short
 # undef short
@@ -598,17 +602,17 @@ static const yytype_int8 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
-       0,   123,   123,   126,   127,   130,   131,   132,   133,   134,
-     135,   136,   137,   138,   139,   140,   141,   142,   143,   144,
-     145,   148,   149,   150,   151,   155,   161,   165,   166,   167,
-     168,   169,   170,   171,   172,   173,   174,   175,   178,   179,
-     180,   181,   182,   183,   186,   187,   188,   189,   190,   191,
-     194,   195,   196,   202,   214,   217,   218,   219,   220,   221,
-     224,   227,   228,   231,   232,   235,   238,   241,   242,   248,
-     253,   254,   259,   262,   266,   267,   270,   273,   274,   277,
-     278,   279,   282,   286,   287,   288,   289,   292,   293,   294,
-     298,   299,   301,   302,   307,   308,   309,   312,   313,   316,
-     317,   318,   319,   320,   323,   324,   325,   326,   327,   328
+       0,   127,   127,   130,   131,   134,   135,   136,   137,   138,
+     139,   140,   141,   142,   143,   144,   145,   146,   147,   148,
+     149,   152,   153,   154,   155,   159,   168,   172,   173,   174,
+     175,   176,   177,   178,   179,   180,   181,   182,   185,   201,
+     205,   209,   213,   217,   220,   221,   222,   223,   224,   225,
+     228,   229,   230,   236,   248,   251,   252,   253,   254,   255,
+     258,   261,   262,   265,   266,   269,   272,   275,   276,   282,
+     287,   288,   293,   296,   300,   301,   304,   307,   308,   311,
+     312,   313,   316,   320,   321,   322,   323,   326,   327,   328,
+     332,   333,   335,   336,   341,   342,   343,   346,   347,   350,
+     351,   352,   353,   354,   357,   358,   359,   360,   361,   362
 };
 #endif
 
@@ -1747,7 +1751,7 @@ yyreduce:
         case 24:
 
 /* Line 1455 of yacc.c  */
-#line 151 "parser.y"
+#line 155 "parser.y"
     { 	currentEntry = YaccInsert(currentName,0,currentDataTypeNumber,mainTable);
 																}
     break;
@@ -1755,11 +1759,14 @@ yyreduce:
   case 25:
 
 /* Line 1455 of yacc.c  */
-#line 155 "parser.y"
+#line 159 "parser.y"
     {	
-																if(currentEntry!= NULL){	
+																if(currentEntry!= NULL) {	
 																	isDeclaration = 1; 
-																	printInFile("Variable Defined succefully\n");
+																	/* write_declaration("MOV", currentName, "-", "-"); */
+
+
+																	printf("Variable Defined succefully\n");
 																}
 															}
     break;
@@ -1767,149 +1774,225 @@ yyreduce:
   case 38:
 
 /* Line 1455 of yacc.c  */
-#line 178 "parser.y"
-    { type_check((yyvsp[(1) - (3)].node).type, (yyvsp[(3) - (3)].node).type,0); (yyval.float_type) = (yyvsp[(1) - (3)].node).value + (yyvsp[(3) - (3)].node).value;}
+#line 185 "parser.y"
+    { type_check((yyvsp[(1) - (3)].node).type, (yyvsp[(3) - (3)].node).type,0); (yyval.float_type) = (yyvsp[(1) - (3)].node).value + (yyvsp[(3) - (3)].node).value;
+
+																							write_arithmetic("ADD", currentName, (yyvsp[(1) - (3)].node).value, (yyvsp[(3) - (3)].node).value);
+
+																						// WriteQuadruple("ADD "); WriteQuadruple(currentName);
+																						//   char* text1;
+																						  //gcvt($1.value, 6, text1);
+
+																						  //itoa(7, text1,10);
+																						   //sprintf(text1, "%f", $1.value);
+																						//   printf("the text 1 value is: %s" ,text1);
+																						 //WriteQuadruple(text1);
+
+
+																						  //WriteQuadruple(text2); WriteQuadruple("\n");
+																						 }
     break;
 
   case 39:
 
 /* Line 1455 of yacc.c  */
-#line 179 "parser.y"
-    { type_check((yyvsp[(1) - (3)].node).type, (yyvsp[(3) - (3)].node).type,0); (yyval.float_type) = (yyvsp[(1) - (3)].node).value - (yyvsp[(3) - (3)].node).value;}
+#line 201 "parser.y"
+    { 
+																							type_check((yyvsp[(1) - (3)].node).type, (yyvsp[(3) - (3)].node).type,0); (yyval.float_type) = (yyvsp[(1) - (3)].node).value - (yyvsp[(3) - (3)].node).value;
+																							write_arithmetic("SUB", currentName, (yyvsp[(1) - (3)].node).value, (yyvsp[(3) - (3)].node).value);
+																						}
     break;
 
   case 40:
 
 /* Line 1455 of yacc.c  */
-#line 180 "parser.y"
-    { type_check((yyvsp[(1) - (3)].node).type, (yyvsp[(3) - (3)].node).type,0); (yyval.float_type) = (yyvsp[(1) - (3)].node).value * (yyvsp[(3) - (3)].node).value;}
+#line 205 "parser.y"
+    { 
+																							type_check((yyvsp[(1) - (3)].node).type, (yyvsp[(3) - (3)].node).type,0); (yyval.float_type) = (yyvsp[(1) - (3)].node).value * (yyvsp[(3) - (3)].node).value;
+																							write_arithmetic("MUL", currentName, (yyvsp[(1) - (3)].node).value, (yyvsp[(3) - (3)].node).value);
+																						}
     break;
 
   case 41:
 
 /* Line 1455 of yacc.c  */
-#line 181 "parser.y"
-    { type_check((yyvsp[(1) - (3)].node).type, (yyvsp[(3) - (3)].node).type,0); (yyval.float_type) = (yyvsp[(1) - (3)].node).value / (yyvsp[(3) - (3)].node).value;}
+#line 209 "parser.y"
+    {
+																							 type_check((yyvsp[(1) - (3)].node).type, (yyvsp[(3) - (3)].node).type,0); (yyval.float_type) = (yyvsp[(1) - (3)].node).value / (yyvsp[(3) - (3)].node).value;
+																							 write_arithmetic("DIV", currentName, (yyvsp[(1) - (3)].node).value, (yyvsp[(3) - (3)].node).value);
+																						}
     break;
 
   case 42:
 
 /* Line 1455 of yacc.c  */
-#line 182 "parser.y"
-    { type_check((yyvsp[(1) - (3)].node).type, (yyvsp[(3) - (3)].node).type,0); (yyval.float_type) = fmod((yyvsp[(1) - (3)].node).value,(yyvsp[(3) - (3)].node).value);}
+#line 213 "parser.y"
+    { 
+																							type_check((yyvsp[(1) - (3)].node).type, (yyvsp[(3) - (3)].node).type,0); (yyval.float_type) = fmod((yyvsp[(1) - (3)].node).value,(yyvsp[(3) - (3)].node).value);
+																							write_arithmetic("MOD", currentName, (yyvsp[(1) - (3)].node).value, (yyvsp[(3) - (3)].node).value);
+																						}
+    break;
+
+  case 43:
+
+/* Line 1455 of yacc.c  */
+#line 217 "parser.y"
+    {(yyval.float_type) = -((yyvsp[(2) - (2)].node).value); write_mov("NEG", currentName, (yyvsp[(2) - (2)].node).value, "-");}
+    break;
+
+  case 44:
+
+/* Line 1455 of yacc.c  */
+#line 220 "parser.y"
+    {write_arithmetic("EQ", currentName, (yyvsp[(1) - (3)].node).value, (yyvsp[(3) - (3)].node).value);}
+    break;
+
+  case 45:
+
+/* Line 1455 of yacc.c  */
+#line 221 "parser.y"
+    {write_arithmetic("NEQ", currentName, (yyvsp[(1) - (3)].node).value, (yyvsp[(3) - (3)].node).value);}
+    break;
+
+  case 46:
+
+/* Line 1455 of yacc.c  */
+#line 222 "parser.y"
+    {write_arithmetic("GEQ", currentName, (yyvsp[(1) - (3)].node).value, (yyvsp[(3) - (3)].node).value);}
+    break;
+
+  case 47:
+
+/* Line 1455 of yacc.c  */
+#line 223 "parser.y"
+    {write_arithmetic("LEQ", currentName, (yyvsp[(1) - (3)].node).value, (yyvsp[(3) - (3)].node).value);}
+    break;
+
+  case 48:
+
+/* Line 1455 of yacc.c  */
+#line 224 "parser.y"
+    {write_arithmetic("GRT", currentName, (yyvsp[(1) - (3)].node).value, (yyvsp[(3) - (3)].node).value);}
+    break;
+
+  case 49:
+
+/* Line 1455 of yacc.c  */
+#line 225 "parser.y"
+    {write_arithmetic("LSS", currentName, (yyvsp[(1) - (3)].node).value, (yyvsp[(3) - (3)].node).value);}
     break;
 
   case 53:
 
 /* Line 1455 of yacc.c  */
-#line 202 "parser.y"
-    { 	if(isDeclaration){
+#line 236 "parser.y"
+    { 	
+																					if(isDeclaration){												
+																						printf("before mov");
 																						currentEntry = YaccInsert(currentName,0,currentDataTypeNumber,mainTable);
 																						currentEntry->value = (yyvsp[(3) - (3)].node).value;
 																						(yyvsp[(1) - (3)].entry) = currentEntry;
-																						printEntry((yyvsp[(1) - (3)].entry));
 																						isDeclaration = 0;
-																						}
-																					
-																						
+																						write_mov("MOV", currentName,  currentEntry->value, "-");
+																					}	
 																				}
     break;
 
   case 54:
 
 /* Line 1455 of yacc.c  */
-#line 214 "parser.y"
+#line 248 "parser.y"
     {printInFile("Assigned succefully\n");}
     break;
 
   case 61:
 
 /* Line 1455 of yacc.c  */
-#line 227 "parser.y"
+#line 261 "parser.y"
     {printInFile("Prefix increment Exp detected\n");}
     break;
 
   case 62:
 
 /* Line 1455 of yacc.c  */
-#line 228 "parser.y"
+#line 262 "parser.y"
     {printInFile("Postfix increment Exp detected\n");}
     break;
 
   case 63:
 
 /* Line 1455 of yacc.c  */
-#line 231 "parser.y"
+#line 265 "parser.y"
     {printInFile("Prefix decrement Exp detected\n");}
     break;
 
   case 64:
 
 /* Line 1455 of yacc.c  */
-#line 232 "parser.y"
+#line 266 "parser.y"
     {printInFile("Postfix decrement Exp detected\n");}
     break;
 
   case 65:
 
 /* Line 1455 of yacc.c  */
-#line 235 "parser.y"
+#line 269 "parser.y"
     {printInFile("increment detected\n");}
     break;
 
   case 66:
 
 /* Line 1455 of yacc.c  */
-#line 238 "parser.y"
+#line 272 "parser.y"
     {printInFile("decrement detected\n");}
     break;
 
   case 69:
 
 /* Line 1455 of yacc.c  */
-#line 248 "parser.y"
+#line 282 "parser.y"
     {printInFile("Function constructed successfully\n");}
     break;
 
   case 72:
 
 /* Line 1455 of yacc.c  */
-#line 259 "parser.y"
+#line 293 "parser.y"
     { printInFile("While Loop constructed successfully\n");}
     break;
 
   case 73:
 
 /* Line 1455 of yacc.c  */
-#line 262 "parser.y"
+#line 296 "parser.y"
     {printf("do while reached\n"); printInFile("Do while Loop constructed successfully\n");}
     break;
 
   case 76:
 
 /* Line 1455 of yacc.c  */
-#line 270 "parser.y"
+#line 304 "parser.y"
     {printInFile("For Loop constructed successfully\n");}
     break;
 
   case 82:
 
 /* Line 1455 of yacc.c  */
-#line 282 "parser.y"
+#line 316 "parser.y"
     {printInFile("Switch case constructed successfully\n");}
     break;
 
   case 92:
 
 /* Line 1455 of yacc.c  */
-#line 301 "parser.y"
+#line 335 "parser.y"
     { 	(yyval.node).value = (yyvsp[(1) - (1)].data_type); (yyval.node).type = INTEGER; }
     break;
 
   case 93:
 
 /* Line 1455 of yacc.c  */
-#line 302 "parser.y"
+#line 336 "parser.y"
     { 	(yyval.node).value = data_float; (yyval.node).type = FLOAT;
 																	
 																}
@@ -1918,84 +2001,84 @@ yyreduce:
   case 99:
 
 /* Line 1455 of yacc.c  */
-#line 316 "parser.y"
+#line 350 "parser.y"
     {currentDataTypeNumber = INTEGER; }
     break;
 
   case 100:
 
 /* Line 1455 of yacc.c  */
-#line 317 "parser.y"
+#line 351 "parser.y"
     {currentDataTypeNumber = FLOAT;}
     break;
 
   case 101:
 
 /* Line 1455 of yacc.c  */
-#line 318 "parser.y"
+#line 352 "parser.y"
     {currentDataTypeNumber = CHARACTER;}
     break;
 
   case 102:
 
 /* Line 1455 of yacc.c  */
-#line 319 "parser.y"
+#line 353 "parser.y"
     {currentDataTypeNumber = STRING;}
     break;
 
   case 103:
 
 /* Line 1455 of yacc.c  */
-#line 320 "parser.y"
+#line 354 "parser.y"
     {currentDataTypeNumber = BOOLEAN;}
     break;
 
   case 104:
 
 /* Line 1455 of yacc.c  */
-#line 323 "parser.y"
+#line 357 "parser.y"
     {currentDataTypeNumber = INTEGER; (yyval.data_type) = INTEGER;}
     break;
 
   case 105:
 
 /* Line 1455 of yacc.c  */
-#line 324 "parser.y"
+#line 358 "parser.y"
     {currentDataTypeNumber = FLOAT; (yyval.data_type) = FLOAT;}
     break;
 
   case 106:
 
 /* Line 1455 of yacc.c  */
-#line 325 "parser.y"
+#line 359 "parser.y"
     {currentDataTypeNumber = CHARACTER; (yyval.data_type) = CHARACTER;}
     break;
 
   case 107:
 
 /* Line 1455 of yacc.c  */
-#line 326 "parser.y"
+#line 360 "parser.y"
     {currentDataTypeNumber = STRING; (yyval.data_type) = STRING;}
     break;
 
   case 108:
 
 /* Line 1455 of yacc.c  */
-#line 327 "parser.y"
+#line 361 "parser.y"
     {currentDataTypeNumber = BOOLEAN; (yyval.data_type) = BOOLEAN;}
     break;
 
   case 109:
 
 /* Line 1455 of yacc.c  */
-#line 328 "parser.y"
+#line 362 "parser.y"
     {currentDataTypeNumber = VOID; (yyval.data_type) = VOID;}
     break;
 
 
 
 /* Line 1455 of yacc.c  */
-#line 1999 "y.tab.c"
+#line 2082 "y.tab.c"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);
@@ -2207,7 +2290,7 @@ yyreturn:
 
 
 /* Line 1675 of yacc.c  */
-#line 331 "parser.y"
+#line 365 "parser.y"
 
 
 void type_check(int left, int right, int flag){
@@ -2242,11 +2325,20 @@ void printInFile(char message[maxLinesToParse]){
 	lineCount++;
 }
 
+/* void WriteQuadruple(char* name )
+{
+	f2=fopen("WriteQuadruple.txt","a");
+    fprintf(f2,name);
+    fprintf(f2," ");
+
+} */
 
 int main(void) {
+	fopen("WriteQuadruple.txt", "w");
 	mainTable = Initialize();
     yyin = fopen("expressions.txt", "r");
 	f1=fopen("output.txt","w");
+	/* f2=fopen("WriteQuadruple.txt","w"); */
    if(!yyparse())
 	{
 		printf("\nParsing complete\n");
