@@ -1,3 +1,4 @@
+
 #define sizeTable  200
 #define numTables 20 
 #include <stdint.h>
@@ -6,6 +7,8 @@
 #include <limits.h>
 #include <string.h>
 #include <math.h>
+
+
 
 typedef enum { false, true } bool;
 
@@ -21,6 +24,8 @@ typedef struct entry
 {
 	char *name;
 	double value;
+    char char_value;
+    short bool_value;
 	int data_type;
 	int is_constant;
 	struct entry* next;
@@ -213,7 +218,7 @@ bool InsertInHashMap(struct entry** symbolTable, struct entry* e)
 	return inserted;
 }
 
-entry * create_entry( char *name, int value, int data_type)
+entry * create_entry( char *name, int value, char character, short boolean, int data_type)
 {
 	entry *new_entry = NULL;
 
@@ -227,6 +232,9 @@ entry * create_entry( char *name, int value, int data_type)
 	}
     
 	new_entry->value = value;
+    new_entry->char_value = character;
+    new_entry->bool_value = boolean;
+
 	new_entry->is_constant = 0;
 	new_entry->data_type = data_type;
     new_entry->next = NULL;
@@ -236,6 +244,8 @@ entry * create_entry( char *name, int value, int data_type)
 void printEntry(struct entry *entry){
 	printf("        %s\n", entry->name);
 	printf("        %f\n", entry->value);
+	printf("        char: %c\n", entry->char_value);
+	printf("        bool: %hd\n", entry->bool_value);
 	printf("        %d\n", entry->data_type);
 }
 
@@ -265,9 +275,9 @@ void printTableData(struct table* tableList){
 }
 
 //Function to Insert an entry to the currentTable, given its info
-struct entry* insert(char *name, int value, int data_type, struct entry** currentTable)
+struct entry* insert(char *name, int value, char character, short boolean, int data_type, struct entry** currentTable)
 {
-    struct entry *myEntry =  create_entry(  name,  value,  data_type);
+    struct entry *myEntry =  create_entry(  name,  value, character, boolean, data_type);
     bool insertedSuccessfully = InsertInHashMap(currentTable, myEntry);
 	if(insertedSuccessfully == true){
 		return myEntry;

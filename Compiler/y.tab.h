@@ -35,17 +35,19 @@
 /* "%code requires" blocks.  */
 
 /* Line 1676 of yacc.c  */
-#line 42 "parser.y"
+#line 49 "parser.y"
 
     struct node {
         float value;
+		char char_value;
+		short bool_value;
         int type;
     };
 
 
 
 /* Line 1676 of yacc.c  */
-#line 49 "y.tab.h"
+#line 51 "y.tab.h"
 
 /* Tokens.  */
 #ifndef YYTOKENTYPE
@@ -153,17 +155,19 @@ typedef union YYSTYPE
 {
 
 /* Line 1676 of yacc.c  */
-#line 50 "parser.y"
+#line 59 "parser.y"
 
 		struct node node;
 		float float_type;
+		char char_type;
+		short bool_type;
 		int data_type;
 		struct entry* entry;
 	
 
 
 /* Line 1676 of yacc.c  */
-#line 167 "y.tab.h"
+#line 171 "y.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */

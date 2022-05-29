@@ -1,0 +1,4 @@
+MOV x 0 - 
+MOV b 0 - 
+EQ x 0 0 
+EQ x 0 0 

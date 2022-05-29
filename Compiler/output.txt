@@ -1,1 +1,6 @@
-Error: Type mismatch, variable no longer existsVariable Defined succefully
+Variable Defined succefully
+Variable Defined succefully
+Assigned succefully
+Assigned succefully
+Assigned succefully
+Function constructed successfully

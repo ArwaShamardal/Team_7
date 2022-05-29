@@ -74,9 +74,16 @@
 
 	int yylex();
 	void yyerror(const char *s);
+
 	#include "semanticAnalyzer.h"
+	#include "WritingQuadruples.h"
+
+
+
 	char* currentName;
 	float data_float;
+	char data_char;
+	short data_bool;
 	int currentScope = 0;
 	int currentDataTypeNumber;
 	int yylineno;
@@ -97,14 +104,14 @@
 
 	
 	bool findEntry(char* myEntry);
-	struct entry * insert( char *name, int value, int data_type, struct entry** mainTable);
-	struct entry * YaccInsert(char* currentName,double number,int typeNumber,struct entry ** mainTable);
+	struct entry * insert( char *name, int value, char character, short boolean, int data_type, struct entry** mainTable);
+	struct entry * YaccInsert(char* currentName,double number, char character, short boolean, int typeNumber,struct entry ** mainTable);
 	void printInFile(char message[maxLinesToParse]);
 	void type_check(int,int,int);
 
 
 /* Line 189 of yacc.c  */
-#line 108 "y.tab.c"
+#line 115 "y.tab.c"
 
 /* Enabling traces.  */
 #ifndef YYDEBUG
@@ -127,17 +134,19 @@
 /* "%code requires" blocks.  */
 
 /* Line 209 of yacc.c  */
-#line 42 "parser.y"
+#line 49 "parser.y"
 
     struct node {
         float value;
+		char char_value;
+		short bool_value;
         int type;
     };
 
 
 
 /* Line 209 of yacc.c  */
-#line 141 "y.tab.c"
+#line 150 "y.tab.c"
 
 /* Tokens.  */
 #ifndef YYTOKENTYPE
@@ -245,17 +254,19 @@ typedef union YYSTYPE
 {
 
 /* Line 214 of yacc.c  */
-#line 50 "parser.y"
+#line 59 "parser.y"
 
 		struct node node;
 		float float_type;
+		char char_type;
+		short bool_type;
 		int data_type;
 		struct entry* entry;
 	
 
 
 /* Line 214 of yacc.c  */
-#line 259 "y.tab.c"
+#line 270 "y.tab.c"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
@@ -267,7 +278,7 @@ typedef union YYSTYPE
 
 
 /* Line 264 of yacc.c  */
-#line 271 "y.tab.c"
+#line 282 "y.tab.c"
 
 #ifdef short
 # undef short
@@ -600,18 +611,18 @@ static const yytype_int8 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
-       0,   124,   124,   127,   128,   131,   132,   133,   134,   135,
-     136,   137,   138,   139,   140,   141,   142,   142,   142,   143,
-     144,   145,   148,   149,   150,   151,   154,   160,   164,   165,
-     166,   167,   168,   169,   170,   171,   172,   173,   179,   180,
-     181,   182,   183,   184,   187,   188,   189,   190,   191,   192,
-     195,   196,   197,   203,   227,   250,   253,   254,   255,   256,
-     257,   258,   262,   263,   266,   267,   270,   273,   276,   277,
-     283,   283,   288,   289,   290,   295,   295,   295,   298,   298,
-     298,   302,   303,   306,   306,   309,   310,   313,   314,   315,
-     318,   318,   322,   323,   324,   325,   328,   329,   330,   334,
-     335,   337,   338,   341,   342,   343,   346,   347,   351,   352,
-     353,   354,   355,   356
+       0,   137,   137,   140,   141,   144,   145,   146,   147,   148,
+     149,   150,   151,   152,   153,   154,   155,   155,   155,   156,
+     157,   158,   161,   162,   163,   164,   167,   173,   177,   178,
+     179,   180,   181,   182,   183,   184,   185,   186,   192,   197,
+     201,   205,   209,   213,   216,   217,   218,   219,   220,   221,
+     225,   226,   227,   233,   261,   286,   289,   290,   291,   292,
+     293,   294,   298,   299,   302,   303,   306,   309,   312,   313,
+     319,   319,   324,   325,   326,   331,   331,   331,   334,   334,
+     334,   338,   339,   342,   342,   345,   346,   349,   350,   351,
+     354,   354,   358,   359,   360,   361,   364,   365,   366,   370,
+     371,   373,   374,   377,   378,   379,   382,   383,   387,   388,
+     389,   390,   391,   392
 };
 #endif
 
@@ -1762,21 +1773,21 @@ yyreduce:
         case 16:
 
 /* Line 1455 of yacc.c  */
-#line 142 "parser.y"
+#line 155 "parser.y"
     {currentScope = CreateTable();}
     break;
 
   case 17:
 
 /* Line 1455 of yacc.c  */
-#line 142 "parser.y"
+#line 155 "parser.y"
     {currentScope = ExitingTable();}
     break;
 
   case 26:
 
 /* Line 1455 of yacc.c  */
-#line 154 "parser.y"
+#line 167 "parser.y"
     {	
 																if(currentEntry!= NULL){	
 																	isDeclaration = 0; 
@@ -1788,64 +1799,154 @@ yyreduce:
   case 37:
 
 /* Line 1455 of yacc.c  */
-#line 173 "parser.y"
+#line 186 "parser.y"
     {rightHandSide=1; isDeclaration=0;
 																						if((yyvsp[(1) - (1)].entry) != NULL){
-																							(yyval.node).type = (yyvsp[(1) - (1)].entry)->data_type; (yyval.node).value = (yyvsp[(1) - (1)].entry)->value;
+																							(yyval.node).type = (yyvsp[(1) - (1)].entry)->data_type; (yyval.node).char_value = (yyvsp[(1) - (1)].entry)->char_value; (yyval.node).bool_value = (yyvsp[(1) - (1)].entry)->bool_value; 
 																						}}
     break;
 
   case 38:
 
 /* Line 1455 of yacc.c  */
-#line 179 "parser.y"
-    { type_check((yyvsp[(1) - (3)].node).type, (yyvsp[(3) - (3)].node).type,0); (yyval.float_type) = (yyvsp[(1) - (3)].node).value + (yyvsp[(3) - (3)].node).value;}
+#line 192 "parser.y"
+    { type_check((yyvsp[(1) - (3)].node).type, (yyvsp[(3) - (3)].node).type,0); (yyval.float_type) = (yyvsp[(1) - (3)].node).value + (yyvsp[(3) - (3)].node).value;
+
+																							write_arithmetic("ADD", currentName, (yyvsp[(1) - (3)].node).value, (yyvsp[(3) - (3)].node).value);
+
+																						 }
     break;
 
   case 39:
 
 /* Line 1455 of yacc.c  */
-#line 180 "parser.y"
-    { type_check((yyvsp[(1) - (3)].node).type, (yyvsp[(3) - (3)].node).type,0); (yyval.float_type) = (yyvsp[(1) - (3)].node).value - (yyvsp[(3) - (3)].node).value;}
+#line 197 "parser.y"
+    { 
+																							type_check((yyvsp[(1) - (3)].node).type, (yyvsp[(3) - (3)].node).type,0); (yyval.float_type) = (yyvsp[(1) - (3)].node).value - (yyvsp[(3) - (3)].node).value;
+																							write_arithmetic("SUB", currentName, (yyvsp[(1) - (3)].node).value, (yyvsp[(3) - (3)].node).value);
+																						}
     break;
 
   case 40:
 
 /* Line 1455 of yacc.c  */
-#line 181 "parser.y"
-    { type_check((yyvsp[(1) - (3)].node).type, (yyvsp[(3) - (3)].node).type,0); (yyval.float_type) = (yyvsp[(1) - (3)].node).value * (yyvsp[(3) - (3)].node).value;}
+#line 201 "parser.y"
+    { 
+																							type_check((yyvsp[(1) - (3)].node).type, (yyvsp[(3) - (3)].node).type,0); (yyval.float_type) = (yyvsp[(1) - (3)].node).value * (yyvsp[(3) - (3)].node).value;
+																							write_arithmetic("MUL", currentName, (yyvsp[(1) - (3)].node).value, (yyvsp[(3) - (3)].node).value);
+																						}
     break;
 
   case 41:
 
 /* Line 1455 of yacc.c  */
-#line 182 "parser.y"
-    { type_check((yyvsp[(1) - (3)].node).type, (yyvsp[(3) - (3)].node).type,0); (yyval.float_type) = (yyvsp[(1) - (3)].node).value / (yyvsp[(3) - (3)].node).value;}
+#line 205 "parser.y"
+    {
+																							 type_check((yyvsp[(1) - (3)].node).type, (yyvsp[(3) - (3)].node).type,0); (yyval.float_type) = (yyvsp[(1) - (3)].node).value / (yyvsp[(3) - (3)].node).value;
+																							 write_arithmetic("DIV", currentName, (yyvsp[(1) - (3)].node).value, (yyvsp[(3) - (3)].node).value);
+																						}
     break;
 
   case 42:
 
 /* Line 1455 of yacc.c  */
-#line 183 "parser.y"
-    { type_check((yyvsp[(1) - (3)].node).type, (yyvsp[(3) - (3)].node).type,0); (yyval.float_type) = fmod((yyvsp[(1) - (3)].node).value,(yyvsp[(3) - (3)].node).value);}
+#line 209 "parser.y"
+    { 
+																							type_check((yyvsp[(1) - (3)].node).type, (yyvsp[(3) - (3)].node).type,0); (yyval.float_type) = fmod((yyvsp[(1) - (3)].node).value,(yyvsp[(3) - (3)].node).value);
+																							write_arithmetic("MOD", currentName, (yyvsp[(1) - (3)].node).value, (yyvsp[(3) - (3)].node).value);
+																						}
+    break;
+
+  case 43:
+
+/* Line 1455 of yacc.c  */
+#line 213 "parser.y"
+    {(yyval.float_type) = -((yyvsp[(2) - (2)].node).value); write_mov("NEG", currentName, (yyvsp[(2) - (2)].node).value, "-");}
+    break;
+
+  case 44:
+
+/* Line 1455 of yacc.c  */
+#line 216 "parser.y"
+    {(yyval.bool_type) = (yyvsp[(1) - (3)].node).bool_value == (yyvsp[(3) - (3)].node).bool_value; write_arithmetic("EQ", currentName, (yyvsp[(1) - (3)].node).bool_value, (yyvsp[(3) - (3)].node).bool_value);}
+    break;
+
+  case 45:
+
+/* Line 1455 of yacc.c  */
+#line 217 "parser.y"
+    {(yyval.bool_type) = (yyvsp[(1) - (3)].node).bool_value != (yyvsp[(3) - (3)].node).bool_value; write_arithmetic("NEQ", currentName, (yyvsp[(1) - (3)].node).bool_value, (yyvsp[(3) - (3)].node).bool_value);}
+    break;
+
+  case 46:
+
+/* Line 1455 of yacc.c  */
+#line 218 "parser.y"
+    { (yyval.bool_type) = (yyvsp[(1) - (3)].node).bool_value >= (yyvsp[(3) - (3)].node).bool_value; write_arithmetic("GEQ", currentName, (yyvsp[(1) - (3)].node).bool_value, (yyvsp[(3) - (3)].node).bool_value);}
+    break;
+
+  case 47:
+
+/* Line 1455 of yacc.c  */
+#line 219 "parser.y"
+    { (yyval.bool_type) = (yyvsp[(1) - (3)].node).bool_value <= (yyvsp[(3) - (3)].node).bool_value; write_arithmetic("LEQ", currentName, (yyvsp[(1) - (3)].node).bool_value, (yyvsp[(3) - (3)].node).bool_value);}
+    break;
+
+  case 48:
+
+/* Line 1455 of yacc.c  */
+#line 220 "parser.y"
+    { (yyval.bool_type) = (yyvsp[(1) - (3)].node).bool_value > (yyvsp[(3) - (3)].node).bool_value; write_arithmetic("GRT", currentName, (yyvsp[(1) - (3)].node).bool_value, (yyvsp[(3) - (3)].node).bool_value);}
+    break;
+
+  case 49:
+
+/* Line 1455 of yacc.c  */
+#line 221 "parser.y"
+    {(yyval.bool_type) = (yyvsp[(1) - (3)].node).bool_value < (yyvsp[(3) - (3)].node).bool_value; write_arithmetic("LSS", currentName, (yyvsp[(1) - (3)].node).bool_value, (yyvsp[(3) - (3)].node).bool_value);}
+    break;
+
+  case 50:
+
+/* Line 1455 of yacc.c  */
+#line 225 "parser.y"
+    {(yyval.bool_type) = (yyvsp[(1) - (3)].node).bool_value || (yyvsp[(3) - (3)].node).bool_value; write_arithmetic("OR", currentName, (yyvsp[(1) - (3)].node).bool_value, (yyvsp[(3) - (3)].node).bool_value);}
+    break;
+
+  case 51:
+
+/* Line 1455 of yacc.c  */
+#line 226 "parser.y"
+    {(yyval.bool_type) = (yyvsp[(1) - (3)].node).bool_value && (yyvsp[(3) - (3)].node).bool_value; write_arithmetic("AND", currentName, (yyvsp[(1) - (3)].node).bool_value, (yyvsp[(3) - (3)].node).bool_value);}
+    break;
+
+  case 52:
+
+/* Line 1455 of yacc.c  */
+#line 227 "parser.y"
+    {(yyval.bool_type) = !((yyvsp[(2) - (2)].node).bool_value); write_mov("NOT", currentName, (yyvsp[(2) - (2)].node).bool_value, "-");}
     break;
 
   case 53:
 
 /* Line 1455 of yacc.c  */
-#line 203 "parser.y"
+#line 233 "parser.y"
     { 	rightHandSide = 0;
 																					// found = findEntry(currentName);
 																					// printf("found %d\n", found);
 																					if((yyvsp[(1) - (3)].entry) != NULL)
 																						{
 																							(yyvsp[(1) - (3)].entry)->value = (yyvsp[(3) - (3)].node).value;
+																							(yyvsp[(1) - (3)].entry)->char_value = (yyvsp[(3) - (3)].node).char_value;
+																							(yyvsp[(1) - (3)].entry)->bool_value = (yyvsp[(3) - (3)].node).bool_value;
+
 																							if((yyvsp[(3) - (3)].node).type == 0){
 																								type_check((yyvsp[(1) - (3)].entry)->data_type, (yyvsp[(3) - (3)].node).type,3);
 																							}
 																							else{
 																								type_check((yyvsp[(1) - (3)].entry)->data_type, (yyvsp[(3) - (3)].node).type,1);
 																							}
+
 																							// printf("found %s\n", currentName);
 																						}
 																					else{
@@ -1859,13 +1960,15 @@ yyreduce:
   case 54:
 
 /* Line 1455 of yacc.c  */
-#line 227 "parser.y"
+#line 261 "parser.y"
     {
 																					if(isDeclaration==1 && rightHandSide==0){
-																						currentEntry = YaccInsert(currentName,0,currentDataTypeNumber,tableList[currentScope].symbolTable);
+																						currentEntry = YaccInsert(currentName,0, '\0', 0,  currentDataTypeNumber,tableList[currentScope].symbolTable);
 																						(yyvsp[(1) - (1)].entry) = currentEntry;
 																						isDeclaration = 0;
 																						(yyval.entry) = (yyvsp[(1) - (1)].entry);
+																						write_mov("MOV", currentName,  currentEntry->value, "-");
+
 																					}
 																					else{
 																						currentEntry = searchReturnEntry(currentName);
@@ -1885,238 +1988,252 @@ yyreduce:
   case 55:
 
 /* Line 1455 of yacc.c  */
-#line 250 "parser.y"
+#line 286 "parser.y"
     {printInFile("Assigned succefully\n");}
     break;
 
   case 56:
 
 /* Line 1455 of yacc.c  */
-#line 253 "parser.y"
+#line 289 "parser.y"
     {rightHandSide = 1;}
     break;
 
   case 57:
 
 /* Line 1455 of yacc.c  */
-#line 254 "parser.y"
+#line 290 "parser.y"
     {rightHandSide = 1;}
     break;
 
   case 58:
 
 /* Line 1455 of yacc.c  */
-#line 255 "parser.y"
+#line 291 "parser.y"
     {rightHandSide = 1;}
     break;
 
   case 59:
 
 /* Line 1455 of yacc.c  */
-#line 256 "parser.y"
+#line 292 "parser.y"
     {rightHandSide = 1;}
     break;
 
   case 60:
 
 /* Line 1455 of yacc.c  */
-#line 257 "parser.y"
+#line 293 "parser.y"
     {rightHandSide = 1;}
     break;
 
   case 61:
 
 /* Line 1455 of yacc.c  */
-#line 258 "parser.y"
+#line 294 "parser.y"
     {rightHandSide = 1;}
     break;
 
   case 62:
 
 /* Line 1455 of yacc.c  */
-#line 262 "parser.y"
+#line 298 "parser.y"
     {printInFile("Prefix increment Exp detected\n");}
     break;
 
   case 63:
 
 /* Line 1455 of yacc.c  */
-#line 263 "parser.y"
+#line 299 "parser.y"
     {printInFile("Postfix increment Exp detected\n");}
     break;
 
   case 64:
 
 /* Line 1455 of yacc.c  */
-#line 266 "parser.y"
+#line 302 "parser.y"
     {printInFile("Prefix decrement Exp detected\n");}
     break;
 
   case 65:
 
 /* Line 1455 of yacc.c  */
-#line 267 "parser.y"
+#line 303 "parser.y"
     {printInFile("Postfix decrement Exp detected\n");}
     break;
 
   case 66:
 
 /* Line 1455 of yacc.c  */
-#line 270 "parser.y"
+#line 306 "parser.y"
     {printInFile("increment detected\n");}
     break;
 
   case 67:
 
 /* Line 1455 of yacc.c  */
-#line 273 "parser.y"
+#line 309 "parser.y"
     {printInFile("decrement detected\n");}
     break;
 
   case 70:
 
 /* Line 1455 of yacc.c  */
-#line 283 "parser.y"
+#line 319 "parser.y"
     {currentScope = CreateTable();}
     break;
 
   case 71:
 
 /* Line 1455 of yacc.c  */
-#line 283 "parser.y"
+#line 319 "parser.y"
     {currentScope = ExitingTable(); printInFile("Function constructed successfully\n");}
     break;
 
   case 75:
 
 /* Line 1455 of yacc.c  */
-#line 295 "parser.y"
+#line 331 "parser.y"
     {currentScope = CreateTable();}
     break;
 
   case 76:
 
 /* Line 1455 of yacc.c  */
-#line 295 "parser.y"
+#line 331 "parser.y"
     {currentScope = ExitingTable();}
     break;
 
   case 77:
 
 /* Line 1455 of yacc.c  */
-#line 295 "parser.y"
+#line 331 "parser.y"
     { printInFile("While Loop constructed successfully\n");}
     break;
 
   case 78:
 
 /* Line 1455 of yacc.c  */
-#line 298 "parser.y"
+#line 334 "parser.y"
     {currentScope = CreateTable();}
     break;
 
   case 79:
 
 /* Line 1455 of yacc.c  */
-#line 298 "parser.y"
+#line 334 "parser.y"
     {currentScope = ExitingTable();}
     break;
 
   case 80:
 
 /* Line 1455 of yacc.c  */
-#line 298 "parser.y"
+#line 334 "parser.y"
     {printf("do while reached\n"); printInFile("Do while Loop constructed successfully\n");}
     break;
 
   case 83:
 
 /* Line 1455 of yacc.c  */
-#line 306 "parser.y"
+#line 342 "parser.y"
     {currentScope = CreateTable();}
     break;
 
   case 84:
 
 /* Line 1455 of yacc.c  */
-#line 306 "parser.y"
+#line 342 "parser.y"
     {currentScope = ExitingTable();  printInFile("For Loop constructed successfully\n");}
     break;
 
   case 90:
 
 /* Line 1455 of yacc.c  */
-#line 318 "parser.y"
+#line 354 "parser.y"
     {currentScope = CreateTable();}
     break;
 
   case 91:
 
 /* Line 1455 of yacc.c  */
-#line 318 "parser.y"
+#line 354 "parser.y"
     { currentScope = ExitingTable();  printInFile("Switch case constructed successfully\n");}
     break;
 
   case 101:
 
 /* Line 1455 of yacc.c  */
-#line 337 "parser.y"
+#line 373 "parser.y"
     { 	(yyval.node).value = (yyvsp[(1) - (1)].data_type); (yyval.node).type = INTEGER; }
     break;
 
   case 102:
 
 /* Line 1455 of yacc.c  */
-#line 338 "parser.y"
+#line 374 "parser.y"
     { 	(yyval.node).value = data_float; (yyval.node).type = FLOAT;}
+    break;
+
+  case 103:
+
+/* Line 1455 of yacc.c  */
+#line 377 "parser.y"
+    { 	(yyval.node).bool_value = data_bool;  (yyval.node).type = BOOLEAN;}
+    break;
+
+  case 104:
+
+/* Line 1455 of yacc.c  */
+#line 378 "parser.y"
+    { 	(yyval.node).char_value = data_char;  (yyval.node).type = CHARACTER;}
     break;
 
   case 108:
 
 /* Line 1455 of yacc.c  */
-#line 351 "parser.y"
+#line 387 "parser.y"
     {isDeclaration=1; currentDataTypeNumber = INTEGER; (yyval.data_type) = INTEGER;}
     break;
 
   case 109:
 
 /* Line 1455 of yacc.c  */
-#line 352 "parser.y"
+#line 388 "parser.y"
     {isDeclaration=1; currentDataTypeNumber = FLOAT; (yyval.data_type) = FLOAT;}
     break;
 
   case 110:
 
 /* Line 1455 of yacc.c  */
-#line 353 "parser.y"
+#line 389 "parser.y"
     {isDeclaration=1; currentDataTypeNumber = CHARACTER; (yyval.data_type) = CHARACTER;}
     break;
 
   case 111:
 
 /* Line 1455 of yacc.c  */
-#line 354 "parser.y"
+#line 390 "parser.y"
     {isDeclaration=1; currentDataTypeNumber = STRING; (yyval.data_type) = STRING;}
     break;
 
   case 112:
 
 /* Line 1455 of yacc.c  */
-#line 355 "parser.y"
+#line 391 "parser.y"
     {isDeclaration=1; currentDataTypeNumber = BOOLEAN; (yyval.data_type) = BOOLEAN;}
     break;
 
   case 113:
 
 /* Line 1455 of yacc.c  */
-#line 356 "parser.y"
+#line 392 "parser.y"
     {isDeclaration=1; currentDataTypeNumber = VOID; (yyval.data_type) = VOID;}
     break;
 
 
 
 /* Line 1455 of yacc.c  */
-#line 2120 "y.tab.c"
+#line 2237 "y.tab.c"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);
@@ -2328,7 +2445,7 @@ yyreturn:
 
 
 /* Line 1675 of yacc.c  */
-#line 359 "parser.y"
+#line 395 "parser.y"
 
 
 void type_check(int left, int right, int flag){
@@ -2357,8 +2474,8 @@ bool findEntry(char* myEntryName){
 	}
 }
 
-struct entry * YaccInsert(char* currentName,double number,int typeNumber,struct entry ** mainTable){
-	currentEntry = insert(currentName,number,typeNumber,mainTable);
+struct entry * YaccInsert(char* currentName,double number, char character, short boolean, int typeNumber,struct entry ** mainTable){
+	currentEntry = insert(currentName,number, character, boolean, typeNumber,mainTable);
 	if(currentEntry == NULL){
 		yyerror("Error: Variable already declared in this scope");
 	}
@@ -2379,6 +2496,7 @@ void printInFile(char message[maxLinesToParse]){
 
 
 int main(void) {
+	fopen("WriteQuadruple.txt", "w");
 	mainTable = Initialize();
     yyin = fopen("test1.txt", "r");
 	f1=fopen("output.txt","w");

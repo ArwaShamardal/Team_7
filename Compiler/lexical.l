@@ -2,7 +2,10 @@
 %{
 
 #include "y.tab.h"
+
 #include <string.h>
+
+
 struct entry** mainTable;
 
 struct entry * insert( char *name, int value, int data_type, struct entry** mainTable);
@@ -10,6 +13,8 @@ void yyerror(const char *s);
 int count = 0;
 extern char* currentName;
 extern float data_float;
+extern char data_char;
+extern short data_bool;
 extern int yylineno;
 %}
 
@@ -102,11 +107,16 @@ return			{return RETURN;}
 {float_val}		{
                     data_float = atof(yytext);
                     return VAL_FLOAT;}
-{bool_val}      {return VAL_BOOLEAN;}
+{bool_val}      {
+                printf("yytext: %s\n", yytext);
+                data_bool = (!strcmp(yytext, "true") || !strcmp(yytext, "1") ? 1 : 0);
+                return VAL_BOOLEAN;}
 {variable}		{   currentName = strdup(yytext) ;
                     return IDETIFIER;}
 {string_val}	{return VAL_STRING;}
-{char_val}		{return VAL_CHAR;}
+{char_val}		{
+                    data_char = yytext[1];
+                    return VAL_CHAR;}
 
 \n              {yylineno++;}
 {comment}       ;

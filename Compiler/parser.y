@@ -3,9 +3,16 @@
 
 	int yylex();
 	void yyerror(const char *s);
+
 	#include "semanticAnalyzer.h"
+	#include "WritingQuadruples.h"
+
+
+
 	char* currentName;
 	float data_float;
+	char data_char;
+	short data_bool;
 	int currentScope = 0;
 	int currentDataTypeNumber;
 	int yylineno;
@@ -26,8 +33,8 @@
 
 	
 	bool findEntry(char* myEntry);
-	struct entry * insert( char *name, int value, int data_type, struct entry** mainTable);
-	struct entry * YaccInsert(char* currentName,double number,int typeNumber,struct entry ** mainTable);
+	struct entry * insert( char *name, int value, char character, short boolean, int data_type, struct entry** mainTable);
+	struct entry * YaccInsert(char* currentName,double number, char character, short boolean, int typeNumber,struct entry ** mainTable);
 	void printInFile(char message[maxLinesToParse]);
 	void type_check(int,int,int);
 %}
@@ -42,6 +49,8 @@
 %code requires {
     struct node {
         float value;
+		char char_value;
+		short bool_value;
         int type;
     };
 }
@@ -50,12 +59,14 @@
 	{
 		struct node node;
 		float float_type;
+		char char_type;
+		short bool_type;
 		int data_type;
 		struct entry* entry;
 	}
 
 /* Keywords tokens*/
-%token IF ELSE FOR WHILE DO SWITCH CASE DEFAULT BREAK CONTINUE RETURN SEMICOLON 
+%token IF ELSE FOR WHILE DO SWITCH CASE DEFAULT BREAK CONTINUE RETURN SEMICOLON
 
 /*Data types tokens*/
 %token INTEGER CHARACTER FLOAT STRING DOUBLE BOOLEAN CONSTANT VOID
@@ -83,6 +94,8 @@
 
 %type <data_type> FunctionCallExp DataType VarDeclaration OneLineDeclaration VAL_INTEGER VAL_FLOAT
 %type <float_type> ArithmeticExp
+%type <bool_type> RelationalExp LogicalExp
+ /* %type <char_type>   */
 
 
 
@@ -172,29 +185,46 @@ Expression			: ArithmeticExp
 					| DecrementExp
 					| LHS 																{rightHandSide=1; isDeclaration=0;
 																						if($1 != NULL){
-																							$$.type = $1->data_type; $$.value = $1->value;
+																							$$.type = $1->data_type; $$.char_value = $1->char_value; $$.bool_value = $1->bool_value; 
 																						}}																			
 					;
 
-ArithmeticExp		: Expression '+' Expression 										{ type_check($1.type, $3.type,0); $$ = $1.value + $3.value;}																																					
-					| Expression '-' Expression											{ type_check($1.type, $3.type,0); $$ = $1.value - $3.value;}						
-					| Expression '*' Expression											{ type_check($1.type, $3.type,0); $$ = $1.value * $3.value;}
-					| Expression '/' Expression											{ type_check($1.type, $3.type,0); $$ = $1.value / $3.value;}
-					| Expression '%' Expression											{ type_check($1.type, $3.type,0); $$ = fmod($1.value,$3.value);}
-					| '-' Expression %prec OP_LOGICAL_NOT								
+ArithmeticExp		: Expression '+' Expression 										{ type_check($1.type, $3.type,0); $$ = $1.value + $3.value;
+
+																							write_arithmetic("ADD", currentName, $1.value, $3.value);
+
+																						 }																																							
+					| Expression '-' Expression											{ 
+																							type_check($1.type, $3.type,0); $$ = $1.value - $3.value;
+																							write_arithmetic("SUB", currentName, $1.value, $3.value);
+																						}						
+					| Expression '*' Expression											{ 
+																							type_check($1.type, $3.type,0); $$ = $1.value * $3.value;
+																							write_arithmetic("MUL", currentName, $1.value, $3.value);
+																						}
+					| Expression '/' Expression											{
+																							 type_check($1.type, $3.type,0); $$ = $1.value / $3.value;
+																							 write_arithmetic("DIV", currentName, $1.value, $3.value);
+																						}
+					| Expression '%' Expression											{ 
+																							type_check($1.type, $3.type,0); $$ = fmod($1.value,$3.value);
+																							write_arithmetic("MOD", currentName, $1.value, $3.value);
+																						}
+					| '-' Expression %prec OP_LOGICAL_NOT								{$$ = -($2.value); write_mov("NEG", currentName, $2.value, "-");}
 					;
 
-RelationalExp		: Expression OP_EQUALITY Expression
-					| Expression OP_INEQUALITY Expression
-					| Expression OP_GREATER_OR_EQUAL Expression
-					| Expression OP_LESS_OR_EQUAL Expression
-					| Expression OP_GREATER_THAN Expression
-					| Expression OP_LESS_THAN Expression
+RelationalExp		: Expression OP_EQUALITY Expression{$$ = $1.bool_value == $3.bool_value; write_arithmetic("EQ", currentName, $1.bool_value, $3.bool_value);}
+					| Expression OP_INEQUALITY Expression{$$ = $1.bool_value != $3.bool_value; write_arithmetic("NEQ", currentName, $1.bool_value, $3.bool_value);}
+					| Expression OP_GREATER_OR_EQUAL Expression{ $$ = $1.bool_value >= $3.bool_value; write_arithmetic("GEQ", currentName, $1.bool_value, $3.bool_value);}
+					| Expression OP_LESS_OR_EQUAL Expression{ $$ = $1.bool_value <= $3.bool_value; write_arithmetic("LEQ", currentName, $1.bool_value, $3.bool_value);}
+					| Expression OP_GREATER_THAN Expression{ $$ = $1.bool_value > $3.bool_value; write_arithmetic("GRT", currentName, $1.bool_value, $3.bool_value);}
+					| Expression OP_LESS_THAN Expression{$$ = $1.bool_value < $3.bool_value; write_arithmetic("LSS", currentName, $1.bool_value, $3.bool_value);}
+
 					;	
 
-LogicalExp			: Expression OP_LOGICAL_OR Expression
-					| Expression OP_LOGICAL_AND Expression
-					| OP_LOGICAL_NOT Expression
+LogicalExp			: Expression OP_LOGICAL_OR Expression{$$ = $1.bool_value || $3.bool_value; write_arithmetic("OR", currentName, $1.bool_value, $3.bool_value);}
+					| Expression OP_LOGICAL_AND Expression{$$ = $1.bool_value && $3.bool_value; write_arithmetic("AND", currentName, $1.bool_value, $3.bool_value);}
+					| OP_LOGICAL_NOT Expression{$$ = !($2.bool_value); write_mov("NOT", currentName, $2.bool_value, "-");}
 					;
 
 
@@ -206,12 +236,16 @@ AssignExp			: LHS AssignOperator Expression 	 						{ 	rightHandSide = 0;
 																					if($1 != NULL)
 																						{
 																							$1->value = $3.value;
+																							$1->char_value = $3.char_value;
+																							$1->bool_value = $3.bool_value;
+
 																							if($3.type == 0){
 																								type_check($1->data_type, $3.type,3);
 																							}
 																							else{
 																								type_check($1->data_type, $3.type,1);
 																							}
+
 																							// printf("found %s\n", currentName);
 																						}
 																					else{
@@ -226,10 +260,12 @@ AssignExp			: LHS AssignOperator Expression 	 						{ 	rightHandSide = 0;
 
 LHS 				: IDETIFIER 													{
 																					if(isDeclaration==1 && rightHandSide==0){
-																						currentEntry = YaccInsert(currentName,0,currentDataTypeNumber,tableList[currentScope].symbolTable);
+																						currentEntry = YaccInsert(currentName,0, '\0', 0,  currentDataTypeNumber,tableList[currentScope].symbolTable);
 																						$1 = currentEntry;
 																						isDeclaration = 0;
 																						$$ = $1;
+																						write_mov("MOV", currentName,  currentEntry->value, "-");
+
 																					}
 																					else{
 																						currentEntry = searchReturnEntry(currentName);
@@ -338,8 +374,8 @@ ValueTypeNumber		: VAL_INTEGER 								{ 	$$.value = $1; $$.type = INTEGER; }
 					| VAL_FLOAT									{ 	$$.value = data_float; $$.type = FLOAT;} 								
 					;
 
-ValueTypeLetter		: VAL_BOOLEAN							
-					| VAL_CHAR									
+ValueTypeLetter		: VAL_BOOLEAN								{ 	$$.bool_value = data_bool;  $$.type = BOOLEAN;} 
+					| VAL_CHAR									{ 	$$.char_value = data_char;  $$.type = CHARACTER;} 
 					| VAL_STRING								
 					;
 
@@ -384,8 +420,8 @@ bool findEntry(char* myEntryName){
 	}
 }
 
-struct entry * YaccInsert(char* currentName,double number,int typeNumber,struct entry ** mainTable){
-	currentEntry = insert(currentName,number,typeNumber,mainTable);
+struct entry * YaccInsert(char* currentName,double number, char character, short boolean, int typeNumber,struct entry ** mainTable){
+	currentEntry = insert(currentName,number, character, boolean, typeNumber,mainTable);
 	if(currentEntry == NULL){
 		yyerror("Error: Variable already declared in this scope");
 	}
@@ -406,6 +442,7 @@ void printInFile(char message[maxLinesToParse]){
 
 
 int main(void) {
+	fopen("WriteQuadruple.txt", "w");
 	mainTable = Initialize();
     yyin = fopen("test1.txt", "r");
 	f1=fopen("output.txt","w");
