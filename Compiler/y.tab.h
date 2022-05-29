@@ -35,7 +35,7 @@
 /* "%code requires" blocks.  */
 
 /* Line 1676 of yacc.c  */
-#line 45 "parser.y"
+#line 46 "parser.y"
 
     struct node {
         float value;
@@ -153,7 +153,7 @@ typedef union YYSTYPE
 {
 
 /* Line 1676 of yacc.c  */
-#line 53 "parser.y"
+#line 54 "parser.y"
 
 		struct node node;
 		float float_type;

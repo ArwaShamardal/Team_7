@@ -11,6 +11,7 @@
 	int currentScope = 0;
 	int currentDataTypeNumber;
 	int yylineno;
+	int found = 0;
 	struct entry* currentEntry = NULL;
 	extern struct entry** mainTable;
 	struct table* tableList;
@@ -23,11 +24,11 @@
 	FILE * f2;
 	int lineCount=0;
 	char outputMessages [maxLinesToParse][maxLinesToParse];
-	int isLeftSide = 0;
+	int rightHandSide = 0;
 	int isDeclaration = 0; 
 
 	
-
+	bool findEntry(char* myEntry);
 	struct entry * insert( char *name, int value, int data_type, struct entry** mainTable);
 	struct entry * YaccInsert(char* currentName,double number,int typeNumber,struct entry ** mainTable);
 	void printInFile(char message[maxLinesToParse]);
@@ -81,7 +82,7 @@
 
 
 
-%type <entry> IDETIFIER 
+%type <entry> IDETIFIER LHS
 %type <node> ValueTypeAll Expression ValueTypeLetter ValueTypeNumber 
 
 %type <data_type> FunctionCallExp DataType VarDeclaration OneLineDeclaration VAL_INTEGER VAL_FLOAT
@@ -141,7 +142,6 @@ Statement			: VarDeclaration Starter
 					| SwitchCase Starter
 					| Increment Starter 
 					| Decrement Starter
-					| ArithmeticAssign Starter
 					| Return Starter
 					| '{' Statement '}' Starter							
 					| BREAK ';' Starter
@@ -151,18 +151,14 @@ Statement			: VarDeclaration Starter
 
 OneLineDeclaration	: AssignExp ',' OneLineDeclaration
 					| AssignExp ';' 							
-					| IDETIFIER ',' OneLineDeclaration          
-					| IDETIFIER ';' 							{ 	currentEntry = YaccInsert(currentName,0,currentDataTypeNumber,mainTable);
-																}
+					| LHS ',' OneLineDeclaration          
+					| LHS ';' 	
 					;
 
 VarDeclaration		: DataType OneLineDeclaration 			{	
-																if(currentEntry!= NULL) {	
-																	isDeclaration = 1; 
-																	/* write_declaration("MOV", currentName, "-", "-"); */
-
-
-																	printf("Variable Defined succefully\n");
+																if(currentEntry!= NULL){	
+																	isDeclaration = 0; 
+																	printInFile("Variable Defined succefully\n");
 																}
 															}
 					| CONSTANT VarDeclaration 
@@ -178,25 +174,14 @@ Expression			: ArithmeticExp
 					| AssignExp
 					| IncrementExp			
 					| DecrementExp
-					| ArithmeticAssignExp
-					| IDETIFIER  							
+					| LHS 																{rightHandSide=1; isDeclaration=0;
+																						$$.type = $1->data_type; $$.value = $1->value;}																			
 					;
 
 ArithmeticExp		: Expression '+' Expression 										{ type_check($1.type, $3.type,0); $$ = $1.value + $3.value;
 
 																							write_arithmetic("ADD", currentName, $1.value, $3.value);
 
-																						// WriteQuadruple("ADD "); WriteQuadruple(currentName);
-																						//   char* text1;
-																						  //gcvt($1.value, 6, text1);
-
-																						  //itoa(7, text1,10);
-																						   //sprintf(text1, "%f", $1.value);
-																						//   printf("the text 1 value is: %s" ,text1);
-																						 //WriteQuadruple(text1);
-
-
-																						  //WriteQuadruple(text2); WriteQuadruple("\n");
 																						 }																			
 					| Expression '-' Expression											{ 
 																							type_check($1.type, $3.type,0); $$ = $1.value - $3.value;
@@ -233,30 +218,57 @@ LogicalExp			: Expression OP_LOGICAL_OR Expression
 
 
 
-AssignExp			: IDETIFIER '=' Expression 	 								{ 	
-																					if(isDeclaration){												
-																						printf("before mov");
-																						currentEntry = YaccInsert(currentName,0,currentDataTypeNumber,mainTable);
-																						currentEntry->value = $3.value;
-																						$1 = currentEntry;
-																						isDeclaration = 0;
-																						write_mov("MOV", currentName,  currentEntry->value, "-");
-																					}	
+AssignExp			: LHS AssignOperator Expression 	 						{ 	rightHandSide = 0;
+																					// found = findEntry(currentName);
+																					// printf("found %d\n", found);
+																					if(findEntry(currentName) == 1)
+																						{
+																							$1->value = $3.value;
+																							printf("found %s\n", currentName);
+																						}
+																					else{
+																							printf("not found %s\n", currentName);
+																						}
 																				}			
 					;
+
+
+
+LHS 				: IDETIFIER 													{
+																					if(isDeclaration==1 && rightHandSide==0){
+																						currentEntry = YaccInsert(currentName,0,currentDataTypeNumber,mainTable);
+																						$1 = currentEntry;
+																						isDeclaration = 0;
+																						$$ = $1;
+																						write_mov("MOV", currentName,  currentEntry->value, "-");
+																					}
+																					else{
+																						currentEntry = searchReturnEntry(currentName);
+																						if(currentEntry!=NULL)
+																						{	$1 = currentEntry;
+																							$$ = $1;
+																						}
+																						else{
+																							$1 = NULL;
+																							$$ = $1;
+																						}
+
+																					}
+																					}
+
+					;					
 
 Assign  			: AssignExp ';' {printInFile("Assigned succefully\n");}
 					;
 
-ArithmeticAssignExp : IDETIFIER OP_PLUS_EQUAL Expression
-					| IDETIFIER OP_MINUS_EQUAL Expression
-					| IDETIFIER OP_MULTIPLY_EQUAL Expression
-					| IDETIFIER OP_DIVIDE_EQUAL Expression
-					| IDETIFIER OP_MODULO_EQUAL Expression
+AssignOperator		: '='											{rightHandSide = 1;}
+					| OP_PLUS_EQUAL 								{rightHandSide = 1;}
+					| OP_MINUS_EQUAL								{rightHandSide = 1;}
+					| OP_MULTIPLY_EQUAL								{rightHandSide = 1;}
+					| OP_DIVIDE_EQUAL								{rightHandSide = 1;}
+					| OP_MODULO_EQUAL								{rightHandSide = 1;}
 					;
 
-ArithmeticAssign 	: ArithmeticAssignExp ';'
-					;
 
 IncrementExp		: OP_INCREMENT IDETIFIER {printInFile("Prefix increment Exp detected\n");}
 					| IDETIFIER OP_INCREMENT {printInFile("Postfix increment Exp detected\n");}
@@ -333,9 +345,7 @@ FunctionCallExp		: IDETIFIER '(' Arguments ')'
 FunctionCall		: FunctionCallExp ';'
 
 ValueTypeNumber		: VAL_INTEGER 								{ 	$$.value = $1; $$.type = INTEGER; }																			
-					| VAL_FLOAT									{ 	$$.value = data_float; $$.type = FLOAT;
-																	
-																} 								
+					| VAL_FLOAT									{ 	$$.value = data_float; $$.type = FLOAT;} 								
 					;
 
 ValueTypeLetter		: VAL_BOOLEAN							
@@ -354,12 +364,12 @@ DataTypeNoVoid		: INTEGER 									{currentDataTypeNumber = INTEGER; }
 					| BOOLEAN									{currentDataTypeNumber = BOOLEAN;}
 					;
 
-DataType			: INTEGER 									{currentDataTypeNumber = INTEGER; $$ = INTEGER;}
-					| FLOAT										{currentDataTypeNumber = FLOAT; $$ = FLOAT;}
-					| CHARACTER									{currentDataTypeNumber = CHARACTER; $$ = CHARACTER;}
-					| STRING									{currentDataTypeNumber = STRING; $$ = STRING;}
-					| BOOLEAN									{currentDataTypeNumber = BOOLEAN; $$ = BOOLEAN;}
-					| VOID										{currentDataTypeNumber = VOID; $$ = VOID;}
+DataType			: INTEGER 									{isDeclaration=1; currentDataTypeNumber = INTEGER; $$ = INTEGER;}
+					| FLOAT										{isDeclaration=1; currentDataTypeNumber = FLOAT; $$ = FLOAT;}
+					| CHARACTER									{isDeclaration=1; currentDataTypeNumber = CHARACTER; $$ = CHARACTER;}
+					| STRING									{isDeclaration=1; currentDataTypeNumber = STRING; $$ = STRING;}
+					| BOOLEAN									{isDeclaration=1; currentDataTypeNumber = BOOLEAN; $$ = BOOLEAN;}
+					| VOID										{isDeclaration=1; currentDataTypeNumber = VOID; $$ = VOID;}
 					;
 
 %%
@@ -373,6 +383,19 @@ void type_check(int left, int right, int flag){
 			case 1: yyerror("Error: Type mismatch in assignment expression"); break;
 			case 2: yyerror("Error: Type mismatch in logical expression"); break;
 		}
+	}
+}
+
+
+bool findEntry(char* myEntryName){
+	bool find = searchInCurrentAndParent(myEntryName);
+	if(find)
+	{
+		return true;
+	}
+	else{
+		yyerror("Error: Could not find variable");
+		return false;
 	}
 }
 
@@ -407,7 +430,7 @@ void printInFile(char message[maxLinesToParse]){
 int main(void) {
 	fopen("WriteQuadruple.txt", "w");
 	mainTable = Initialize();
-    yyin = fopen("expressions.txt", "r");
+    yyin = fopen("test1.txt", "r");
 	f1=fopen("output.txt","w");
 	/* f2=fopen("WriteQuadruple.txt","w"); */
    if(!yyparse())

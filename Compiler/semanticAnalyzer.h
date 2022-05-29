@@ -143,6 +143,45 @@ bool searchInCurrentAndParent(char* lexeme)
 	return finder;
 }
 
+
+struct entry * ReturnEntryInTable(char *name, struct entry** currentTable){
+    entry * found = NULL;
+    int indx = HashFunction(name);
+    if(currentTable[indx] != NULL){
+        struct entry* e = currentTable[indx];
+        while(e != NULL){
+            if(strcmp(e->name,name) == 0)
+            {
+                found = e;
+                break;
+            }
+            e = e->next;
+        }
+    }
+    return found;
+}
+
+
+struct entry * searchReturnEntry(char* lexeme)
+{
+	int idx = tableID;
+	entry * finder = NULL;
+
+	while(idx != -1)
+	{
+		finder = ReturnEntryInTable(lexeme, tableList[idx].symbolTable);
+
+		if(finder != NULL)
+			return finder;
+
+		idx = tableList[idx].parentID;
+	}
+
+	return finder;
+}
+
+
+
 //Function that inserts a variable in the current symbol table, returns true if insrted, false if not
 bool InsertInHashMap(struct entry** symbolTable, struct entry* e)
 {
