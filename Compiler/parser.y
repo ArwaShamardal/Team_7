@@ -9,6 +9,7 @@
 	int currentScope = 0;
 	int currentDataTypeNumber;
 	int yylineno;
+	int found = 0;
 	struct entry* currentEntry = NULL;
 	extern struct entry** mainTable;
 	struct table* tableList;
@@ -20,11 +21,11 @@
     FILE * f1;
 	int lineCount=0;
 	char outputMessages [maxLinesToParse][maxLinesToParse];
-	int isLeftSide = 0;
+	int rightHandSide = 0;
 	int isDeclaration = 0; 
 
 	
-
+	bool findEntry(char* myEntry);
 	struct entry * insert( char *name, int value, int data_type, struct entry** mainTable);
 	struct entry * YaccInsert(char* currentName,double number,int typeNumber,struct entry ** mainTable);
 	void printInFile(char message[maxLinesToParse]);
@@ -77,7 +78,7 @@
 
 
 
-%type <entry> IDETIFIER 
+%type <entry> IDETIFIER LHS
 %type <node> ValueTypeAll Expression ValueTypeLetter ValueTypeNumber 
 
 %type <data_type> FunctionCallExp DataType VarDeclaration OneLineDeclaration VAL_INTEGER VAL_FLOAT
@@ -137,7 +138,6 @@ Statement			: VarDeclaration Starter
 					| SwitchCase Starter
 					| Increment Starter 
 					| Decrement Starter
-					| ArithmeticAssign Starter
 					| Return Starter
 					| '{' Statement '}' Starter							
 					| BREAK ';' Starter
@@ -147,12 +147,8 @@ Statement			: VarDeclaration Starter
 
 OneLineDeclaration	: AssignExp ',' OneLineDeclaration
 					| AssignExp ';' 							
-					| IDETIFIER ',' OneLineDeclaration          
-					| IDETIFIER ';' 							{ 	
-																	currentEntry = YaccInsert(currentName,0,currentDataTypeNumber,mainTable);
-																	isDeclaration = 0;
-													
-																}
+					| LHS ',' OneLineDeclaration          
+					| LHS ';' 	
 					;
 
 VarDeclaration		: DataType OneLineDeclaration 			{	
@@ -174,8 +170,7 @@ Expression			: ArithmeticExp
 					| AssignExp
 					| IncrementExp			
 					| DecrementExp
-					| ArithmeticAssignExp
-					| IDETIFIER  							
+					| LHS 																{rightHandSide=1; isDeclaration=0;}																			
 					;
 
 ArithmeticExp		: Expression '+' Expression 										{ type_check($1.type, $3.type,0); $$ = $1.value + $3.value;}																																					
@@ -202,30 +197,43 @@ LogicalExp			: Expression OP_LOGICAL_OR Expression
 
 
 
-AssignExp			: IDETIFIER '=' Expression 	 								{ 	
-																					if(isDeclaration){
-																						currentEntry = YaccInsert(currentName,0,currentDataTypeNumber,mainTable);
-																						currentEntry->value = $3.value;
-																						$1 = currentEntry;
-																						isDeclaration = 0;
-																					}
-																					
-																						
+AssignExp			: LHS AssignOperator Expression 	 						{ 	rightHandSide = 0;
+																					// found = findEntry(currentName);
+																					// printf("found %d\n", found);
+																					if(findEntry(currentName) == 1)
+																						{
+																							$1->value = $3.value;
+																							//printf("found %s\n", currentName);
+																						}
+																					else{
+																							//printf("not found %s\n", currentName);
+																						}
 																				}			
 					;
+
+LHS 				: IDETIFIER 													{
+																					if(isDeclaration==1 && rightHandSide==0){
+																						currentEntry = YaccInsert(currentName,0,currentDataTypeNumber,mainTable);
+																						$1 = currentEntry;
+																						isDeclaration = 0;
+																						$$ = $1;
+																					}
+																					else
+																						currentName = currentName;
+																					}
+					;					
 
 Assign  			: AssignExp ';' {printInFile("Assigned succefully\n");}
 					;
 
-ArithmeticAssignExp : IDETIFIER OP_PLUS_EQUAL Expression
-					| IDETIFIER OP_MINUS_EQUAL Expression
-					| IDETIFIER OP_MULTIPLY_EQUAL Expression
-					| IDETIFIER OP_DIVIDE_EQUAL Expression
-					| IDETIFIER OP_MODULO_EQUAL Expression
+AssignOperator		: '='											{rightHandSide = 1;}
+					| OP_PLUS_EQUAL 								{rightHandSide = 1;}
+					| OP_MINUS_EQUAL								{rightHandSide = 1;}
+					| OP_MULTIPLY_EQUAL								{rightHandSide = 1;}
+					| OP_DIVIDE_EQUAL								{rightHandSide = 1;}
+					| OP_MODULO_EQUAL								{rightHandSide = 1;}
 					;
 
-ArithmeticAssign 	: ArithmeticAssignExp ';'
-					;
 
 IncrementExp		: OP_INCREMENT IDETIFIER {printInFile("Prefix increment Exp detected\n");}
 					| IDETIFIER OP_INCREMENT {printInFile("Postfix increment Exp detected\n");}
@@ -340,6 +348,18 @@ void type_check(int left, int right, int flag){
 			case 1: yyerror("Error: Type mismatch in assignment expression"); break;
 			case 2: yyerror("Error: Type mismatch in logical expression"); break;
 		}
+	}
+}
+
+
+bool findEntry(char* myEntryName){
+	bool find = searchInCurrentAndParent(myEntryName);
+	if(find)
+	{
+		return true;
+	}
+	else{
+		yyerror("Error: Could not find variable");
 	}
 }
 
