@@ -1,4 +1,3 @@
 Variable Defined succefully
-Variable Defined succefully
-Assigned succefully
-Function constructed successfully
+Postfix increment Exp detected
+Error: Variable not declared yetFor Loop constructed successfully

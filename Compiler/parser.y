@@ -139,7 +139,7 @@ Statement			: VarDeclaration Starter
 					| Increment Starter 
 					| Decrement Starter
 					| Return Starter
-					| '{' Statement '}' Starter							
+					| '{' {currentScope = CreateTable();} Statement '}' {currentScope = ExitingTable();} Starter							
 					| BREAK ';' Starter
 					| CONTINUE ';' Starter
 					|
@@ -148,7 +148,7 @@ Statement			: VarDeclaration Starter
 OneLineDeclaration	: AssignExp ',' OneLineDeclaration
 					| AssignExp ';' 							
 					| LHS ',' OneLineDeclaration          
-					| LHS ';' 	
+					| LHS ';'	
 					;
 
 VarDeclaration		: DataType OneLineDeclaration 			{	
@@ -166,7 +166,7 @@ Expression			: ArithmeticExp
 					| RelationalExp
 					| LogicalExp
 					| '(' Expression ')'
-					| ValueTypeAll										
+					| ValueTypeAll																							
 					| AssignExp
 					| IncrementExp			
 					| DecrementExp
@@ -206,7 +206,12 @@ AssignExp			: LHS AssignOperator Expression 	 						{ 	rightHandSide = 0;
 																					if($1 != NULL)
 																						{
 																							$1->value = $3.value;
-																							type_check($1->data_type, $3.type,1);
+																							if($3.type == 0){
+																								type_check($1->data_type, $3.type,3);
+																							}
+																							else{
+																								type_check($1->data_type, $3.type,1);
+																							}
 																							// printf("found %s\n", currentName);
 																						}
 																					else{
@@ -221,7 +226,7 @@ AssignExp			: LHS AssignOperator Expression 	 						{ 	rightHandSide = 0;
 
 LHS 				: IDETIFIER 													{
 																					if(isDeclaration==1 && rightHandSide==0){
-																						currentEntry = YaccInsert(currentName,0,currentDataTypeNumber,mainTable);
+																						currentEntry = YaccInsert(currentName,0,currentDataTypeNumber,tableList[currentScope].symbolTable);
 																						$1 = currentEntry;
 																						isDeclaration = 0;
 																						$$ = $1;
@@ -275,30 +280,30 @@ Return				: RETURN Expression ';'
 
  /* Any 'Assign' written below is to be changed to a block of statements */
 
-Function			: DataType IDETIFIER '(' Parameters ')' '{' Statement '}' {printInFile("Function constructed successfully\n");}
+Function			: DataType IDETIFIER '(' {currentScope = CreateTable();} Parameters ')' '{'   Statement '}'  {currentScope = ExitingTable(); printInFile("Function constructed successfully\n");}
 					;
 
 
  /* If conditon */
-Condition			: IF '(' Expression ')' '{' Statement '}' %prec THEN
-					| IF '(' Expression ')' '{' Statement '}' ELSE '{' Statement '}'
-					| IF '(' Expression ')' '{' Statement '}' ELSE Condition
+Condition			: IF '(' Expression ')' '{' Statement '}'    %prec THEN
+					| IF '(' Expression ')' '{'  Statement '}'    ELSE '{'   Statement '}' 
+					| IF '(' Expression ')' '{'  Statement '}'   ELSE Condition
     				;
 
 
  /* loops */
-WhileLoop			: WHILE '(' Expression ')' '{' Statement '}' 				{ printInFile("While Loop constructed successfully\n");}
+WhileLoop			: WHILE '(' Expression ')' '{' {currentScope = CreateTable();} Statement '}' {currentScope = ExitingTable();} 				{ printInFile("While Loop constructed successfully\n");}
 					;
 
-DoWhileLoop			: DO '{' Statement '}' WHILE '(' Expression ')' ';' 		{printf("do while reached\n"); printInFile("Do while Loop constructed successfully\n");}
+DoWhileLoop			: DO '{' {currentScope = CreateTable();} Statement '}' {currentScope = ExitingTable();} WHILE '(' Expression ')' ';' 		{printf("do while reached\n"); printInFile("Do while Loop constructed successfully\n");}
 					;
 
 
-ForLoopInit			: VarDeclaration
-					| Assign
+ForLoopInit			: VarDeclaration 
+ 					| Assign 
 					;
 
-ForLoop				: FOR '(' ForLoopInit Expression ';' Expression ')' '{' Statement '}' {printInFile("For Loop constructed successfully\n");}
+ForLoop				: FOR {currentScope = CreateTable();} '(' ForLoopInit Expression ';' Expression ')' '{'  Statement '}'     {currentScope = ExitingTable();  printInFile("For Loop constructed successfully\n");}
 					;
 
 SwitchValueTypes	: VAL_INTEGER
@@ -310,7 +315,7 @@ Case				: CASE SwitchValueTypes ':' Statement Case
 					|
 					;
 
-SwitchCase			: SWITCH '(' IDETIFIER ')' '{' Case '}'	{printInFile("Switch case constructed successfully\n");}
+SwitchCase			: SWITCH '(' IDETIFIER ')' '{'    {currentScope = CreateTable();}     Case '}'   	{ currentScope = ExitingTable();  printInFile("Switch case constructed successfully\n");}
 					;
 
 
@@ -342,12 +347,6 @@ ValueTypeAll		: ValueTypeNumber
 					| ValueTypeLetter
 					;
 
-DataTypeNoVoid		: INTEGER 									{currentDataTypeNumber = INTEGER; }
-					| FLOAT										{currentDataTypeNumber = FLOAT;}
-					| CHARACTER									{currentDataTypeNumber = CHARACTER;}
-					| STRING									{currentDataTypeNumber = STRING;}
-					| BOOLEAN									{currentDataTypeNumber = BOOLEAN;}
-					;
 
 DataType			: INTEGER 									{isDeclaration=1; currentDataTypeNumber = INTEGER; $$ = INTEGER;}
 					| FLOAT										{isDeclaration=1; currentDataTypeNumber = FLOAT; $$ = FLOAT;}
@@ -367,6 +366,7 @@ void type_check(int left, int right, int flag){
 			case 0: yyerror("Error: Type mismatch in arithmetic expression"); break;
 			case 1: yyerror("Error: Type mismatch in assignment expression"); break;
 			case 2: yyerror("Error: Type mismatch in logical expression"); break;
+			case 3: yyerror("Error: Type mismatch, variable no longer exists"); break;
 		}
 	}
 }
@@ -415,6 +415,8 @@ int main(void) {
 		for(int i=0; i<lineCount ; i++)
 			fprintf(f1,outputMessages[i]);
 		printTableData(tableList);	
+		printf("current scope index is %d\n",currentScope);
+		struct entry* test = searchReturnEntry("y");
 	}
 	else
 	{
