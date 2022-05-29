@@ -1,4 +1,4 @@
 Variable Defined succefully
 Variable Defined succefully
-Error: Could not find variableAssigned succefully
-Error: Could not find variableVariable Defined succefully
+Variable Defined succefully
+Variable Defined succefully

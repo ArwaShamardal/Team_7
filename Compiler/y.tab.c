@@ -600,14 +600,14 @@ static const yytype_uint16 yyrline[] =
        0,   124,   124,   127,   128,   131,   132,   133,   134,   135,
      136,   137,   138,   139,   140,   141,   142,   143,   144,   145,
      148,   149,   150,   151,   154,   160,   164,   165,   166,   167,
-     168,   169,   170,   171,   172,   173,   176,   177,   178,   179,
-     180,   181,   184,   185,   186,   187,   188,   189,   192,   193,
-     194,   200,   214,   226,   229,   230,   231,   232,   233,   234,
-     238,   239,   242,   243,   246,   249,   252,   253,   259,   264,
-     265,   270,   273,   277,   278,   281,   284,   285,   288,   289,
-     290,   293,   297,   298,   299,   300,   303,   304,   305,   309,
-     310,   312,   313,   316,   317,   318,   321,   322,   325,   326,
-     327,   328,   329,   332,   333,   334,   335,   336,   337
+     168,   169,   170,   171,   172,   173,   177,   178,   179,   180,
+     181,   182,   185,   186,   187,   188,   189,   190,   193,   194,
+     195,   201,   217,   240,   243,   244,   245,   246,   247,   248,
+     252,   253,   256,   257,   260,   263,   266,   267,   273,   278,
+     279,   284,   287,   291,   292,   295,   298,   299,   302,   303,
+     304,   307,   311,   312,   313,   314,   317,   318,   319,   323,
+     324,   326,   327,   330,   331,   332,   335,   336,   339,   340,
+     341,   342,   343,   346,   347,   348,   349,   350,   351
 };
 #endif
 
@@ -1755,48 +1755,49 @@ yyreduce:
 
 /* Line 1455 of yacc.c  */
 #line 173 "parser.y"
-    {rightHandSide=1; isDeclaration=0;}
+    {printf("reached %s\n", (yyvsp[(1) - (1)].entry)->name) ; rightHandSide=1; isDeclaration=0;
+																						(yyval.node).type = (yyvsp[(1) - (1)].entry)->data_type; (yyval.node).value = (yyvsp[(1) - (1)].entry)->value;}
     break;
 
   case 36:
 
 /* Line 1455 of yacc.c  */
-#line 176 "parser.y"
+#line 177 "parser.y"
     { type_check((yyvsp[(1) - (3)].node).type, (yyvsp[(3) - (3)].node).type,0); (yyval.float_type) = (yyvsp[(1) - (3)].node).value + (yyvsp[(3) - (3)].node).value;}
     break;
 
   case 37:
 
 /* Line 1455 of yacc.c  */
-#line 177 "parser.y"
+#line 178 "parser.y"
     { type_check((yyvsp[(1) - (3)].node).type, (yyvsp[(3) - (3)].node).type,0); (yyval.float_type) = (yyvsp[(1) - (3)].node).value - (yyvsp[(3) - (3)].node).value;}
     break;
 
   case 38:
 
 /* Line 1455 of yacc.c  */
-#line 178 "parser.y"
+#line 179 "parser.y"
     { type_check((yyvsp[(1) - (3)].node).type, (yyvsp[(3) - (3)].node).type,0); (yyval.float_type) = (yyvsp[(1) - (3)].node).value * (yyvsp[(3) - (3)].node).value;}
     break;
 
   case 39:
 
 /* Line 1455 of yacc.c  */
-#line 179 "parser.y"
+#line 180 "parser.y"
     { type_check((yyvsp[(1) - (3)].node).type, (yyvsp[(3) - (3)].node).type,0); (yyval.float_type) = (yyvsp[(1) - (3)].node).value / (yyvsp[(3) - (3)].node).value;}
     break;
 
   case 40:
 
 /* Line 1455 of yacc.c  */
-#line 180 "parser.y"
+#line 181 "parser.y"
     { type_check((yyvsp[(1) - (3)].node).type, (yyvsp[(3) - (3)].node).type,0); (yyval.float_type) = fmod((yyvsp[(1) - (3)].node).value,(yyvsp[(3) - (3)].node).value);}
     break;
 
   case 51:
 
 /* Line 1455 of yacc.c  */
-#line 200 "parser.y"
+#line 201 "parser.y"
     { 	rightHandSide = 0;
 																					// found = findEntry(currentName);
 																					// printf("found %d\n", found);
@@ -1814,7 +1815,7 @@ yyreduce:
   case 52:
 
 /* Line 1455 of yacc.c  */
-#line 214 "parser.y"
+#line 217 "parser.y"
     {
 																					if(isDeclaration==1 && rightHandSide==0){
 																						currentEntry = YaccInsert(currentName,0,currentDataTypeNumber,mainTable);
@@ -1822,232 +1823,242 @@ yyreduce:
 																						isDeclaration = 0;
 																						(yyval.entry) = (yyvsp[(1) - (1)].entry);
 																					}
-																					else
-																						currentName = currentName;
+																					else{
+																						currentEntry = searchReturnEntry(currentName);
+																						if(currentEntry!=NULL)
+																						{	(yyvsp[(1) - (1)].entry) = currentEntry;
+																							(yyval.entry) = (yyvsp[(1) - (1)].entry);
+																						}
+																						else{
+																							(yyvsp[(1) - (1)].entry) = NULL;
+																							(yyval.entry) = (yyvsp[(1) - (1)].entry);
+																						}
+
+																					}
 																					}
     break;
 
   case 53:
 
 /* Line 1455 of yacc.c  */
-#line 226 "parser.y"
+#line 240 "parser.y"
     {printInFile("Assigned succefully\n");}
     break;
 
   case 54:
 
 /* Line 1455 of yacc.c  */
-#line 229 "parser.y"
+#line 243 "parser.y"
     {rightHandSide = 1;}
     break;
 
   case 55:
 
 /* Line 1455 of yacc.c  */
-#line 230 "parser.y"
+#line 244 "parser.y"
     {rightHandSide = 1;}
     break;
 
   case 56:
 
 /* Line 1455 of yacc.c  */
-#line 231 "parser.y"
+#line 245 "parser.y"
     {rightHandSide = 1;}
     break;
 
   case 57:
 
 /* Line 1455 of yacc.c  */
-#line 232 "parser.y"
+#line 246 "parser.y"
     {rightHandSide = 1;}
     break;
 
   case 58:
 
 /* Line 1455 of yacc.c  */
-#line 233 "parser.y"
+#line 247 "parser.y"
     {rightHandSide = 1;}
     break;
 
   case 59:
 
 /* Line 1455 of yacc.c  */
-#line 234 "parser.y"
+#line 248 "parser.y"
     {rightHandSide = 1;}
     break;
 
   case 60:
 
 /* Line 1455 of yacc.c  */
-#line 238 "parser.y"
+#line 252 "parser.y"
     {printInFile("Prefix increment Exp detected\n");}
     break;
 
   case 61:
 
 /* Line 1455 of yacc.c  */
-#line 239 "parser.y"
+#line 253 "parser.y"
     {printInFile("Postfix increment Exp detected\n");}
     break;
 
   case 62:
 
 /* Line 1455 of yacc.c  */
-#line 242 "parser.y"
+#line 256 "parser.y"
     {printInFile("Prefix decrement Exp detected\n");}
     break;
 
   case 63:
 
 /* Line 1455 of yacc.c  */
-#line 243 "parser.y"
+#line 257 "parser.y"
     {printInFile("Postfix decrement Exp detected\n");}
     break;
 
   case 64:
 
 /* Line 1455 of yacc.c  */
-#line 246 "parser.y"
+#line 260 "parser.y"
     {printInFile("increment detected\n");}
     break;
 
   case 65:
 
 /* Line 1455 of yacc.c  */
-#line 249 "parser.y"
+#line 263 "parser.y"
     {printInFile("decrement detected\n");}
     break;
 
   case 68:
 
 /* Line 1455 of yacc.c  */
-#line 259 "parser.y"
+#line 273 "parser.y"
     {printInFile("Function constructed successfully\n");}
     break;
 
   case 71:
 
 /* Line 1455 of yacc.c  */
-#line 270 "parser.y"
+#line 284 "parser.y"
     { printInFile("While Loop constructed successfully\n");}
     break;
 
   case 72:
 
 /* Line 1455 of yacc.c  */
-#line 273 "parser.y"
+#line 287 "parser.y"
     {printf("do while reached\n"); printInFile("Do while Loop constructed successfully\n");}
     break;
 
   case 75:
 
 /* Line 1455 of yacc.c  */
-#line 281 "parser.y"
+#line 295 "parser.y"
     {printInFile("For Loop constructed successfully\n");}
     break;
 
   case 81:
 
 /* Line 1455 of yacc.c  */
-#line 293 "parser.y"
+#line 307 "parser.y"
     {printInFile("Switch case constructed successfully\n");}
     break;
 
   case 91:
 
 /* Line 1455 of yacc.c  */
-#line 312 "parser.y"
+#line 326 "parser.y"
     { 	(yyval.node).value = (yyvsp[(1) - (1)].data_type); (yyval.node).type = INTEGER; }
     break;
 
   case 92:
 
 /* Line 1455 of yacc.c  */
-#line 313 "parser.y"
+#line 327 "parser.y"
     { 	(yyval.node).value = data_float; (yyval.node).type = FLOAT;}
     break;
 
   case 98:
 
 /* Line 1455 of yacc.c  */
-#line 325 "parser.y"
+#line 339 "parser.y"
     {currentDataTypeNumber = INTEGER; }
     break;
 
   case 99:
 
 /* Line 1455 of yacc.c  */
-#line 326 "parser.y"
+#line 340 "parser.y"
     {currentDataTypeNumber = FLOAT;}
     break;
 
   case 100:
 
 /* Line 1455 of yacc.c  */
-#line 327 "parser.y"
+#line 341 "parser.y"
     {currentDataTypeNumber = CHARACTER;}
     break;
 
   case 101:
 
 /* Line 1455 of yacc.c  */
-#line 328 "parser.y"
+#line 342 "parser.y"
     {currentDataTypeNumber = STRING;}
     break;
 
   case 102:
 
 /* Line 1455 of yacc.c  */
-#line 329 "parser.y"
+#line 343 "parser.y"
     {currentDataTypeNumber = BOOLEAN;}
     break;
 
   case 103:
 
 /* Line 1455 of yacc.c  */
-#line 332 "parser.y"
+#line 346 "parser.y"
     {isDeclaration=1; currentDataTypeNumber = INTEGER; (yyval.data_type) = INTEGER;}
     break;
 
   case 104:
 
 /* Line 1455 of yacc.c  */
-#line 333 "parser.y"
+#line 347 "parser.y"
     {isDeclaration=1; currentDataTypeNumber = FLOAT; (yyval.data_type) = FLOAT;}
     break;
 
   case 105:
 
 /* Line 1455 of yacc.c  */
-#line 334 "parser.y"
+#line 348 "parser.y"
     {isDeclaration=1; currentDataTypeNumber = CHARACTER; (yyval.data_type) = CHARACTER;}
     break;
 
   case 106:
 
 /* Line 1455 of yacc.c  */
-#line 335 "parser.y"
+#line 349 "parser.y"
     {isDeclaration=1; currentDataTypeNumber = STRING; (yyval.data_type) = STRING;}
     break;
 
   case 107:
 
 /* Line 1455 of yacc.c  */
-#line 336 "parser.y"
+#line 350 "parser.y"
     {isDeclaration=1; currentDataTypeNumber = BOOLEAN; (yyval.data_type) = BOOLEAN;}
     break;
 
   case 108:
 
 /* Line 1455 of yacc.c  */
-#line 337 "parser.y"
+#line 351 "parser.y"
     {isDeclaration=1; currentDataTypeNumber = VOID; (yyval.data_type) = VOID;}
     break;
 
 
 
 /* Line 1455 of yacc.c  */
-#line 2051 "y.tab.c"
+#line 2062 "y.tab.c"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);
@@ -2259,7 +2270,7 @@ yyreturn:
 
 
 /* Line 1675 of yacc.c  */
-#line 340 "parser.y"
+#line 354 "parser.y"
 
 
 void type_check(int left, int right, int flag){

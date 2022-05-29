@@ -1,4 +1,4 @@
 int y = 10 + 10;
 int k = 10 * 10;
-l = 1;
-int j = k + o;
+int j = k + y;
+int f;

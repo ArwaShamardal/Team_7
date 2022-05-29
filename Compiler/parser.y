@@ -170,7 +170,8 @@ Expression			: ArithmeticExp
 					| AssignExp
 					| IncrementExp			
 					| DecrementExp
-					| LHS 																{rightHandSide=1; isDeclaration=0;}																			
+					| LHS 																{printf("reached %s\n", $1->name) ; rightHandSide=1; isDeclaration=0;
+																						$$.type = $1->data_type; $$.value = $1->value;}																			
 					;
 
 ArithmeticExp		: Expression '+' Expression 										{ type_check($1.type, $3.type,0); $$ = $1.value + $3.value;}																																					
@@ -211,6 +212,8 @@ AssignExp			: LHS AssignOperator Expression 	 						{ 	rightHandSide = 0;
 																				}			
 					;
 
+
+
 LHS 				: IDETIFIER 													{
 																					if(isDeclaration==1 && rightHandSide==0){
 																						currentEntry = YaccInsert(currentName,0,currentDataTypeNumber,mainTable);
@@ -218,9 +221,20 @@ LHS 				: IDETIFIER 													{
 																						isDeclaration = 0;
 																						$$ = $1;
 																					}
-																					else
-																						currentName = currentName;
+																					else{
+																						currentEntry = searchReturnEntry(currentName);
+																						if(currentEntry!=NULL)
+																						{	$1 = currentEntry;
+																							$$ = $1;
+																						}
+																						else{
+																							$1 = NULL;
+																							$$ = $1;
+																						}
+
 																					}
+																					}
+
 					;					
 
 Assign  			: AssignExp ';' {printInFile("Assigned succefully\n");}
