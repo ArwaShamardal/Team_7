@@ -303,7 +303,7 @@ ForLoopInit			: VarDeclaration
  					| Assign 
 					;
 
-ForLoop				: FOR {currentScope = CreateTable();} '(' ForLoopInit Expression ';' Expression ')' '{'  Statement '}'     {currentScope = ExitingTable();  printInFile("For Loop constructed successfully\n");}
+ForLoop				: FOR {currentScope = CreateTable();} '(' ForLoopInit Expression ';' Expression')' '{'  Statement '}'     {currentScope = ExitingTable();  printInFile("For Loop constructed successfully\n");}
 					;
 
 SwitchValueTypes	: VAL_INTEGER
